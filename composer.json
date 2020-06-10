@@ -1,0 +1,16 @@
+{
+    "name": "patopen/oc_blog",
+    "description": "Openclassrooms projet 5 creer un blog",
+    "authors": [
+        {
+            "name": "Pat",
+            "email": "patopenclassrom@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.2"
+    }
+}
