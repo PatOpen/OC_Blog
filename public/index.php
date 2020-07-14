@@ -1,11 +1,13 @@
 <?php
 
+use Whoops\Handler\PrettyPageHandler;
+
 require '../vendor/autoload.php';
 require '../controllers/Router.php';
 
 //Debug error
 $whoops = new Whoops\Run;
-$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+$whoops->pushHandler(new PrettyPageHandler);
 $whoops->register();
 
 //Twig
