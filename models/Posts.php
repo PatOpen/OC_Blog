@@ -1,7 +1,8 @@
 <?php
 
+namespace OC_Blog\Models;
 
-class ModelPosts extends Manager {
+class Posts {
 
 	private $_id;
 	private $_title;
@@ -13,6 +14,15 @@ class ModelPosts extends Manager {
 
 	public function __construct(array $data)
 	{
+		if(!empty($data))
+		{
+			$this -> hydrate($data);
+		}
+
+	}
+
+	public function hydrate($data){
+
 		foreach ($data as $key => $value)
 		{
 			$method = 'set'.ucfirst($key);

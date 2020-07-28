@@ -1,6 +1,9 @@
 <?php
 
-require_once 'config.php';
+namespace OC_Blog\Models;
+
+use Exception;
+use PDO;
 
 abstract class Manager {
 
@@ -8,8 +11,8 @@ abstract class Manager {
 
 	private static function setBdd() {
 		try {
-			$db = CONNECT;
-			self::$_bdd = new PDO( "$db[dsn]", "$db[username]", "$db[passwd]" );
+			require_once "../config/DBConfig.php";
+			self::$_bdd = new PDO( CONNECT['dsn'], CONNECT['username'], CONNECT['passwd'] );
 			self::$_bdd->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 			self::$_bdd->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ );
 		}

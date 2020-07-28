@@ -14,6 +14,9 @@ $whoops->register();
 $loader = new Twig\Loader\FilesystemLoader('../views');
 $twig = new Twig\Environment($loader);
 
+//Sessions
+//OC_Blog\Tools\Session::newSession();
+
 //Router
 $router = new Router();
 $router->routeRequest($twig);

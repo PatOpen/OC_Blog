@@ -1,5 +1,7 @@
 <?php
 
+use OC_Blog\Controllers\ControllerHome;
+
 class Router {
 
 	private $_ctrl;

@@ -2,6 +2,6 @@
 
 namespace OC_Blog\Models;
 
-class ModelForms {
+class AuthManager extends Manager {
 
 }
