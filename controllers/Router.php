@@ -1,36 +1,32 @@
 <?php
 
-use OC_Blog\Controllers\ControllerHome;
+namespace OC_Blog\Controllers;
+
+use Exception;
+//use OC_Blog\Controllers;
 
 class Router {
 
 	private $_ctrl;
 
-	public function routeRequest($twig) {
+	public function routeRequest( $twig) {
 		try {
 
-			$url = '';
+			$url = explode( '/', filter_var( $_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL ) );
 
-			if ( isset( $_GET['url'] ) ) {
-				$url = explode( '/', filter_var( $_GET['url'], FILTER_SANITIZE_URL ) );
+			if ( isset($url)) {
 
-				$controller      = ucfirst( strtolower( $url[0] ) );
+				$controller      = ucfirst( strtolower( $url[1] ) );
 
-				$controllerClass = "Controller" . $controller;
-				$controllerFile  = "controllers/" . $controllerClass . ".php";
+				$controllerClass = "OC_Blog\\Controllers\\Controller" . $controller;
 
-				if ( file_exists( $controllerFile ) ) {
-					require_once( $controllerFile );
-					$this->_ctrl = new $controllerClass($url,$twig);
+				if ( class_exists( $controllerClass ) ) {
+					$this->_ctrl = new $controllerClass($url[2],$twig);
 				}
 				else {
-					throw new Exception( 'Page introuvable' );
+					$this->_ctrl = new ControllerHome($twig);
 				}
 
-			}
-			else {
-				require_once( 'ControllerHome.php' );
-				$this->_ctrl = new ControllerHome( $url, $twig);
 			}
 
 

@@ -39,7 +39,7 @@ class CommentsManager extends Manager {
 
 		$req->blindValue(':user_id', $comments->getUserId(), PDO::PARAM_INT);
 		$req->blindValue(':post_id', $comments->getPostId(), PDO::PARAM_INT);
-		$req->blindValue('::content', $comments->getContent(), PDO::PARAM_STR);
+		$req->blindValue(':content', $comments->getContent(), PDO::PARAM_STR);
 
 		$req->execute();
 

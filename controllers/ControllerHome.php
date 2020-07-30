@@ -6,12 +6,12 @@ use OC_Blog\Models\PostsManager;
 
 class ControllerHome {
 
-	private $url;
+
 	private $twig;
 
 
-	public function __construct($url, $twig) {
-		$this->url = $url;
+	public function __construct( $twig) {
+
 		$this->twig = $twig;
 		$this->renderHome();
 

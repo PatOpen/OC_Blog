@@ -13,11 +13,14 @@
            <div class="col-xs">
                <div class="card">
                    <img src="images/Logo.png" alt="" class="card-img-top" width="100%">
-                   <div class="card-title">{{ allPost.title }}</div>
+                   <div class="card-title text-center">{{ allPost.title }}</div>
                    <p class="card-text">{{ allPost.chapo }}</p>
-                   <a href="#">Voir l'article</a>
+                   <p class="card-text">{{ allPost.description }}</p>
+                   <a href="http://localhost:8000/Post/{{ allPost.id }}">Voir l'article</a>
                </div>
            </div>
+
+
 
         {% endfor %}
 

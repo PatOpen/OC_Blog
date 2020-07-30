@@ -1,9 +1,9 @@
 <?php
 
+use OC_Blog\Controllers\Router;
 use Whoops\Handler\PrettyPageHandler;
 
 require '../vendor/autoload.php';
-require '../controllers/Router.php';
 
 //Debug error
 $whoops = new Whoops\Run;

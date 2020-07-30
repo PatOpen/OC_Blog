@@ -20,6 +20,9 @@ class Session {
 		if (!self::$session){
 			self::$session = new Session();
 		}
+
+		return self::$session;
+
 	}
 
 	public function setKey($key, $value){
