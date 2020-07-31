@@ -14,26 +14,36 @@ class CommentsManager extends Manager {
 
 		return $req->fetchAll();
 
-	/*	//$comments = [];
-		while ($data = $req->fetch(PDO::FETCH_ASSOC)){
-				$comments = new Comments($data);
-				//array_push($comments, new Comments($data));
-		}
-		return $comments;*/
 	}
 
 	public function postComment($postId){
+		$sql = "SELECT c.id,
+					   c.user_id,
+					   c.post_id,
+					   TO_CHAR(c.create_at, 'DD/MM/YYYY à HH24hMI') AS comment_create_date,
+					   content,
+					   validation,
+					   TO_CHAR(c.modified_at, 'DD/MM/YYYY à HH24hMI') AS comment_modif_date,
+					   u.pseudo
+					   FROM comment AS c
+					   INNER JOIN users AS u
+					   ON c.user_id = u.id
+					   WHERE post_id = :postId AND validation = false ";
 
+		$req = $this->getBdd()->prepare($sql);
+		$req->bindValue(':postId', $postId);
+		$req->execute();
+		$req->setFetchMode( PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Comments' );
+		$comments = $req->fetchAll();
 
-		$req = $this->getBdd()->prepare("SELECT id, user_id, DATE_FORMAT(create_at, '%d/%m/%Y à %Hh%i') AS create_date, content FROM comment WHERE post_id = :post_id AND validation = true ORDER BY create_date DESC");
-		$req->execute([':post_id'=> $postId]);
+		$req->closeCursor();
 
-		return $req->fetchAll(PDO::FETCH_ASSOC);
+		return $comments;
 	}
 
 
 
-	public  function addComments(Comments $comments){
+	public function addComments(Comments $comments){
 
 		$req = $this->getBdd()->prepare('INSERT INTO comment(user_id, post_id, create_at, content, validation) VALUES ( :user_id, :post_id, NOW(), :content, false )');
 

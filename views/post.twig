@@ -8,8 +8,24 @@
 
     <h1>{{ thePosts.title }}</h1>
 
-        <p>écrit par {{ thePosts.user_id }}</p>
+        <span>Article écrit le {{ thePosts.post_create_date }}</span>
+
+        <p>{{ thePosts.description }}</p>
+
+        <p>écrit par {{ thePosts.pseudo }}</p>
+
+    {% for allComment in allComments %}
+
+        <div>{{ allComment.content }}</div>
+        <p>commentaire écrit par {{ allComment.pseudo }} le {{ allComment.comment_create_date }}</p>
 
     {% endfor %}
+
+    {% endfor %}
+
+
+    <h2>Ajouter un commentaire</h2>
+
+
 
 {% endblock %}

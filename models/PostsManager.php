@@ -9,7 +9,16 @@ class PostsManager extends Manager {
 
 	public function listPosts() {
 
-		$sql = "SELECT id, title, chapo, description, TO_CHAR(create_at, 'DD/MM/YYYY à HH24hMI') AS create_date, TO_CHAR(modified_at, 'DD/MM/YYYY à HH24hMI') AS modif_date, user_id FROM post ORDER BY id DESC" ;
+		$sql = "SELECT id,
+					   title,
+					   chapo,
+					   description,
+					   TO_CHAR(create_at, 'DD/MM/YYYY à HH24hMI') AS post_create_date,
+					   TO_CHAR(modified_at, 'DD/MM/YYYY à HH24hMI') AS post_modif_date,
+					   user_id
+					   FROM post
+					   ORDER BY id DESC";
+
 		$req = $this->getBdd()->prepare($sql);
 		$req->execute();
 		$req->setFetchMode( PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Posts' );
@@ -22,7 +31,19 @@ class PostsManager extends Manager {
 	}
 
 	public function getPost($id){
-		$sql = "SELECT id, title, chapo, description, TO_CHAR(create_at, 'DD/MM/YYYY à HH24hMI') AS create_date, TO_CHAR(modified_at, 'DD/MM/YYYY à HH24hMI') AS modif_date, user_id FROM post WHERE id = :id";
+		$sql = "SELECT p.id,
+					   title,
+					   chapo,
+					   description,
+					   TO_CHAR(p.create_at, 'DD/MM/YYYY à HH24hMI') AS post_create_date,
+					   TO_CHAR(modified_at, 'DD/MM/YYYY à HH24hMI') AS post_modif_date,
+					   p.user_id,
+					   u.pseudo
+					   FROM post AS p
+					   INNER JOIN users AS u
+					   ON p.user_id = u.id
+					   WHERE p.id = :id";
+
 		$req = $this->getBdd()->prepare($sql);
 		$req->bindValue(':id', $id);
 		$req->execute();

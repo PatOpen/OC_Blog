@@ -23,7 +23,6 @@ class ControllerPost {
 		$comments = new CommentsManager();
 		$thePost = $post->getPost($this->slug);
 		$allComments = $comments->postComment($this->slug);
-		echo $this->twig->render( 'post.twig', ['thePost' => $thePost,
-												'allComments' => $allComments]);
+		echo $this->twig->render( 'post.twig', ['thePost' => $thePost, 'allComments' => $allComments]);
 	}
 }
