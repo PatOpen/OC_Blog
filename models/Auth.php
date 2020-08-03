@@ -1,7 +1,8 @@
 <?php
 
+namespace OC_Blog\Models;
 
-class ModelAuth extends Manager {
+class Auth {
 
 	private $_id;
 	private $_pseudo;
@@ -12,6 +13,15 @@ class ModelAuth extends Manager {
 
 	public function __construct(array $data)
 	{
+		if(!empty($data))
+		{
+			$this -> hydrate($data);
+		}
+
+	}
+
+	public function hydrate($data){
+
 		foreach ($data as $key => $value)
 		{
 			$method = 'set'.ucfirst($key);

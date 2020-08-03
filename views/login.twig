@@ -1,0 +1,36 @@
+{% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+
+    {% if valid %}
+    <div class="bg-success text-white">
+        <p>Vous avez bien été enregistré, veuillez vous connecté !</p>
+    </div>
+    {% endif %}
+
+    <h1>Connexion</h1>
+
+    <form action="http://localhost:8000/Auth/addUser" method="post">
+        <div class="row">
+
+            {{ form.input('identifiant', 'Identifiant', 'email', 'Votre Email') }}
+
+        </div>
+        <div class="row">
+
+            {{ form.input('password', 'Mot de passe', 'password', 'Votre mot de passe') }}
+
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
+        <div class="form-group">
+            <a href="http://localhost:8000/Auth/register">Créer un compte</a>
+        </div>
+    </form>
+
+
+{% endblock %}

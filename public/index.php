@@ -1,9 +1,9 @@
 <?php
 
+use OC_Blog\Controllers\Router;
 use Whoops\Handler\PrettyPageHandler;
 
 require '../vendor/autoload.php';
-require '../controllers/Router.php';
 
 //Debug error
 $whoops = new Whoops\Run;
@@ -14,6 +14,8 @@ $whoops->register();
 $loader = new Twig\Loader\FilesystemLoader('../views');
 $twig = new Twig\Environment($loader);
 
-//Router
+//Sessions
+OC_Blog\Tools\Session::newSession();
+
 $router = new Router();
 $router->routeRequest($twig);

@@ -1,11 +1,29 @@
 {% extends 'layout.twig' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block content %}
 
     <p>Salut les gens</p>
 
+    <div class="row">
 
+        {% for allPost in allPosts %}
+
+           <div class="col-xs">
+               <div class="card">
+                   <img src="images/Logo.png" alt="" class="card-img-top" width="100%">
+                   <div class="card-title text-center">{{ allPost.title }}</div>
+                   <p class="card-text">{{ allPost.chapo }}</p>
+                   <p class="card-text">{{ allPost.description }}</p>
+                   <a href="http://localhost:8000/Post/{{ allPost.id }}">Voir l'article</a>
+               </div>
+           </div>
+
+
+
+        {% endfor %}
+
+    </div>
 
 {% endblock %}

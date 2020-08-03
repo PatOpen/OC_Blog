@@ -1,7 +1,8 @@
 <?php
 
+namespace OC_Blog\Models;
 
-class ModelComments extends Manager {
+class Comments {
 
 	private $_id;
 	private $_user_id;
@@ -12,6 +13,15 @@ class ModelComments extends Manager {
 
 	public function __construct(array $data)
 	{
+		if(!empty($data))
+		{
+			$this -> hydrate($data);
+		}
+
+	}
+
+	public function hydrate($data){
+
 		foreach ($data as $key => $value)
 		{
 			$method = 'set'.ucfirst($key);

@@ -1,7 +1,41 @@
 {% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
 
-{% block title %}{% endblock %}
+{% block title %}post{% endblock %}
 
 {% block content %}
+
+    {% for thePosts in thePost %}
+
+    <h1>{{ thePosts.title }}</h1>
+
+        <span>Article écrit le {{ thePosts.post_create_date }}</span>
+
+        <p>{{ thePosts.description }}</p>
+
+        <p>écrit par {{ thePosts.pseudo }}</p>
+
+    {% for allComment in allComments %}
+
+        <div>{{ allComment.content }}</div>
+        <p>commentaire écrit par {{ allComment.pseudo }} le {{ allComment.comment_create_date }}</p>
+
+    {% endfor %}
+
+    {% endfor %}
+
+
+    <h2>Ajouter un commentaire</h2>
+
+    <form action="http://localhost:8000/add" method="post">
+        <div class="row">
+
+            {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message') }}
+
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
+    </form>
 
 {% endblock %}
