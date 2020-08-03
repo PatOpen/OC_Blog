@@ -3,7 +3,7 @@
 namespace OC_Blog\Controllers;
 
 use Exception;
-//use OC_Blog\Controllers;
+
 
 class Router {
 
@@ -17,12 +17,18 @@ class Router {
 			if ( isset($url)) {
 
 				$controller      = ucfirst( strtolower( $url[1] ) );
-
 				$controllerClass = "OC_Blog\\Controllers\\Controller" . $controller;
 
-				if ( class_exists( $controllerClass ) ) {
+				if ( class_exists( $controllerClass)  && empty($url[2])) {
+					$this->_ctrl = new $controllerClass($twig);
+				}elseif (isset($_POST)){
+					$params['post'] = $_POST;
+					$this->_ctrl = new $controllerClass($url[2], $twig, $params);
+				}
+				elseif ( class_exists( $controllerClass)  && isset($url[2])) {
 					$this->_ctrl = new $controllerClass($url[2],$twig);
 				}
+
 				else {
 					$this->_ctrl = new ControllerHome($twig);
 				}

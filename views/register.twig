@@ -1,0 +1,65 @@
+{% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+
+    <h1>S'enregistrer</h1>
+
+    <form action="http://localhost:8000/Auth/check" method="post">
+        <div class="row">
+
+            {{ form.input('pseudo', 'Pseudo', 'text', 'Votre pseudo', key.pseudo ) }}
+            {{ form.input('identifiant', 'Email', 'email', 'Votre Email', key.identifiant) }}
+
+        </div>
+
+        {% if noPseudo %}
+            <div class="bg-warning text-white">
+                <p>Ce pseudo existe déja !</p>
+            </div>
+        {% endif %}
+        {% if noEmail %}
+            <div class="bg-warning text-white">
+                <p>Cet Email existe déja !</p>
+            </div>
+        {% endif %}
+
+        <div class="row">
+
+            {{ form.input('password', 'Mot de passe', 'password', 'Votre mot de passe') }}
+
+        </div>
+        <div class="row">
+
+            {{ form.input('confirme', 'Confirmer votre mot de passe', 'password', 'Confirmer votre mot de passe') }}
+
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
+
+
+        {% if valid %}
+            <div class="bg-danger text-white">
+                <p>les mots de passe ne correspondent pas !</p>
+            </div>
+        {% endif %}
+        {% if noValid %}
+            <div class="bg-danger text-white">
+                <p>Les champs doivent avoir au moins 4 caractères et sans espace !</p>
+            </div>
+        {% endif %}
+        {% if space %}
+            <div class="bg-warning text-white">
+                <p>Les champs ne doivent pas contenir d'espaces</p>
+            </div>
+        {% endif %}
+
+
+    </form>
+
+
+{% endblock %}

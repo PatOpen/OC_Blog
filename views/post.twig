@@ -1,4 +1,5 @@
 {% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
 
 {% block title %}post{% endblock %}
 
@@ -26,6 +27,15 @@
 
     <h2>Ajouter un commentaire</h2>
 
+    <form action="http://localhost:8000/add" method="post">
+        <div class="row">
 
+            {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message') }}
+
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
+    </form>
 
 {% endblock %}
