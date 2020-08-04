@@ -10,7 +10,7 @@ class ControllerHome {
 	private $twig;
 
 
-	public function __construct( $twig) {
+	public function __construct( $twig ) {
 
 		$this->twig = $twig;
 		$this->renderHome();
@@ -20,6 +20,14 @@ class ControllerHome {
 	public function renderHome(){
 		$posts = new PostsManager();
 		$allPosts = $posts->listPosts();
-		echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts]);
+		if(!empty($_SESSION)){
+			$logged = true;
+			echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts, 'logged'=> $logged, 'user'=> $_SESSION['user']['pseudo']]);
+		}else{
+			$logged = false;
+			echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts, 'logged' => $logged]);
+			var_dump($_SESSION);
+		}
+
 	}
 }
