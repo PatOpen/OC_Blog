@@ -5,7 +5,6 @@ namespace OC_Blog\Controllers;
 
 use OC_Blog\Models\AuthManager;
 
-
 class ControllerAuth extends AuthManager{
 
 	private $params;
@@ -40,6 +39,21 @@ class ControllerAuth extends AuthManager{
 		$this->registerUser($params);
 		$valid = true;
 		echo $this->twig->render('login.twig', ['valid' => $valid]);
+
+	}
+
+	public function checkAuth(){
+		$params = $this->params['post'];
+		$user = $this->checkLogin($params);
+
+		if ($user === false){
+			$notValid = true;
+			echo $this->twig->render('login.twig', ['notValid' => $notValid]);
+		}else{
+			$_SESSION['user'] = $user;
+			header("Location: http://localhost:8000/Home");
+		}
+
 
 	}
 

@@ -13,7 +13,7 @@
 
     <h1>Connexion</h1>
 
-    <form action="http://localhost:8000/Auth/addUser" method="post">
+    <form action="http://localhost:8000/Auth/checkAuth" method="post">
         <div class="row">
 
             {{ form.input('identifiant', 'Identifiant', 'email', 'Votre Email') }}
@@ -27,6 +27,13 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Envoyer</button>
         </div>
+
+        {% if notValid %}
+            <div class="bg-danger text-white">
+                <p>L'identifiant ou le mot de passe sont incorrect</p>
+            </div>
+        {% endif %}
+
         <div class="form-group">
             <a href="http://localhost:8000/Auth/register">Créer un compte</a>
         </div>

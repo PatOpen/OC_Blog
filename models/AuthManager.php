@@ -2,6 +2,8 @@
 
 namespace OC_Blog\Models;
 
+use PDO;
+
 class AuthManager extends Manager {
 
 
@@ -14,6 +16,8 @@ class AuthManager extends Manager {
 			':email'    => $params['identifiant'],
 			':password' => $pass
 		]);
+
+		$req->closeCursor();
 	}
 
 	public function checkUser($user):bool
@@ -23,6 +27,8 @@ class AuthManager extends Manager {
 		$req = $this->getBdd()->prepare($sql);
 		$req->execute([$pseudo]);
 		$test = $req->fetch();
+
+		$req->closeCursor();
 
 		if ($test){
 			return true;
@@ -41,6 +47,8 @@ class AuthManager extends Manager {
 		$req->execute([$email]);
 		$test = $req->fetch();
 
+		$req->closeCursor();
+
 		if ($test){
 			return true;
 		}else{
@@ -48,6 +56,25 @@ class AuthManager extends Manager {
 		}
 
 
+	}
+
+	public function checkLogin($params)
+	{
+		$email = $params['identifiant'];
+
+		$sql = "SELECT * FROM users WHERE email = ?";
+		$req = $this->getBdd()->prepare($sql);
+		$req->execute([$email]);
+		$user = $req->fetch(PDO::FETCH_ASSOC);
+
+		$req->closeCursor();
+
+
+		if (password_verify($params['password'], $user['password'])){
+			return $user;
+		}else{
+			return false;
+		}
 	}
 
 }

@@ -9,7 +9,7 @@ class Router {
 
 	private $_ctrl;
 
-	public function routeRequest( $twig) {
+	public function routeRequest( $twig ) {
 		try {
 
 			$url = explode( '/', filter_var( $_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL ) );
@@ -21,12 +21,16 @@ class Router {
 
 				if ( class_exists( $controllerClass)  && empty($url[2])) {
 					$this->_ctrl = new $controllerClass($twig);
-				}elseif (isset($_POST)){
+					//var_dump($controller);
+				}elseif (class_exists( $controllerClass)  && !empty($_POST)){
+					//var_dump($_POST);
 					$params['post'] = $_POST;
 					$this->_ctrl = new $controllerClass($url[2], $twig, $params);
+					//var_dump($controller);
 				}
 				elseif ( class_exists( $controllerClass)  && isset($url[2])) {
-					$this->_ctrl = new $controllerClass($url[2],$twig);
+					$this->_ctrl = new $controllerClass($url[2], $twig, []);
+					//var_dump($url);
 				}
 
 				else {
