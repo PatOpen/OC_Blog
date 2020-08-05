@@ -15,7 +15,7 @@ $loader = new Twig\Loader\FilesystemLoader('../views');
 $twig = new Twig\Environment($loader);
 
 //Sessions
-OC_Blog\Tools\Session::newSession();
+OC_Blog\Tools\Session::getSession();
 
 $router = new Router();
 $router->routeRequest($twig);

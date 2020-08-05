@@ -19,10 +19,23 @@ class ControllerPost {
 	}
 
 	public function renderPost(){
+
 		$post = new PostsManager();
 		$comments = new CommentsManager();
 		$thePost = $post->getPost($this->slug);
 		$allComments = $comments->postComment($this->slug);
-		echo $this->twig->render( 'post.twig', ['thePost' => $thePost, 'allComments' => $allComments]);
+		if (!empty($_SESSION)){
+			$logged = true;
+			echo $this->twig->render( 'post.twig', ['thePost' => $thePost,
+			                                        'allComments' => $allComments,
+			                                        'logged'=> $logged,
+			                                        'user'=> $_SESSION['user']['pseudo']]);
+		}else{
+			$logged = false;
+			echo $this->twig->render( 'post.twig', ['thePost' => $thePost,
+			                                        'allComments' => $allComments,
+			                                        'logged'=> $logged]);
+		}
+
 	}
 }
