@@ -3,3 +3,5 @@
 /vendor/
 
 /config/DBConfig.php
+
+/public/images/

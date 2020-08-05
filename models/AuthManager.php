@@ -105,4 +105,20 @@ class AuthManager extends Manager {
 
 	}
 
+	public function updateAvatar($params){
+
+		$user = new Auth($_SESSION['user']);
+		$sql ="UPDATE users SET avatar = :avatar WHERE id = :id";
+		$req = $this->getBdd()->prepare($sql);
+		$user = $req->execute([':id'=> $user->getId(),
+		               ':avatar'=> $params]);
+
+		if ($user){
+			return true;
+		}else{
+			return false;
+		}
+
+	}
+
 }

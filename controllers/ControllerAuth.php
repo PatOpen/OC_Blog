@@ -101,4 +101,5 @@ class ControllerAuth extends AuthManager{
 		$this->addUser($params);
 	}
 
+
 }

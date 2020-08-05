@@ -32,7 +32,8 @@ class ControllerAdmin {
 	public function profile(){
 		echo $this->twig->render('profile.twig', ['logged' => self::LOGGED,
 		                                          'user'   => $_SESSION['user']['pseudo'],
-		                                          'value'  => $_SESSION['user']['email']]);
+		                                          'value'  => $_SESSION['user']['email'],
+												   'avatar'=> $_SESSION['user']['avatar']]);
 
 	}
 
@@ -105,6 +106,60 @@ class ControllerAdmin {
 				exit();
 			}
 		}
+	}
+
+	public function avatar(){
+
+		$maxSize = 500000;
+		$fileSize = $_FILES['avatar']['size'];
+		$tmpName = $_FILES['avatar']['tmp_name'];
+		$fileName = $_FILES['avatar']['name'];
+		$extension = ['jpg', 'jpeg', 'gif', 'png'];
+
+		if($_FILES['avatar']['error'] > 0){
+			$error =true;
+			echo $this->twig->render('profile.twig', ['error' => $error, 'logged'=> self::LOGGED, 'user'=> $_SESSION['user']['pseudo'], 'value'=> $_SESSION['user']['email']]);
+			exit();
+		}
+
+		if ($fileSize > $maxSize){
+			$size = true;
+			echo $this->twig->render('profile.twig', ['size' => $size, 'logged'=> self::LOGGED, 'user'=> $_SESSION['user']['pseudo'], 'value'=> $_SESSION['user']['email']]);
+			exit();
+		}
+
+		$fileExtension = strtolower(substr($fileName, -3));
+
+		if (!in_array($fileExtension, $extension)){
+			$ext =true;
+			echo $this->twig->render('profile.twig', ['ext' => $ext, 'logged'=> self::LOGGED, 'user'=> $_SESSION['user']['pseudo'], 'value'=> $_SESSION['user']['email']]);
+			exit();
+		}
+
+		$uniqName = md5(uniqid(rand(), true));
+		$newNameFile = $uniqName . "." . $fileExtension;
+		$pathFile = "../public/images/avatar/". $newNameFile;
+		$moveFile = move_uploaded_file($tmpName, $pathFile);
+
+		if ($moveFile){
+			$oldFile = "../public/images/avatar/" . $_SESSION['user']['avatar'];
+
+			$upload = $this->userManager->updateAvatar($newNameFile);
+
+			if ($upload){
+				$confirm = true;
+				$_SESSION['user']['avatar'] = $newNameFile;
+				echo $this->twig->render('profile.twig', ['confirm' => $confirm, 'logged'=> self::LOGGED, 'user'=> $_SESSION['user']['pseudo'], 'value'=> $_SESSION['user']['email'], 'avatar'=> $_SESSION['user']['avatar']]);
+
+			}
+
+			if (file_exists($oldFile)){
+				unlink($oldFile);
+			}
+		}
+
+
+
 	}
 
 }
