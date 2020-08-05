@@ -15,7 +15,7 @@ class Session {
 		}
 	}
 
-	public static function newSession(){
+	public static function getSession(){
 
 		if (!self::$session){
 			self::$session = new Session();

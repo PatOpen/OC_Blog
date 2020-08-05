@@ -6,7 +6,6 @@ use OC_Blog\Models\PostsManager;
 
 class ControllerHome {
 
-
 	private $twig;
 
 
@@ -26,7 +25,6 @@ class ControllerHome {
 		}else{
 			$logged = false;
 			echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts, 'logged' => $logged]);
-			var_dump($_SESSION);
 		}
 
 	}

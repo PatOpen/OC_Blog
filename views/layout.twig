@@ -29,17 +29,17 @@
 
         </ul>
     </div>
-    {% if logged%}
+    {% if logged %}
         <ul class="navbar-nav ml-md-auto">
-            <li class="nav-item ">
-                <span class="nav-link">Salut {{ user }}</span>
+            <li class="nav-item dropdown show">
+                <a href="#" class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Bonjour {{ user }}</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a href="http://localhost:8000/Admin/profile" class="dropdown-item">Mon profile</a>
+                    <a href="http://localhost:8000/Auth/logout" class="dropdown-item">Déconnexion</a>
+                </div>
             </li>
         </ul>
-        <ul class="navbar-nav ml-md-auto">
-            <li class="nav-item ">
-                <a class="nav-link" href="http://localhost:8000/Auth/logout" >Déconnexion</a>
-            </li>
-        </ul>
+
     {% else %}
     <ul class="navbar-nav ml-md-auto">
         <li class="nav-item ">

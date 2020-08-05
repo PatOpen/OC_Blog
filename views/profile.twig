@@ -1,0 +1,66 @@
+{% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+    {% if confirm %}
+        <div class="bg-success text-white">
+            <p>Vos informations ont bien été mis à jour !</p>
+        </div>
+    {% endif %}
+
+    <h1>Profile</h1>
+
+    <form action="http://localhost:8000/Admin/checkMailProfile" method="post">
+        <div class="row">
+
+            {{ form.input('identifiant', 'Changer d\'Email', 'email', 'Nouveau Email', value) }}
+
+        </div>
+        {% if noEmail %}
+            <div class="bg-warning text-white">
+                <p>Cet Email existe déja !</p>
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </form>
+
+    <form action="http://localhost:8000/Admin/checkPassProfile" method="post">
+        <div class="row">
+
+            {{ form.input('password', 'Nouveau mot de passe', 'password', 'Votre nouveau mot de passe') }}
+
+        </div>
+        <div class="row">
+
+            {{ form.input('confirme', 'Confirmation du nouveau mot de passe', 'password', 'Confirmation') }}
+
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+
+        {% if valid %}
+            <div class="bg-danger text-white">
+                <p>les mots de passe ne correspondent pas !</p>
+            </div>
+        {% endif %}
+        {% if noValid %}
+            <div class="bg-danger text-white">
+                <p>Les champs doivent avoir au moins 4 caractères et sans espace !</p>
+            </div>
+        {% endif %}
+        {% if space %}
+            <div class="bg-warning text-white">
+                <p>Les champs ne doivent pas contenir d'espaces</p>
+            </div>
+        {% endif %}
+    </form>
+
+
+{% endblock %}

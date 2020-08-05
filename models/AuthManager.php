@@ -4,6 +4,7 @@ namespace OC_Blog\Models;
 
 use PDO;
 
+
 class AuthManager extends Manager {
 
 
@@ -75,6 +76,33 @@ class AuthManager extends Manager {
 		}else{
 			return false;
 		}
+	}
+
+	public function updateUserMail($params){
+
+		$user = new Auth($_SESSION['user']);
+		$sql ="UPDATE users SET email = :email WHERE id = :id";
+		$req = $this->getBdd()->prepare($sql);
+		$user = $req->execute([':id'=> $user->getId(),
+			                   ':email'=> $params]);
+
+		if ($user){
+			return true;
+		}else{
+			return false;
+		}
+
+	}
+
+	public function updateUserPass($params){
+		$pass = password_hash($params['password'], PASSWORD_DEFAULT);
+
+		$user = new Auth($_SESSION['user']);
+		$sql ="UPDATE users SET password = :password WHERE id = :id";
+		$req = $this->getBdd()->prepare($sql);
+		$req->execute([':id'=> $user->getId(),
+		                       ':password'=> $pass]);
+
 	}
 
 }

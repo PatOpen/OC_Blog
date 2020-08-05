@@ -29,6 +29,11 @@ class ControllerAuth extends AuthManager{
 
 	}
 
+	public function logout(){
+		session_destroy();
+		header("Location: http://localhost:8000/Home");
+	}
+
 	public function register(){
 
 		echo $this->twig->render('register.twig');
