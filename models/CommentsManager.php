@@ -24,7 +24,8 @@ class CommentsManager extends Manager {
 					   content,
 					   validation,
 					   TO_CHAR(c.modified_at, 'DD/MM/YYYY à HH24hMI') AS comment_modif_date,
-					   u.pseudo
+					   u.pseudo,
+					   u.avatar
 					   FROM comment AS c
 					   INNER JOIN users AS u
 					   ON c.user_id = u.id
@@ -43,25 +44,35 @@ class CommentsManager extends Manager {
 
 
 
-	public function addComments(Comments $comments){
+	public function addComment($userId, $comment, $postId){
 
-		$req = $this->getBdd()->prepare('INSERT INTO comment(user_id, post_id, create_at, content, validation) VALUES ( :user_id, :post_id, NOW(), :content, false )');
+		$sql = "INSERT INTO comment (user_id, post_id, create_at, content, validation, modified_at) VALUES (:user_id, :post_id, now(), :content, false, null )";
+		$req = $this->getBdd()->prepare($sql);
+		$result = $req->execute([
+			':user_id' => $userId,
+			':post_id' => $postId,
+			':content' => $comment
+		]);
 
-		$req->blindValue(':user_id', $comments->getUserId(), PDO::PARAM_INT);
-		$req->blindValue(':post_id', $comments->getPostId(), PDO::PARAM_INT);
-		$req->blindValue(':content', $comments->getContent(), PDO::PARAM_STR);
+		$req->closeCursor();
 
-		$req->execute();
+		if ($result){
+			return true;
+		}else{
+			return  false;
+		}
 
 	}
 
-	public function deleteComments($id){
+	public function deleteComment($id){
 
 		$this->getBdd()->exec('DELETE FROM comment WHERE id = ' . (int) $id);
 
 	}
 
-	public function updateComments(Comments $comments){
+	public function updateComment(Comments $comments){
+
+		$sql = "UPDATE comment SET user_id = :user_id, post_id = :post_id, modified_at = NOW(), content = :content, validation = false ";
 
 		$req = $this->getBdd()->prepare('UPDATE comment SET user_id = :user_id, post_id = :post_id, modified_at = NOW(), content = :content, validation = false ');
 		$req->blindValue(':user_id', $comments->getUserId(), PDO::PARAM_INT);

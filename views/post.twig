@@ -15,19 +15,46 @@
 
         <p>écrit par {{ thePosts.pseudo }}</p>
 
-    {% for allComment in allComments %}
+        <h2 class="page-header">Commentaires</h2>
 
-        <div>{{ allComment.content }}</div>
-        <p>commentaire écrit par {{ allComment.pseudo }} le {{ allComment.comment_create_date }}</p>
+        <section class="comment-list">
 
-    {% endfor %}
+            {% for allComment in allComments %}
+            <article class="row">
+                <div class="col-md-2 col-sm-2 hidden-xs">
+                    <figure class="thumbnail">
+                        <img class=" rounded mx-auto d-block" src="../images/avatar/{{ allComment.avatar }}" width="50px" height="50px" alt="{{ allComment.pseudo }}"/>
+                        <figcaption class="text-center">{{ allComment.pseudo }}</figcaption>
+                    </figure>
+                </div>
+                <div class="col-md-10 col-sm-10">
+                    <div class="panel panel-default arrow left">
+                        <div class="panel-body">
+                            <header class="text-left">
+                                <div class="comment-user"><i class="fa fa-user"></i> {{ allComment.pseudo }}</div>
+                                <time class="comment-date" datetime="{{ allComment.comment_create_date }}"><i class="fa fa-clock-o"></i> {{ allComment.comment_create_date }}</time>
+                            </header>
+                            <div class="comment-post">
+                                <p>{{ allComment.content }} </p>
+                            </div>
+                            {% if allComment.user_id == modifComment%}
+                            <p class="text-right"><a href="http://localhost:8000/Comment/modifComment/{{ allComment.id}}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i> Modifier</a></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            {% endfor %}
+
+        </section>
 
     {% endfor %}
 
 
     <h2>Ajouter un commentaire</h2>
 
-    <form action="http://localhost:8000/add" method="post">
+    <form action="http://localhost:8000/Comment/addCommentPost" method="post">
         <div class="row">
 
             {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message') }}

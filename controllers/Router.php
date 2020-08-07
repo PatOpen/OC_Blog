@@ -21,16 +21,13 @@ class Router {
 
 				if ( class_exists( $controllerClass)  && empty($url[2])) {
 					$this->_ctrl = new $controllerClass($twig);
-					//var_dump($controller);
 				}elseif (class_exists( $controllerClass)  && !empty($_POST)){
-					//var_dump($_POST);
 					$params['post'] = $_POST;
-					$this->_ctrl = new $controllerClass($url[2], $twig, $params);
-					//var_dump($controller);
+					//var_dump($url);exit();
+					$this->_ctrl = new $controllerClass($url, $twig, $params);
 				}
 				elseif ( class_exists( $controllerClass)  && isset($url[2])) {
-					$this->_ctrl = new $controllerClass($url[2], $twig, []);
-					//var_dump($url);
+					$this->_ctrl = new $controllerClass($url, $twig, []);
 				}
 
 				else {

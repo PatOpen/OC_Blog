@@ -15,8 +15,9 @@ class ControllerAuth extends AuthManager{
 		$this->method = $method;
 		$this->twig = $twig;
 		$this->params = $params;
-		if (method_exists(ControllerAuth::class, $method) ) {
-			$this->$method();
+		$target = $method[2];
+		if (method_exists(ControllerAuth::class, $target) ) {
+			$this->$target();
 		}else{
 			echo $this->twig->render('404.twig');
 		}

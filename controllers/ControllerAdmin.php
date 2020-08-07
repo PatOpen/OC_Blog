@@ -20,9 +20,9 @@ class ControllerAdmin {
 		$this->twig = $twig;
 		$this->params = $params;
 		$this->userManager = new AuthManager();
-
-		if (method_exists(ControllerAdmin::class, $method) ) {
-			$this->$method();
+		$target = $method[2];
+		if (method_exists(ControllerAdmin::class, $target) ) {
+			$this->$target();
 		}else{
 			echo $this->twig->render('404.twig');
 		}
@@ -33,7 +33,7 @@ class ControllerAdmin {
 		echo $this->twig->render('profile.twig', ['logged' => self::LOGGED,
 		                                          'user'   => $_SESSION['user']['pseudo'],
 		                                          'value'  => $_SESSION['user']['email'],
-												   'avatar'=> $_SESSION['user']['avatar']]);
+		                                          'avatar'=> $_SESSION['user']['avatar']]);
 
 	}
 
@@ -142,7 +142,10 @@ class ControllerAdmin {
 		$moveFile = move_uploaded_file($tmpName, $pathFile);
 
 		if ($moveFile){
-			$oldFile = "../public/images/avatar/" . $_SESSION['user']['avatar'];
+
+			if (file_exists("../public/images/avatar/" . $_SESSION['user']['avatar'])){
+				$oldFile = "../public/images/avatar/" . $_SESSION['user']['avatar'];
+			}
 
 			$upload = $this->userManager->updateAvatar($newNameFile);
 

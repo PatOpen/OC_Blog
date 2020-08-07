@@ -19,7 +19,7 @@ class ControllerHome {
 	public function renderHome(){
 		$posts = new PostsManager();
 		$allPosts = $posts->listPosts();
-		if(!empty($_SESSION)){
+		if(!empty($_SESSION['user'])){
 			$logged = true;
 			echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts, 'logged'=> $logged, 'user'=> $_SESSION['user']['pseudo']]);
 		}else{

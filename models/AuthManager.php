@@ -86,6 +86,8 @@ class AuthManager extends Manager {
 		$user = $req->execute([':id'=> $user->getId(),
 			                   ':email'=> $params]);
 
+		$req->closeCursor();
+
 		if ($user){
 			return true;
 		}else{
@@ -101,7 +103,9 @@ class AuthManager extends Manager {
 		$sql ="UPDATE users SET password = :password WHERE id = :id";
 		$req = $this->getBdd()->prepare($sql);
 		$req->execute([':id'=> $user->getId(),
-		                       ':password'=> $pass]);
+		               ':password'=> $pass]);
+
+		$req->closeCursor();
 
 	}
 
@@ -111,7 +115,9 @@ class AuthManager extends Manager {
 		$sql ="UPDATE users SET avatar = :avatar WHERE id = :id";
 		$req = $this->getBdd()->prepare($sql);
 		$user = $req->execute([':id'=> $user->getId(),
-		               ':avatar'=> $params]);
+		                       ':avatar'=> $params]);
+
+		$req->closeCursor();
 
 		if ($user){
 			return true;
