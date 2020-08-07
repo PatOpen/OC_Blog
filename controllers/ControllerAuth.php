@@ -4,6 +4,7 @@
 namespace OC_Blog\Controllers;
 
 use OC_Blog\Models\AuthManager;
+use OC_Blog\Tools\Session;
 
 class ControllerAuth extends AuthManager{
 
@@ -51,12 +52,13 @@ class ControllerAuth extends AuthManager{
 	public function checkAuth(){
 		$params = $this->params['post'];
 		$user = $this->checkLogin($params);
+		$key = 'user';
 
 		if ($user === false){
 			$notValid = true;
 			echo $this->twig->render('login.twig', ['notValid' => $notValid]);
 		}else{
-			$_SESSION['user'] = $user;
+			( new Session )->setKey($key, $user);
 			header("Location: http://localhost:8000/Home");
 		}
 

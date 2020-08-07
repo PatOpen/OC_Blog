@@ -3,6 +3,7 @@
 namespace OC_Blog\Controllers;
 
 use OC_Blog\Models\PostsManager;
+use OC_Blog\Tools\Session;
 
 class ControllerHome {
 
@@ -19,9 +20,11 @@ class ControllerHome {
 	public function renderHome(){
 		$posts = new PostsManager();
 		$allPosts = $posts->listPosts();
-		if(!empty($_SESSION['user'])){
+		$key = (new Session)->getKey('user');
+
+		if(!empty($key)){
 			$logged = true;
-			echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts, 'logged'=> $logged, 'user'=> $_SESSION['user']['pseudo']]);
+			echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts, 'logged'=> $logged, 'user'=> $key['pseudo']]);
 		}else{
 			$logged = false;
 			echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts, 'logged' => $logged]);

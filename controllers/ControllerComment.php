@@ -3,6 +3,7 @@
 namespace OC_Blog\Controllers;
 
 use OC_Blog\Models\CommentsManager;
+use OC_Blog\Tools\Session;
 
 
 class ControllerComment {
@@ -12,7 +13,6 @@ class ControllerComment {
 	private $twig;
 	private $commentManager;
 
-	const LOGGED = true;
 
 	public function __construct($method, $twig, $params){
 		$this->method = $method;
@@ -28,18 +28,17 @@ class ControllerComment {
 	}
 
 	public function addCommentPost(){
+		$key = (new Session)->getKey('user');
 
 
-		if (!isset($_SESSION['user'])){
+		if (!isset($key)){
 			header("Location: http://localhost:8000/Auth/login");
 			exit();
-		}
+		}else{
 
-		if (isset($_SESSION['user'])){
-
-			$userId = $_SESSION['user']['id'];
+			$userId = $key['id'];
 			$comment = $this->params['post']['message'];
-			$postId = $_SESSION['post'];
+			$postId = (new Session)->getKey('post');
 
 			$good = $this->commentManager->addComment($userId, $comment, $postId);
 
@@ -51,7 +50,9 @@ class ControllerComment {
 		}
 	}
 
-	public function modifComment(){
+/*	public function modifComment(){
+		$keyUser = (new Session)->getKey('user');
+		$keyPost = (new Session)->getKey('post');
 
 		if (isset($this->method[3]) && isset($_SESSION['user']['id'])){
 			$comentId = $this->method[3];
@@ -61,7 +62,7 @@ class ControllerComment {
 		}
 
 
-	}
+	}*/
 
 
 
