@@ -46,7 +46,7 @@ class CommentsManager extends Manager {
 
 	public function addComment($userId, $comment, $postId){
 
-		$sql = "INSERT INTO comment (user_id, post_id, create_at, content, validation, modified_at) VALUES (:user_id, :post_id, now(), :content, false, null )";
+		$sql = "INSERT INTO comment ( user_id, post_id, create_at, content, validation, modified_at) VALUES ( :user_id, :post_id, now(), :content, false, null )";
 		$req = $this->getBdd()->prepare($sql);
 		$result = $req->execute([
 			':user_id' => $userId,
@@ -70,14 +70,15 @@ class CommentsManager extends Manager {
 
 	}
 
+
+
 	public function updateComment(Comments $comments){
 
 		$sql = "UPDATE comment SET user_id = :user_id, post_id = :post_id, modified_at = NOW(), content = :content, validation = false ";
 
 		$req = $this->getBdd()->prepare('UPDATE comment SET user_id = :user_id, post_id = :post_id, modified_at = NOW(), content = :content, validation = false ');
-		$req->blindValue(':user_id', $comments->getUserId(), PDO::PARAM_INT);
-		$req->blindValue(':post_id', $comments->getPostId(), PDO::PARAM_INT);
-		$req->blindValue(':content', $comments->getContent(), PDO::PARAM_STR);
+
+
 
 		$req->execute();
 

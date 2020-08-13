@@ -32,7 +32,7 @@ class ControllerComment {
 
 
 		if (!isset($key)){
-			header("Location: http://localhost:8000/Auth/login");
+			header("Location: http://".$_SERVER['SERVER_NAME']."/Auth/login");
 			exit();
 		}else{
 
@@ -40,10 +40,10 @@ class ControllerComment {
 			$comment = $this->params['post']['message'];
 			$postId = (new Session)->getKey('post');
 
-			$good = $this->commentManager->addComment($userId, $comment, $postId);
+			$good = $this->commentManager->addComment($userId, $comment, $postId['id']);
 
 			if ($good){
-				header("Location: http://localhost:8000/Post/$postId");
+				header("Location: http://".$_SERVER['SERVER_NAME']."/Post/".$postId['id']);
 			}else{
 				var_dump($good);
 			}
@@ -54,11 +54,16 @@ class ControllerComment {
 		$keyUser = (new Session)->getKey('user');
 		$keyPost = (new Session)->getKey('post');
 
-		if (isset($this->method[3]) && isset($_SESSION['user']['id'])){
-			$comentId = $this->method[3];
-			$user = $_SESSION['user']['id'];
-			$postId = $_SESSION['post']['id'];
-			var_dump($_SESSION['post']['id']);
+		if (isset($this->method[3]) && isset($keyUser['id']) && isset($keyPost['id'])){
+			//$comentId = (int)$this->method[3];
+			//$user = $keyUser['id'];
+			//$postId = $keyPost['id'];
+
+
+
+
+
+
 		}
 
 

@@ -62,7 +62,7 @@ class ControllerAdmin {
 
 		else
 			{
-			$validChange = $this->userManager->updateUserMail($params['identifiant']);
+			$validChange = $this->userManager->updateUserMail($params['identifiant'], $key);
 			if ($validChange){
 				$key['email'] = $params['identifiant'];
 				$confirm = true;
@@ -89,7 +89,7 @@ class ControllerAdmin {
 
 		if ($params['password'] === $params['confirme']){
 			$confirm = true;
-			$this->userManager->updateUserPass($params);
+			$this->userManager->updateUserPass($params, $key);
 			echo $this->twig->render('profile.twig', ['confirm' => $confirm, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
 
 		}
@@ -147,28 +147,23 @@ class ControllerAdmin {
 		$newNameFile = $uniqName . "." . $fileExtension;
 		$pathFile = "../public/images/avatar/". $newNameFile;
 		$moveFile = move_uploaded_file($tmpName, $pathFile);
+		$oldFile = "../public/images/avatar/" . $key['avatar'];
 
 		if ($moveFile){
 
-			if (file_exists("../public/images/avatar/" . $key['avatar'])){
-				$oldFile = "../public/images/avatar/" . $key['avatar'];
-			}
-
-			$upload = $this->userManager->updateAvatar($newNameFile);
+			$upload = $this->userManager->updateAvatar($newNameFile, $key);
 
 			if ($upload){
+
 				$confirm = true;
-				$key['avatar'] = $newNameFile;
+				(new Session)->setValueKey('user', 'avatar', $newNameFile);
 				echo $this->twig->render('profile.twig', ['confirm' => $confirm, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email'], 'avatar'=> $key['avatar']]);
 
-			}
-
-			if (file_exists($oldFile)){
-				unlink($oldFile);
+				if (file_exists($oldFile)){
+					unlink($oldFile);
+				}
 			}
 		}
-
-
 
 	}
 

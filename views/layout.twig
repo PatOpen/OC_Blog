@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="">
 
     <title>{% block title %}{% endblock %}</title>
 
@@ -23,7 +23,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="http://localhost:8000/Home">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/Home">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>
@@ -36,8 +36,8 @@
             <li class="nav-item dropdown show">
                 <a href="#" class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Bonjour {{ user }}</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a href="http://localhost:8000/Admin/profile" class="dropdown-item">Mon profile</a>
-                    <a href="http://localhost:8000/Auth/logout" class="dropdown-item">Déconnexion</a>
+                    <a href="http://localhost/Admin/profile" class="dropdown-item">Mon profile</a>
+                    <a href="http://localhost/Auth/logout" class="dropdown-item">Déconnexion</a>
                 </div>
             </li>
         </ul>
@@ -45,7 +45,7 @@
     {% else %}
     <ul class="navbar-nav ml-md-auto">
         <li class="nav-item ">
-            <a class="nav-link" href="http://localhost:8000/Auth/login" >Se connecter</a>
+            <a class="nav-link" href="http://localhost/Auth/login" >Se connecter</a>
         </li>
     </ul>
     {% endif %}

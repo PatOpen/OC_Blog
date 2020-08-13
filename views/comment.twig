@@ -1,8 +1,11 @@
+{% extends 'layout.twig' %}
 {% import 'form.twig' as form %}
 
-{% block modif %}
+{% block title %}Modification{% endblock %}
 
-    <form action="http://localhost:8000/Comment/addCommentPost" method="post">
+{% block content %}
+
+    <form action="http://localhost/Comment/addCommentPost" method="post">
         <div class="row">
 
             {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message', allComment.content ) }}

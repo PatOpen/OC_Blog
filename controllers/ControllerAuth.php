@@ -33,7 +33,7 @@ class ControllerAuth extends AuthManager{
 
 	public function logout(){
 		session_destroy();
-		header("Location: http://localhost:8000/Home");
+		header("Location: http://".$_SERVER['SERVER_NAME']."/Home");
 	}
 
 	public function register(){
@@ -59,7 +59,7 @@ class ControllerAuth extends AuthManager{
 			echo $this->twig->render('login.twig', ['notValid' => $notValid]);
 		}else{
 			( new Session )->setKey($key, $user);
-			header("Location: http://localhost:8000/Home");
+			header("Location: http://".$_SERVER['SERVER_NAME']."/Home");
 		}
 
 

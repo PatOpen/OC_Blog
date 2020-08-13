@@ -78,9 +78,9 @@ class AuthManager extends Manager {
 		}
 	}
 
-	public function updateUserMail($params){
+	public function updateUserMail($params, $userKey){
 
-		$user = new Auth($_SESSION['user']);
+		$user = new Auth($userKey);
 		$sql ="UPDATE users SET email = :email WHERE id = :id";
 		$req = $this->getBdd()->prepare($sql);
 		$user = $req->execute([':id'=> $user->getId(),
@@ -96,10 +96,10 @@ class AuthManager extends Manager {
 
 	}
 
-	public function updateUserPass($params){
+	public function updateUserPass($params, $userKey){
 		$pass = password_hash($params['password'], PASSWORD_DEFAULT);
 
-		$user = new Auth($_SESSION['user']);
+		$user = new Auth($userKey);
 		$sql ="UPDATE users SET password = :password WHERE id = :id";
 		$req = $this->getBdd()->prepare($sql);
 		$req->execute([':id'=> $user->getId(),
@@ -109,9 +109,9 @@ class AuthManager extends Manager {
 
 	}
 
-	public function updateAvatar($params){
+	public function updateAvatar($params, $userId){
 
-		$user = new Auth($_SESSION['user']);
+		$user = new Auth($userId);
 		$sql ="UPDATE users SET avatar = :avatar WHERE id = :id";
 		$req = $this->getBdd()->prepare($sql);
 		$user = $req->execute([':id'=> $user->getId(),

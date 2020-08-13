@@ -20,7 +20,7 @@
         <section class="comment-list">
 
             {% for allComment in allComments %}
-            <article class="row">
+            <article class="comment-post row">
                 <div class="col-md-2 col-sm-2 hidden-xs">
                     <figure class="thumbnail">
                         <img class=" rounded mx-auto d-block" src="../images/avatar/{{ allComment.avatar }}" width="50px" height="50px" alt="{{ allComment.pseudo }}"/>
@@ -29,6 +29,21 @@
                 </div>
                 <div class="col-md-10 col-sm-10">
                     <div class="panel panel-default arrow left">
+
+                        {% if allComment.user_id == modifComment%}
+                            <div class="btn-group align-top float-right">
+                                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-bars"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Separated link</a>
+                                </div>
+                            </div>
+                        {% endif %}
                         <div class="panel-body">
                             <header class="text-left">
                                 <div class="comment-user"><i class="fa fa-user"></i> {{ allComment.pseudo }}</div>
@@ -37,12 +52,21 @@
                             <div class="comment-post">
                                 <p>{{ allComment.content }} </p>
                             </div>
-                            {% if allComment.user_id == modifComment%}
-                            <p class="text-right"><a href="http://localhost:8000/Comment/modifComment/{{ allComment.id}}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i> Modifier</a></p>
-                            {% endif %}
                         </div>
                     </div>
+
                 </div>
+
+{#                {% if allComment.user_id == modifComment%}
+                <div class="col-md-6 col-sm-6">
+                        <p class="text-center"><a href="http://localhost:8000/Comment/modifComment/{{ allComment.id}}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i> Modifier</a></p>
+#}{#                        <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-reply"></i> Modifier</button>#}{#
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <p class="text-center"><a href="http://localhost:8000/Comment/modifComment/{{ allComment.id}}" class="btn btn-default btn-sm"><i class="fa fa-times"></i> Supprimer</a></p>
+#}{#                    <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-times"></i> Supprimer</button>#}{#
+                </div>
+                {% endif %}#}
             </article>
 
             {% endfor %}
@@ -54,7 +78,7 @@
 
     <h2>Ajouter un commentaire</h2>
 
-    <form action="http://localhost:8000/Comment/addCommentPost" method="post">
+    <form action="http://localhost/Comment/addCommentPost" method="post">
         <div class="row">
 
             {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message') }}

@@ -13,7 +13,7 @@
 
     <h1>Connexion</h1>
 
-    <form action="http://localhost:8000/Auth/checkAuth" method="post">
+    <form action="http://localhost/Auth/checkAuth" method="post">
         <div class="row">
 
             {{ form.input('identifiant', 'Identifiant', 'email', 'Votre Email') }}
@@ -35,7 +35,7 @@
         {% endif %}
 
         <div class="form-group">
-            <a href="http://localhost:8000/Auth/register">Créer un compte</a>
+            <a href="http://localhost/Auth/register">Créer un compte</a>
         </div>
     </form>
 

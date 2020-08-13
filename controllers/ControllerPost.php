@@ -27,7 +27,7 @@ class ControllerPost {
 		$allComments = $comments->postComment($this->slug);
 		$keyPost = 'post';
 
-		(new Session)->setKey($keyPost, $thePost[0]['id']);
+		(new Session)->setKey($keyPost, ['id' => $this->slug]);
 		$key = (new Session)->getKey('user');
 
 		if (!empty($key)){
