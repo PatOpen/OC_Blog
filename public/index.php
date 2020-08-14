@@ -1,5 +1,5 @@
 <?php
-
+//phpinfo();exit();
 use OC_Blog\Controllers\Router;
 use Whoops\Handler\PrettyPageHandler;
 

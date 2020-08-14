@@ -8,13 +8,13 @@ use OC_Blog\Tools\Session;
 
 class ControllerPost {
 
-	private $slug;
-	private $twig;
+	private int $_slug;
+	private object $_twig;
 
 
 	public function __construct( $slug, $twig) {
-		$this->slug = (int)$slug;
-		$this->twig = $twig;
+		$this->_slug = (int)$slug;
+		$this->_twig = $twig;
 		$this->renderPost();
 
 	}
@@ -23,26 +23,26 @@ class ControllerPost {
 
 		$post = new PostsManager();
 		$comments = new CommentsManager();
-		$thePost = $post->getPost($this->slug);
-		$allComments = $comments->postComment($this->slug);
+		$thePost = $post->getPost($this->_slug);
+		$allComments = $comments->postComment($this->_slug);
 		$keyPost = 'post';
 
-		(new Session)->setKey($keyPost, ['id' => $this->slug]);
+		(new Session)->setKey($keyPost, ['id' => $this->_slug]);
 		$key = (new Session)->getKey('user');
 
 		if (!empty($key)){
 			$modifComment = $key['id'];
-			$logged = true;
-			echo $this->twig->render( 'post.twig', ['thePost' => $thePost,
+			echo $this->_twig->render( 'post.twig', ['thePost' => $thePost,
 			                                        'allComments' => $allComments,
-			                                        'logged'=> $logged,
+			                                        'logged'=> TRUE,
 			                                        'user'=> $key['pseudo'],
+			                                         'server' => $_SERVER['SERVER_NAME'],
 													 'modifComment' => $modifComment]);
 		}else{
-			$logged = false;
-			echo $this->twig->render( 'post.twig', ['thePost' => $thePost,
+			echo $this->_twig->render( 'post.twig', ['thePost' => $thePost,
 			                                        'allComments' => $allComments,
-			                                        'logged'=> $logged]);
+			                                         'server' => $_SERVER['SERVER_NAME'],
+			                                        'logged'=> FALSE]);
 		}
 	}
 }

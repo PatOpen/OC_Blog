@@ -5,7 +5,7 @@
 
 {% block content %}
 
-    <form action="http://localhost/Comment/addCommentPost" method="post">
+    <form action="http://{{ server }}/Comment/addCommentPost" method="post">
         <div class="row">
 
             {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message', allComment.content ) }}

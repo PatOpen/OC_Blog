@@ -9,23 +9,21 @@ use OC_Blog\Tools\Session;
 
 class ControllerAdmin {
 
-	private $params;
-	private $method;
-	private $twig;
-	private $userManager;
-
-	const LOGGED = true;
+	private array $_params;
+	private array $_method;
+	private object $_twig;
+	private object $_userManager;
 
 	public function __construct($method, $twig, $params){
-		$this->method = $method;
-		$this->twig = $twig;
-		$this->params = $params;
-		$this->userManager = new AuthManager();
+		$this->_method = $method;
+		$this->_twig = $twig;
+		$this->_params = $params;
+		$this->_userManager = new AuthManager();
 		$target = $method[2];
 		if (method_exists(ControllerAdmin::class, $target) ) {
 			$this->$target();
 		}else{
-			echo $this->twig->render('404.twig');
+			echo $this->_twig->render('404.twig');
 		}
 
 	}
@@ -33,40 +31,52 @@ class ControllerAdmin {
 	public function profile(){
 		$key = (new Session)->getKey('user');
 
-		echo $this->twig->render('profile.twig', ['logged' => self::LOGGED,
+		echo $this->_twig->render('profile.twig', ['logged' => TRUE,
 		                                          'user'   => $key['pseudo'],
 		                                          'value'  => $key['email'],
+		                                           'server' => $_SERVER['SERVER_NAME'],
 		                                          'avatar'=> $key['avatar']]);
 
 	}
 
 	public function checkMailProfile(){
-		$params = $this->params['post'];
+		$params = $this->_params['post'];
 		$key = (new Session)->getKey('user');
 
         $this->checkForm($params);
 
-		$emailExist = $this->userManager->checkEmail($params['identifiant']);
+		$emailExist = $this->_userManager->checkEmail($params['identifiant']);
 
 		if ($params['identifiant'] != $key['email'] && $emailExist == true)
 		{
 			$noEmail = true;
-			echo $this->twig->render('profile.twig', ['noEmail' => $noEmail, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+			echo $this->_twig->render('profile.twig', ['noEmail' => $noEmail,
+			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'logged'=> TRUE,
+			                                           'user'=> $key['pseudo'],
+			                                           'value'=> $key['email']]);
 			exit();
 		}
 
 		elseif ($params['identifiant'] === $key['email'])
 		{
-			echo $this->twig->render('profile.twig', ['logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+			echo $this->_twig->render('profile.twig', ['logged'=> TRUE,
+			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'user'=> $key['pseudo'],
+			                                           'value'=> $key['email']]);
 		}
 
 		else
 			{
-			$validChange = $this->userManager->updateUserMail($params['identifiant'], $key);
+			$validChange = $this->_userManager->updateUserMail($params['identifiant'], $key);
 			if ($validChange){
 				$key['email'] = $params['identifiant'];
 				$confirm = true;
-				echo $this->twig->render('profile.twig', ['confirm' => $confirm, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+				echo $this->_twig->render('profile.twig', ['confirm' => $confirm,
+				                                           'server' => $_SERVER['SERVER_NAME'],
+				                                           'logged'=> TRUE,
+				                                           'user'=> $key['pseudo'],
+				                                           'value'=> $key['email']]);
 
 			}
 		}
@@ -76,21 +86,29 @@ class ControllerAdmin {
 	}
 
 	public function checkPassProfile(){
-		$params = $this->params['post'];
+		$params = $this->_params['post'];
 		$key = (new Session)->getKey('user');
 
 		$this->checkForm($params);
 
 		if($params['password'] != $params['confirme']){
 			$valid = true;
-			echo $this->twig->render('profile.twig', ['valid' => $valid, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+			echo $this->_twig->render('profile.twig', ['valid' => $valid,
+			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'logged'=> TRUE,
+			                                           'user'=> $key['pseudo'],
+			                                           'value'=> $key['email']]);
 			exit();
 		}
 
 		if ($params['password'] === $params['confirme']){
 			$confirm = true;
-			$this->userManager->updateUserPass($params, $key);
-			echo $this->twig->render('profile.twig', ['confirm' => $confirm, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+			$this->_userManager->updateUserPass($params, $key);
+			echo $this->_twig->render('profile.twig', ['confirm' => $confirm,
+			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'logged'=> TRUE,
+			                                           'user'=> $key['pseudo'],
+			                                           'value'=> $key['email']]);
 
 		}
 
@@ -101,13 +119,21 @@ class ControllerAdmin {
 
 			if ($value != preg_replace('/\s+/', '', $value)){
 				$space = true;
-				echo $this->twig->render('profile.twig', ['space' => $space, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+				echo $this->_twig->render('profile.twig', ['space' => $space,
+				                                           'server' => $_SERVER['SERVER_NAME'],
+				                                           'logged'=> TRUE,
+				                                           'user'=> $key['pseudo'],
+				                                           'value'=> $key['email']]);
 				exit();
 			}
 
 			if (strlen($value) < 4){
 				$noValid = true;
-				echo $this->twig->render('profile.twig', ['noValid' => $noValid, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+				echo $this->_twig->render('profile.twig', ['noValid' => $noValid,
+				                                           'server' => $_SERVER['SERVER_NAME'],
+				                                           'logged'=> TRUE,
+				                                           'user'=> $key['pseudo'],
+				                                           'value'=> $key['email']]);
 				exit();
 			}
 		}
@@ -125,13 +151,21 @@ class ControllerAdmin {
 
 		if($_FILES['avatar']['error'] > 0){
 			$error =true;
-			echo $this->twig->render('profile.twig', ['error' => $error, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+			echo $this->_twig->render('profile.twig', ['error' => $error,
+			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'logged'=> TRUE,
+			                                           'user'=> $key['pseudo'],
+			                                           'value'=> $key['email']]);
 			exit();
 		}
 
 		if ($fileSize > $maxSize){
 			$size = true;
-			echo $this->twig->render('profile.twig', ['size' => $size, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+			echo $this->_twig->render('profile.twig', ['size' => $size,
+			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'logged'=> TRUE,
+			                                           'user'=> $key['pseudo'],
+			                                           'value'=> $key['email']]);
 			exit();
 		}
 
@@ -139,7 +173,11 @@ class ControllerAdmin {
 
 		if (!in_array($fileExtension, $extension)){
 			$ext =true;
-			echo $this->twig->render('profile.twig', ['ext' => $ext, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email']]);
+			echo $this->_twig->render('profile.twig', ['ext' => $ext,
+			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'logged'=> TRUE,
+			                                           'user'=> $key['pseudo'],
+			                                           'value'=> $key['email']]);
 			exit();
 		}
 
@@ -151,13 +189,18 @@ class ControllerAdmin {
 
 		if ($moveFile){
 
-			$upload = $this->userManager->updateAvatar($newNameFile, $key);
+			$upload = $this->_userManager->updateAvatar($newNameFile, $key);
 
 			if ($upload){
 
 				$confirm = true;
 				(new Session)->setValueKey('user', 'avatar', $newNameFile);
-				echo $this->twig->render('profile.twig', ['confirm' => $confirm, 'logged'=> self::LOGGED, 'user'=> $key['pseudo'], 'value'=> $key['email'], 'avatar'=> $key['avatar']]);
+				echo $this->_twig->render('profile.twig', ['confirm' => $confirm,
+				                                           'server' => $_SERVER['SERVER_NAME'],
+				                                           'logged'=> TRUE,
+				                                           'user'=> $key['pseudo'],
+				                                           'value'=> $key['email'],
+				                                           'avatar'=> $key['avatar']]);
 
 				if (file_exists($oldFile)){
 					unlink($oldFile);

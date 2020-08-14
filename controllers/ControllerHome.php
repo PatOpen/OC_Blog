@@ -5,14 +5,14 @@ namespace OC_Blog\Controllers;
 use OC_Blog\Models\PostsManager;
 use OC_Blog\Tools\Session;
 
+
 class ControllerHome {
 
-	private $twig;
-
+	private object $_twig;
 
 	public function __construct( $twig ) {
 
-		$this->twig = $twig;
+		$this->_twig = $twig;
 		$this->renderHome();
 
 	}
@@ -23,11 +23,14 @@ class ControllerHome {
 		$key = (new Session)->getKey('user');
 
 		if(!empty($key)){
-			$logged = true;
-			echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts, 'logged'=> $logged, 'user'=> $key['pseudo']]);
+			echo $this->_twig->render( 'home.twig', ['allPosts' => $allPosts,
+			                                         'logged'=> TRUE,
+			                                         'user'=> $key['pseudo'],
+													  'server' => $_SERVER['SERVER_NAME']]);
 		}else{
-			$logged = false;
-			echo $this->twig->render( 'home.twig', ['allPosts' => $allPosts, 'logged' => $logged]);
+			echo $this->_twig->render( 'home.twig', ['allPosts' => $allPosts,
+			                                         'logged' => FALSE,
+													 'server'=> $_SERVER['SERVER_NAME']]);
 		}
 
 	}

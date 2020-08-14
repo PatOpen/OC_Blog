@@ -20,7 +20,7 @@
         <section class="comment-list">
 
             {% for allComment in allComments %}
-            <article class="comment-post row">
+            <article class="row">
                 <div class="col-md-2 col-sm-2 hidden-xs">
                     <figure class="thumbnail">
                         <img class=" rounded mx-auto d-block" src="../images/avatar/{{ allComment.avatar }}" width="50px" height="50px" alt="{{ allComment.pseudo }}"/>
@@ -78,7 +78,7 @@
 
     <h2>Ajouter un commentaire</h2>
 
-    <form action="http://localhost/Comment/addCommentPost" method="post">
+    <form action="http://{{ server }}/Comment/addCommentPost" method="post">
         <div class="row">
 
             {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message') }}

@@ -7,8 +7,6 @@ use Exception;
 
 class Router {
 
-	private $_ctrl;
-
 	public function routeRequest( $twig ) {
 		try {
 
@@ -20,18 +18,17 @@ class Router {
 				$controllerClass = "OC_Blog\\Controllers\\Controller" . $controller;
 
 				if ( class_exists( $controllerClass)  && empty($url[2])) {
-					$this->_ctrl = new $controllerClass($twig);
+					new $controllerClass($twig);
 				}elseif (class_exists( $controllerClass)  && !empty($_POST)){
 					$params['post'] = $_POST;
-					//var_dump($url);exit();
-					$this->_ctrl = new $controllerClass($url, $twig, $params);
+					new $controllerClass($url, $twig, $params);
 				}
 				elseif ( class_exists( $controllerClass)  && isset($url[2])) {
-					$this->_ctrl = new $controllerClass($url, $twig, []);
+					new $controllerClass($url, $twig, []);
 				}
 
 				else {
-					$this->_ctrl = new ControllerHome($twig);
+					new ControllerHome($twig);
 				}
 
 			}
@@ -39,8 +36,7 @@ class Router {
 
 		} catch ( Exception $e ) {
 			$errorMsg = $e->getMessage();
-			var_dump($errorMsg);
-			echo $twig->render( '404.twig' );
+			echo $twig->render( '404.twig', ['error'=> $errorMsg] );
 		}
 	}
 }

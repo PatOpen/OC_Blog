@@ -13,7 +13,7 @@
 
     <h1>Profile</h1>
 
-    <form action="http://localhost/Admin/checkMailProfile" method="post">
+    <form action="http://{{ server }}/Admin/checkMailProfile" method="post">
         <div class="row">
 
             {{ form.input('identifiant', 'Changer d\'Email', 'email', 'Nouveau Email', value) }}
@@ -30,7 +30,7 @@
         </div>
     </form>
 
-    <form action="http://localhost/Admin/checkPassProfile" method="post">
+    <form action="http://{{ server }}/Admin/checkPassProfile" method="post">
         <div class="row">
 
             {{ form.input('password', 'Nouveau mot de passe', 'password', 'Votre nouveau mot de passe') }}
@@ -62,7 +62,7 @@
         {% endif %}
     </form>
 
-    <form action="http://localhost/Admin/avatar" method="post" enctype="multipart/form-data">
+    <form action="http://{{ server }}/Admin/avatar" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="form-group">
                 <label for="avatar">Choisir un avatar</label>

@@ -2,12 +2,12 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/public" isTestSource="false" packagePrefix="Symfony\Component\Asset\" />
       <sourceFolder url="file://$MODULE_DIR$/tools" isTestSource="false" packagePrefix="OC_Blog\Tools\" />
       <sourceFolder url="file://$MODULE_DIR$/models" isTestSource="false" packagePrefix="OC_Blog\Models\" />
       <sourceFolder url="file://$MODULE_DIR$/controllers" isTestSource="false" packagePrefix="OC_Blog\Controllers\" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/config/DBConstant.php" isTestSource="false" packagePrefix="OC_Blog\Config\DBConstant" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/dictionaries" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/inspectionProfiles" />

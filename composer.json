@@ -12,7 +12,8 @@
             "OC_Blog\\Controllers\\": "controllers/",
             "OC_Blog\\Models\\": "models/",
             "OC_Blog\\Tools\\": "tools/",
-            "Symfony\\Component\\Asset\\": "public/"
+            "OC_Blog\\Config\\DBConstant": "config/DBConstant.php"
+
         }
     },
     "require": {
