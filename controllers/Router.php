@@ -20,7 +20,7 @@ class Router {
 				if ( class_exists( $controllerClass)  && empty($url[2])) {
 					new $controllerClass($twig);
 				}elseif (class_exists( $controllerClass)  && !empty($_POST)){
-					$params['post'] = $_POST;
+					$params = $_POST;
 					new $controllerClass($url, $twig, $params);
 				}
 				elseif ( class_exists( $controllerClass)  && isset($url[2])) {
@@ -39,4 +39,5 @@ class Router {
 			echo $twig->render( '404.twig', ['error'=> $errorMsg] );
 		}
 	}
+
 }

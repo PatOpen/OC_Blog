@@ -10,7 +10,6 @@ class Comments {
 	private $_create_at;
 	private $_content;
 	private $_validation;
-	private $_modified_at;
 
 	public function __construct(array $data)
 	{
@@ -77,13 +76,6 @@ class Comments {
 	}
 
 	/**
-	 * @return mixed
-	 */
-	public function getModifiedAt() {
-		return $this->_modified_at;
-	}
-
-	/**
 	 * @param mixed $id
 	 */
 	public function setId( int $id ) {
@@ -133,13 +125,6 @@ class Comments {
 	 */
 	public function setValidation( bool $validation ) {
 		$this->_validation = $validation;
-	}
-
-	/**
-	 * @param mixed $modified_at
-	 */
-	public function setModifiedAT( $modified_at ) {
-		$this->_modified_at= $modified_at;
 	}
 
 

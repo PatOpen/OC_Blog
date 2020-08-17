@@ -33,11 +33,6 @@ class Session {
 
 	}
 
-	public function setValueKey($key, $valueKey, $value){
-
-		$_SESSION[$key][$valueKey] = $value;
-	}
-
 	public function getKey($key){
 
 		if (isset($_SESSION[$key])){
@@ -47,6 +42,11 @@ class Session {
 			return null;
 		}
 
+	}
+
+	public function setValueKey($key, $valueKey, $value){
+
+		$_SESSION[$key][$valueKey] = $value;
 	}
 
 }

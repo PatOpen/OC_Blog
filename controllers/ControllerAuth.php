@@ -13,11 +13,13 @@ class ControllerAuth extends AuthManager{
 	private array $_method;
 	private object $_twig;
 
-	public function __construct($method, $twig, $params){
+
+	public function __construct( $method, $twig, $params){
 		$this->_method = $method;
 		$this->_twig = $twig;
 		$this->_params = $params;
 		$target = $method[2];
+
 		if (method_exists(ControllerAuth::class, $target) ) {
 			$this->$target();
 		}else{
@@ -27,6 +29,10 @@ class ControllerAuth extends AuthManager{
 	}
 
 	public function login() {
+
+		if (!empty($this->_params)){
+			$this->checkAuth();
+		}
 
 		echo $this->_twig->render('login.twig', ['server' => $_SERVER['SERVER_NAME']]);
 
@@ -45,21 +51,20 @@ class ControllerAuth extends AuthManager{
 	public function addUser($params){
 
 		$this->registerUser($params);
-		$valid = true;
-		echo $this->_twig->render('login.twig', ['valid' => $valid,
+		echo $this->_twig->render('login.twig', ['valid' => TRUE,
 		                                         'server' => $_SERVER['SERVER_NAME']]);
 
 	}
 
 	public function checkAuth(){
-		$params = $this->_params['post'];
+		$params = $this->_params;
 		$user = $this->checkLogin($params);
 		$key = 'user';
 
 		if ($user === false){
-			$notValid = true;
-			echo $this->_twig->render('login.twig', ['notValid' => $notValid,
+			echo $this->_twig->render('login.twig', ['notValid' => TRUE,
 			                                         'server' => $_SERVER['SERVER_NAME']]);
+			exit();
 		}else{
 			( new Session )->setKey($key, $user);
 			header("Location: http://".$_SERVER['SERVER_NAME']."/Home");
@@ -69,21 +74,19 @@ class ControllerAuth extends AuthManager{
 	}
 
 	public function check(){
-		$params = $this->_params['post'];
+		$params = $this->_params;
 
 		foreach ($params as $key => $value){
 
 			if ($value != preg_replace('/\s+/', '', $value)){
-				$space = true;
-				echo $this->_twig->render('register.twig', ['space' => $space,
+				echo $this->_twig->render('register.twig', ['space' => TRUE,
 				                                            'server' => $_SERVER['SERVER_NAME'],
 				                                            'key' => $params]);
 				exit();
 			}
 
 			if (strlen($value) < 3){
-				$noValid = true;
-				echo $this->_twig->render('register.twig', ['noValid' => $noValid,
+				echo $this->_twig->render('register.twig', ['noValid' => TRUE,
 				                                            'server' => $_SERVER['SERVER_NAME'],
 				                                            'key' => $params]);
 				exit();
@@ -91,24 +94,21 @@ class ControllerAuth extends AuthManager{
 		}
 
 		if($params['password'] != $params['confirme']){
-			$valid = true;
-			echo $this->_twig->render('register.twig', ['valid' => $valid,
+			echo $this->_twig->render('register.twig', ['valid' => TRUE,
 			                                            'server' => $_SERVER['SERVER_NAME'],
 			                                            'key' => $params]);
 			exit();
 		}
 
 		if ($this->checkUser($params['pseudo'])){
-			$noPseudo = true;
-			echo $this->_twig->render('register.twig', ['noPseudo' => $noPseudo,
+			echo $this->_twig->render('register.twig', ['noPseudo' => TRUE,
 			                                            'server' => $_SERVER['SERVER_NAME'],
 			                                            'key' => $params]);
 			exit();
 		}
 
 		if ($this->checkEmail($params['identifiant'])){
-			$noEmail = true;
-			echo $this->_twig->render('register.twig', ['noEmail' => $noEmail,
+			echo $this->_twig->render('register.twig', ['noEmail' => TRUE,
 			                                            'server' => $_SERVER['SERVER_NAME'],
 			                                            'key' => $params]);
 			exit();

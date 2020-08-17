@@ -14,9 +14,9 @@ class PostsManager extends Manager {
 					   chapo,
 					   description,
 					   TO_CHAR(create_at, 'DD/MM/YYYY à HH24hMI') AS post_create_date,
-					   TO_CHAR(modified_at, 'DD/MM/YYYY à HH24hMI') AS post_modif_date,					   
-					   user_id,
-					   image
+					   TO_CHAR(modified_at, 'DD/MM/YYYY à HH24hMI') AS post_modif_date,
+					   image,
+					   user_id
 					   FROM post
 					   ORDER BY id DESC";
 

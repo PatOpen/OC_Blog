@@ -70,12 +70,12 @@ class AuthManager extends Manager {
 
 		$req->closeCursor();
 
+		if ($user && password_verify($params['password'], $user['password'])){
+				return $user;
+			}else{
+				return false;
+			}
 
-		if (password_verify($params['password'], $user['password'])){
-			return $user;
-		}else{
-			return false;
-		}
 	}
 
 	public function updateUserMail($params, $userKey){
@@ -84,7 +84,7 @@ class AuthManager extends Manager {
 		$sql ="UPDATE users SET email = :email WHERE id = :id";
 		$req = $this->getBdd()->prepare($sql);
 		$user = $req->execute([':id'=> $user->getId(),
-			                   ':email'=> $params]);
+		                       ':email'=> $params]);
 
 		$req->closeCursor();
 

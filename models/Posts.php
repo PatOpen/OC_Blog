@@ -11,7 +11,6 @@ class Posts {
 	private $_create_at;
 	private $_modified_at;
 	private $_user_id;
-	private $_image;
 
 	public function __construct(array $data)
 	{
@@ -85,13 +84,6 @@ class Posts {
 	}
 
 	/**
-	 * @return mixed
-	 */
-	public function getImage() {
-		return $this->_image;
-	}
-
-	/**
 	 * @param mixed $id
 	 */
 	public function setId(int $id ) {
@@ -145,17 +137,6 @@ class Posts {
 			$this->_user_id = $user_id;
 		}
 	}
-
-	/**
-	 * @param mixed $image
-	 */
-	public function setImage(int $image ) {
-
-		if ($image > 0){
-			$this->_user_id = $image;
-		}
-	}
-
 
 
 

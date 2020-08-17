@@ -29,18 +29,27 @@ class ControllerAdmin {
 	}
 
 	public function profile(){
+
 		$key = (new Session)->getKey('user');
-
-		echo $this->_twig->render('profile.twig', ['logged' => TRUE,
-		                                          'user'   => $key['pseudo'],
-		                                          'value'  => $key['email'],
-		                                           'server' => $_SERVER['SERVER_NAME'],
-		                                          'avatar'=> $key['avatar']]);
-
+		if (isset($this->_params['identifiant'])){
+			$this->checkMailProfile();
+		}elseif (isset($this->_params['password'])){
+			$this->checkPassProfile();
+		}elseif (isset($_FILES['avatar'])){
+			$this->avatar();
+		}else{
+			echo $this->_twig->render('profile.twig', ['logged' => TRUE,
+			                                          'user'   => $key['pseudo'],
+			                                          'value'  => $key['email'],
+			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                          'avatar'=> $key['avatar']]);
+		}
 	}
 
+
+
 	public function checkMailProfile(){
-		$params = $this->_params['post'];
+		$params = $this->_params;
 		$key = (new Session)->getKey('user');
 
         $this->checkForm($params);
@@ -54,7 +63,8 @@ class ControllerAdmin {
 			                                           'server' => $_SERVER['SERVER_NAME'],
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
-			                                           'value'=> $key['email']]);
+			                                           'value'=> $key['email'],
+			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
 
@@ -63,20 +73,22 @@ class ControllerAdmin {
 			echo $this->_twig->render('profile.twig', ['logged'=> TRUE,
 			                                           'server' => $_SERVER['SERVER_NAME'],
 			                                           'user'=> $key['pseudo'],
-			                                           'value'=> $key['email']]);
+			                                           'value'=> $key['email'],
+			                                           'avatar'=> $key['avatar']]);
 		}
 
 		else
 			{
 			$validChange = $this->_userManager->updateUserMail($params['identifiant'], $key);
 			if ($validChange){
+				(new Session)->setValueKey('user', 'email', $params['identifiant']);
 				$key['email'] = $params['identifiant'];
-				$confirm = true;
-				echo $this->_twig->render('profile.twig', ['confirm' => $confirm,
+				echo $this->_twig->render('profile.twig', ['confirm' => TRUE,
 				                                           'server' => $_SERVER['SERVER_NAME'],
-				                                           'logged'=> TRUE,
-				                                           'user'=> $key['pseudo'],
-				                                           'value'=> $key['email']]);
+				                                           'logged' => TRUE,
+				                                           'user' => $key['pseudo'],
+				                                           'value' => $key['email'],
+				                                           'avatar'=> $key['avatar']]);
 
 			}
 		}
@@ -86,7 +98,7 @@ class ControllerAdmin {
 	}
 
 	public function checkPassProfile(){
-		$params = $this->_params['post'];
+		$params = $this->_params;
 		$key = (new Session)->getKey('user');
 
 		$this->checkForm($params);
@@ -97,7 +109,8 @@ class ControllerAdmin {
 			                                           'server' => $_SERVER['SERVER_NAME'],
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
-			                                           'value'=> $key['email']]);
+			                                           'value'=> $key['email'],
+			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
 
@@ -108,7 +121,8 @@ class ControllerAdmin {
 			                                           'server' => $_SERVER['SERVER_NAME'],
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
-			                                           'value'=> $key['email']]);
+			                                           'value'=> $key['email'],
+			                                           'avatar'=> $key['avatar']]);
 
 		}
 
@@ -155,7 +169,8 @@ class ControllerAdmin {
 			                                           'server' => $_SERVER['SERVER_NAME'],
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
-			                                           'value'=> $key['email']]);
+			                                           'value'=> $key['email'],
+			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
 
@@ -165,7 +180,8 @@ class ControllerAdmin {
 			                                           'server' => $_SERVER['SERVER_NAME'],
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
-			                                           'value'=> $key['email']]);
+			                                           'value'=> $key['email'],
+			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
 
@@ -177,7 +193,8 @@ class ControllerAdmin {
 			                                           'server' => $_SERVER['SERVER_NAME'],
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
-			                                           'value'=> $key['email']]);
+			                                           'value'=> $key['email'],
+			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
 
@@ -188,24 +205,26 @@ class ControllerAdmin {
 		$oldFile = "../public/images/avatar/" . $key['avatar'];
 
 		if ($moveFile){
-
 			$upload = $this->_userManager->updateAvatar($newNameFile, $key);
 
 			if ($upload){
 
-				$confirm = true;
 				(new Session)->setValueKey('user', 'avatar', $newNameFile);
-				echo $this->_twig->render('profile.twig', ['confirm' => $confirm,
+				$key['avatar'] = $newNameFile;
+				echo $this->_twig->render('profile.twig', ['confirm' => TRUE,
 				                                           'server' => $_SERVER['SERVER_NAME'],
 				                                           'logged'=> TRUE,
 				                                           'user'=> $key['pseudo'],
 				                                           'value'=> $key['email'],
 				                                           'avatar'=> $key['avatar']]);
 
+
 				if (file_exists($oldFile)){
 					unlink($oldFile);
 				}
 			}
+
+			exit();
 		}
 
 	}
