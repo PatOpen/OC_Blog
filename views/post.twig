@@ -36,37 +36,27 @@
                                     <i class="fa fa-bars"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
+                                    <a class="dropdown-item text-center" href="http://{{ server }}/Comment/updateComment/{{ allComment.id }}">Modifier</a>
+                                    <a class="dropdown-item text-center" href="http://{{ server }}/Comment/deleteComment/{{ allComment.id }}" onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?')">Supprimer</a>
                                 </div>
                             </div>
                         {% endif %}
                         <div class="panel-body">
                             <header class="text-left">
                                 <div class="comment-user"><i class="fa fa-user"></i> {{ allComment.pseudo }}</div>
-                                <time class="comment-date" datetime="{{ allComment.comment_create_date }}"><i class="fa fa-clock-o"></i> {{ allComment.comment_create_date }}</time>
+                                <time class="comment-date" datetime="{{ allComment.comment_create_date }}"><i class="fa fa-clock-o"></i> {{ allComment.comment_create_date }} </time>
+                                {% if allComment.comment_modif_date %}
+                                <time class="comment-date" datetime="{{ allComment.comment_modif_date }}"> <em>  modifié le :</em> {{ allComment.comment_modif_date }}</time>
+                                {% endif %}
                             </header>
                             <div class="comment-post">
                                 <p>{{ allComment.content }} </p>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-{#                {% if allComment.user_id == modifComment%}
-                <div class="col-md-6 col-sm-6">
-                        <p class="text-center"><a href="http://localhost:8000/Comment/modifComment/{{ allComment.id}}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i> Modifier</a></p>
-#}{#                        <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-reply"></i> Modifier</button>#}{#
-                </div>
-                <div class="col-md-6 col-sm-6">
-                    <p class="text-center"><a href="http://localhost:8000/Comment/modifComment/{{ allComment.id}}" class="btn btn-default btn-sm"><i class="fa fa-times"></i> Supprimer</a></p>
-#}{#                    <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-times"></i> Supprimer</button>#}{#
-                </div>
-                {% endif %}#}
+
             </article>
 
             {% endfor %}

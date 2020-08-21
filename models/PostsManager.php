@@ -22,7 +22,7 @@ class PostsManager extends Manager {
 
 		$req = $this->getBdd()->prepare($sql);
 		$req->execute();
-		$req->setFetchMode( PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Posts' );
+		$req->setFetchMode( PDO::FETCH_ASSOC );
 		$listPosts = $req->fetchAll();
 
 		$req->closeCursor();
@@ -56,5 +56,7 @@ class PostsManager extends Manager {
 
 		return $post;
 	}
+
+
 
 }

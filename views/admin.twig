@@ -4,4 +4,52 @@
 
 {% block content %}
 
+    {% for allComment in allComments %}
+
+        <h1>{{ allComment.title }}</h1>
+
+        <h2 class="page-header">Commentaires</h2>
+
+        <section class="comment-list">
+
+                <article class="row">
+                    <div class="col-md-2 col-sm-2 hidden-xs">
+                        <figure class="thumbnail">
+                            <img class=" rounded mx-auto d-block" src="../images/avatar/{{ allComment.avatar }}" width="50px" height="50px" alt="{{ allComment.pseudo }}"/>
+                            <figcaption class="text-center">{{ allComment.pseudo }}</figcaption>
+                        </figure>
+                    </div>
+                    <div class="col-md-10 col-sm-10">
+                        <div class="panel panel-default arrow left">
+                                <div class="btn-group align-top float-right">
+                                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-bars"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item text-center" href="http://{{ server }}/Comment/updateComment/{{ allComment.commentid }}">Modifier</a>
+                                        <a class="dropdown-item text-center" href="http://{{ server }}/Admin/validate/{{ allComment.commentid }}" onclick="return confirm('Voulez-vous vraiment valider ce commentaire ?')">Valider</a>
+                                        <a class="dropdown-item text-center" href="http://{{ server }}/Comment/deleteComment/{{ allComment.commentid }}" onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?')">Supprimer</a>
+                                    </div>
+                                </div>
+                            <div class="panel-body">
+                                <header class="text-left">
+                                    <div class="comment-user"><i class="fa fa-user"></i> {{ allComment.pseudo }}</div>
+                                    <time class="comment-date" datetime="{{ allComment.comment_create_date }}"><i class="fa fa-clock-o"></i> {{ allComment.comment_create_date }} </time>
+                                    {% if allComment.comment_modif_date %}
+                                        <time class="comment-date" datetime="{{ allComment.comment_modif_date }}"> <em>  modifié le :</em> {{ allComment.comment_modif_date }}</time>
+                                    {% endif %}
+                                </header>
+                                <div class="comment-post">
+                                    <p>{{ allComment.content }} </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+        </section>
+
+    {% endfor %}
+
+
 {% endblock %}

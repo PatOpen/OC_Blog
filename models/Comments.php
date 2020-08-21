@@ -8,6 +8,7 @@ class Comments {
 	private $_user_id;
 	private $_post_id;
 	private $_create_at;
+	private $_modified_at;
 	private $_content;
 	private $_validation;
 
@@ -59,6 +60,13 @@ class Comments {
 	 */
 	public function getCreateAt() {
 		return $this->_create_at;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getModifiedAt() {
+		return $this->_modified_at;
 	}
 
 	/**
@@ -126,6 +134,15 @@ class Comments {
 	public function setValidation( bool $validation ) {
 		$this->_validation = $validation;
 	}
+
+	/**
+	 * @param $modified_at
+	 */
+	public function setModifiedAt( $modified_at) {
+		$this->_modified_at = $modified_at;
+	}
+
+
 
 
 }

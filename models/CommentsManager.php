@@ -34,8 +34,26 @@ class CommentsManager extends Manager {
 		$req = $this->getBdd()->prepare($sql);
 		$req->bindValue(':postId', $postId);
 		$req->execute();
-		$req->setFetchMode( PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Comments' );
+		$req->setFetchMode( PDO::FETCH_ASSOC);
 		$comments = $req->fetchAll();
+
+		$req->closeCursor();
+
+		return $comments;
+	}
+
+	public function oneComment($commentId){
+		$sql = "SELECT id,
+					   post_id,
+					   content
+					   FROM comment
+					   WHERE id = :commentId";
+
+		$req = $this->getBdd()->prepare($sql);
+		$req->bindValue(':commentId', $commentId);
+		$req->execute();
+		$req->setFetchMode( PDO::FETCH_ASSOC);
+		$comments = $req->fetch();
 
 		$req->closeCursor();
 
@@ -70,25 +88,35 @@ class CommentsManager extends Manager {
 
 	}
 
-	public function updateComment(Comments $comments){
+	public function updateComment(string $content,int $id){
 
-		$sql = "UPDATE comment SET user_id = :user_id, post_id = :post_id, modified_at = NOW(), content = :content, validation = false ";
+		$sql = "UPDATE comment SET modified_at = NOW(), content = :content, validation = false WHERE id = :id";
+		$req = $this->getBdd()->prepare($sql);
+		$comments = $req->execute([':id' => $id,
+								  ':content'=> $content]);
 
-		$req = $this->getBdd()->prepare('UPDATE comment SET user_id = :user_id, post_id = :post_id, modified_at = NOW(), content = :content, validation = false ');
-		$req->blindValue(':user_id', $comments->getUserId(), PDO::PARAM_INT);
-		$req->blindValue(':post_id', $comments->getPostId(), PDO::PARAM_INT);
-		$req->blindValue(':content', $comments->getContent(), PDO::PARAM_STR);
+		$req->closeCursor();
 
-		$req->execute();
+		if ($comments){
+			return true;
+		}else{
+			return false;
+		}
 
 	}
 
-	public function validComments(Comments $comments){
+	public function validComments(int $commentId){
 
 		$req = $this->getBdd()->prepare('UPDATE comment SET validation = true WHERE id = :id');
-		$req->blindValue(':id', $comments->getId(), PDO::PARAM_INT);
+		$valid = $req->execute([':id' => $commentId]);
 
-		$req->execute();
+		$req->closeCursor();
+
+		if ($valid){
+			return true;
+		}else{
+			return false;
+		}
 
 	}
 }
