@@ -3,7 +3,12 @@
 
 namespace OC_Blog\Controllers;
 
+use GuzzleHttp\Psr7\ServerRequest;
+use OC_Blog\Config\ConstantGlobal;
+use OC_Blog\Models\AdminManager;
 use OC_Blog\Models\AuthManager;
+use OC_Blog\Models\CommentsManager;
+use OC_Blog\Models\PostsManager;
 use OC_Blog\Tools\Session;
 
 
@@ -13,12 +18,21 @@ class ControllerAdmin {
 	private array $_method;
 	private object $_twig;
 	private object $_userManager;
+	private object $_adminManager;
+	private object $_postsManager;
+	private object $_commentManager;
+	private string $_server;
 
 	public function __construct($method, $twig, $params){
 		$this->_method = $method;
 		$this->_twig = $twig;
 		$this->_params = $params;
 		$this->_userManager = new AuthManager();
+		$this->_adminManager = new AdminManager();
+		$this->_postsManager = new PostsManager();
+		$this->_commentManager = new CommentsManager();
+		$this->_server = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerName()['SERVER_NAME'];
+
 		$target = $method[2];
 		if (method_exists(ControllerAdmin::class, $target) ) {
 			$this->$target();
@@ -41,9 +55,40 @@ class ControllerAdmin {
 			echo $this->_twig->render('profile.twig', ['logged' => TRUE,
 			                                          'user'   => $key['pseudo'],
 			                                          'value'  => $key['email'],
-			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'server' => $this->_server,
 			                                          'avatar'=> $key['avatar']]);
 		}
+	}
+
+	public function admin(){
+
+		$key = (new Session)->getKey('user');
+		$admin = $this->_adminManager->checkAdmin((int)$key['id']);
+
+
+		if ($admin){
+			$allComments = $this->_adminManager->commentsPost();
+			echo $this->_twig->render('admin.twig', ['logged' => TRUE,
+												     'user'   => $key['pseudo'],
+												     'allComments'  => $allComments,
+												     'server' => $this->_server,]);
+		}else{
+			echo 'une erreur est survenue';
+		}
+	}
+
+	public function validate(){
+
+		$commentId = $this->_method[3];
+		$validComment = $this->_commentManager->validComments((int)$commentId);
+
+		if ($validComment){
+			header("location: http://".$this->_server."/Admin/admin");
+		}else{
+			echo 'Une erreur est survenue';
+		}
+
+
 	}
 
 
@@ -60,7 +105,7 @@ class ControllerAdmin {
 		{
 			$noEmail = true;
 			echo $this->_twig->render('profile.twig', ['noEmail' => $noEmail,
-			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'server' => $this->_server,
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
@@ -71,7 +116,7 @@ class ControllerAdmin {
 		elseif ($params['identifiant'] === $key['email'])
 		{
 			echo $this->_twig->render('profile.twig', ['logged'=> TRUE,
-			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'server' => $this->_server,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
 			                                           'avatar'=> $key['avatar']]);
@@ -84,7 +129,7 @@ class ControllerAdmin {
 				(new Session)->setValueKey('user', 'email', $params['identifiant']);
 				$key['email'] = $params['identifiant'];
 				echo $this->_twig->render('profile.twig', ['confirm' => TRUE,
-				                                           'server' => $_SERVER['SERVER_NAME'],
+				                                           'server' => $this->_server,
 				                                           'logged' => TRUE,
 				                                           'user' => $key['pseudo'],
 				                                           'value' => $key['email'],
@@ -106,7 +151,7 @@ class ControllerAdmin {
 		if($params['password'] != $params['confirme']){
 			$valid = true;
 			echo $this->_twig->render('profile.twig', ['valid' => $valid,
-			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'server' => $this->_server,
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
@@ -118,7 +163,7 @@ class ControllerAdmin {
 			$confirm = true;
 			$this->_userManager->updateUserPass($params, $key);
 			echo $this->_twig->render('profile.twig', ['confirm' => $confirm,
-			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'server' => $this->_server,
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
@@ -134,7 +179,7 @@ class ControllerAdmin {
 			if ($value != preg_replace('/\s+/', '', $value)){
 				$space = true;
 				echo $this->_twig->render('profile.twig', ['space' => $space,
-				                                           'server' => $_SERVER['SERVER_NAME'],
+				                                           'server' => $this->_server,
 				                                           'logged'=> TRUE,
 				                                           'user'=> $key['pseudo'],
 				                                           'value'=> $key['email']]);
@@ -144,7 +189,7 @@ class ControllerAdmin {
 			if (strlen($value) < 4){
 				$noValid = true;
 				echo $this->_twig->render('profile.twig', ['noValid' => $noValid,
-				                                           'server' => $_SERVER['SERVER_NAME'],
+				                                           'server' => $this->_server,
 				                                           'logged'=> TRUE,
 				                                           'user'=> $key['pseudo'],
 				                                           'value'=> $key['email']]);
@@ -166,7 +211,7 @@ class ControllerAdmin {
 		if($_FILES['avatar']['error'] > 0){
 			$error =true;
 			echo $this->_twig->render('profile.twig', ['error' => $error,
-			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'server' => $this->_server,
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
@@ -177,7 +222,7 @@ class ControllerAdmin {
 		if ($fileSize > $maxSize){
 			$size = true;
 			echo $this->_twig->render('profile.twig', ['size' => $size,
-			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'server' => $this->_server,
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
@@ -190,7 +235,7 @@ class ControllerAdmin {
 		if (!in_array($fileExtension, $extension)){
 			$ext =true;
 			echo $this->_twig->render('profile.twig', ['ext' => $ext,
-			                                           'server' => $_SERVER['SERVER_NAME'],
+			                                           'server' => $this->_server,
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
@@ -212,7 +257,7 @@ class ControllerAdmin {
 				(new Session)->setValueKey('user', 'avatar', $newNameFile);
 				$key['avatar'] = $newNameFile;
 				echo $this->_twig->render('profile.twig', ['confirm' => TRUE,
-				                                           'server' => $_SERVER['SERVER_NAME'],
+				                                           'server' => $this->_server,
 				                                           'logged'=> TRUE,
 				                                           'user'=> $key['pseudo'],
 				                                           'value'=> $key['email'],

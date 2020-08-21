@@ -3,15 +3,26 @@
 namespace OC_Blog\Controllers;
 
 use Exception;
+use GuzzleHttp\Psr7\ServerRequest;
+use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\UriNormalizer;
+use OC_Blog\Config\ConstantGlobal;
 
 
 class Router {
 
-	public function routeRequest( $twig ) {
+
+	public function run($twig){
+
+		$url = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerUri();
+		$url = $this->cleanUri($url);
+
+		$this->routeRequest($twig, $url);
+	}
+
+	public function routeRequest( $twig, $uri ) {
 		try {
-
-			$url = explode( '/', filter_var( $_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL ) );
-
+			$url = explode( '/', filter_var( $uri, FILTER_SANITIZE_URL ) );
 			if ( isset($url)) {
 
 				$controller      = ucfirst( strtolower( $url[1] ) );
@@ -38,6 +49,11 @@ class Router {
 			$errorMsg = $e->getMessage();
 			echo $twig->render( '404.twig', ['error'=> $errorMsg] );
 		}
+	}
+
+	public function cleanUri($url): string {
+		$uri = new Uri($url);
+		return UriNormalizer::normalize($uri,UriNormalizer::REMOVE_DUPLICATE_SLASHES);
 	}
 
 }

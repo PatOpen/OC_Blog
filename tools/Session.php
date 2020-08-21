@@ -6,7 +6,7 @@ namespace OC_Blog\Tools;
 
 class Session {
 
-	private static $session;
+	private static Session $session;
 
 	public function __construct() {
 
@@ -19,7 +19,7 @@ class Session {
 
 	public static function getSession(){
 
-		if (!self::$session){
+		if (!isset(self::$session)){
 			self::$session = new Session();
 		}
 

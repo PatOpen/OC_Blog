@@ -3,6 +3,8 @@
 
 namespace OC_Blog\Controllers;
 
+use GuzzleHttp\Psr7\ServerRequest;
+use OC_Blog\Config\ConstantGlobal;
 use OC_Blog\Models\AuthManager;
 use OC_Blog\Tools\Session;
 
@@ -12,6 +14,7 @@ class ControllerAuth extends AuthManager{
 	private array $_params;
 	private array $_method;
 	private object $_twig;
+	private string $_server;
 
 
 	public function __construct( $method, $twig, $params){
@@ -19,11 +22,12 @@ class ControllerAuth extends AuthManager{
 		$this->_twig = $twig;
 		$this->_params = $params;
 		$target = $method[2];
+		$this->_server = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerName()['SERVER_NAME'];
 
 		if (method_exists(ControllerAuth::class, $target) ) {
 			$this->$target();
 		}else{
-			echo $this->_twig->render('404.twig', ['server' => $_SERVER['SERVER_NAME']]);
+			echo $this->_twig->render('404.twig', ['server' => $this->_server]);
 		}
 
 	}
@@ -34,25 +38,25 @@ class ControllerAuth extends AuthManager{
 			$this->checkAuth();
 		}
 
-		echo $this->_twig->render('login.twig', ['server' => $_SERVER['SERVER_NAME']]);
+		echo $this->_twig->render('login.twig', ['server' => $this->_server]);
 
 	}
 
 	public function logout(){
 		session_destroy();
-		header("Location: http://".$_SERVER['SERVER_NAME']."/Home");
+		header("Location: http://".$this->_server."/Home");
 	}
 
 	public function register(){
 
-		echo $this->_twig->render('register.twig', ['server' => $_SERVER['SERVER_NAME']]);
+		echo $this->_twig->render('register.twig', ['server' => $this->_server]);
 	}
 
 	public function addUser($params){
 
 		$this->registerUser($params);
 		echo $this->_twig->render('login.twig', ['valid' => TRUE,
-		                                         'server' => $_SERVER['SERVER_NAME']]);
+		                                         'server' => $this->_server]);
 
 	}
 
@@ -63,11 +67,11 @@ class ControllerAuth extends AuthManager{
 
 		if ($user === false){
 			echo $this->_twig->render('login.twig', ['notValid' => TRUE,
-			                                         'server' => $_SERVER['SERVER_NAME']]);
+			                                         'server' => $this->_server]);
 			exit();
 		}else{
 			( new Session )->setKey($key, $user);
-			header("Location: http://".$_SERVER['SERVER_NAME']."/Home");
+			header("Location: http://".$this->_server."/Home");
 		}
 
 
@@ -80,14 +84,14 @@ class ControllerAuth extends AuthManager{
 
 			if ($value != preg_replace('/\s+/', '', $value)){
 				echo $this->_twig->render('register.twig', ['space' => TRUE,
-				                                            'server' => $_SERVER['SERVER_NAME'],
+				                                            'server' => $this->_server,
 				                                            'key' => $params]);
 				exit();
 			}
 
 			if (strlen($value) < 3){
 				echo $this->_twig->render('register.twig', ['noValid' => TRUE,
-				                                            'server' => $_SERVER['SERVER_NAME'],
+				                                            'server' => $this->_server,
 				                                            'key' => $params]);
 				exit();
 			}
@@ -95,21 +99,21 @@ class ControllerAuth extends AuthManager{
 
 		if($params['password'] != $params['confirme']){
 			echo $this->_twig->render('register.twig', ['valid' => TRUE,
-			                                            'server' => $_SERVER['SERVER_NAME'],
+			                                            'server' => $this->_server,
 			                                            'key' => $params]);
 			exit();
 		}
 
 		if ($this->checkUser($params['pseudo'])){
 			echo $this->_twig->render('register.twig', ['noPseudo' => TRUE,
-			                                            'server' => $_SERVER['SERVER_NAME'],
+			                                            'server' => $this->_server,
 			                                            'key' => $params]);
 			exit();
 		}
 
 		if ($this->checkEmail($params['identifiant'])){
 			echo $this->_twig->render('register.twig', ['noEmail' => TRUE,
-			                                            'server' => $_SERVER['SERVER_NAME'],
+			                                            'server' => $this->_server,
 			                                            'key' => $params]);
 			exit();
 		}

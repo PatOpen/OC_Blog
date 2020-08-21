@@ -1,9 +1,19 @@
 <?php
-//phpinfo();exit();
+
+//use DI\ContainerBuilder;
 use OC_Blog\Controllers\Router;
 use Whoops\Handler\PrettyPageHandler;
 
-require '../vendor/autoload.php';
+//Chargement de l'autoload de composer
+require (dirname(__DIR__).DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php');
+
+//Conteneur de dépendance
+/*$builder = new ContainerBuilder();
+try {
+	$builder->addDefinitions(dirname(__DIR__).'/config/config.php');
+	$container = $builder->build();
+} catch ( Exception $e ) {
+}*/
 
 //Debug error
 $whoops = new Whoops\Run;
@@ -17,5 +27,6 @@ $twig = new Twig\Environment($loader);
 //Sessions
 OC_Blog\Tools\Session::getSession();
 
+//Instanciation du routeur
 $router = new Router();
-$router->routeRequest($twig);
+$router->run($twig);

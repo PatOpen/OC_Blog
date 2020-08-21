@@ -5,10 +5,17 @@
 
 {% block content %}
 
-    <form action="http://{{ server }}/Comment/addCommentPost" method="post">
+    {% if error %}
+
+        <div class="bg-danger text-white">
+            <p>Une erreur est survenue lors de l'enregistrement !</p>
+        </div>
+
+    {% endif %}
+    <form action="http://{{ server }}/Comment/updateComment/{{ id }}" method="post">
         <div class="row">
 
-            {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message', allComment.content ) }}
+            {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message', content ) }}
 
         </div>
         <div class="form-group">
