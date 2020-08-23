@@ -29,7 +29,7 @@ class CommentsManager extends Manager {
 					   FROM comment AS c
 					   INNER JOIN users AS u
 					   ON c.user_id = u.id
-					   WHERE post_id = :postId AND validation = false ";
+					   WHERE post_id = :postId AND validation = true ";
 
 		$req = $this->getBdd()->prepare($sql);
 		$req->bindValue(':postId', $postId);

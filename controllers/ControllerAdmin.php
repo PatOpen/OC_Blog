@@ -4,7 +4,7 @@
 namespace OC_Blog\Controllers;
 
 use GuzzleHttp\Psr7\ServerRequest;
-use OC_Blog\Config\ConstantGlobal;
+use OC_Blog\Tools\ConstantGlobal;
 use OC_Blog\Models\AdminManager;
 use OC_Blog\Models\AuthManager;
 use OC_Blog\Models\CommentsManager;
@@ -15,7 +15,7 @@ use OC_Blog\Tools\Session;
 class ControllerAdmin {
 
 	private array $_params;
-	private array $_method;
+	private int $_slug;
 	private object $_twig;
 	private object $_userManager;
 	private object $_adminManager;
@@ -23,8 +23,8 @@ class ControllerAdmin {
 	private object $_commentManager;
 	private string $_server;
 
-	public function __construct($method, $twig, $params){
-		$this->_method = $method;
+	public function __construct( $twig, $slug, $params){
+		$this->_slug = $slug;
 		$this->_twig = $twig;
 		$this->_params = $params;
 		$this->_userManager = new AuthManager();
@@ -33,18 +33,12 @@ class ControllerAdmin {
 		$this->_commentManager = new CommentsManager();
 		$this->_server = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerName()['SERVER_NAME'];
 
-		$target = $method[2];
-		if (method_exists(ControllerAdmin::class, $target) ) {
-			$this->$target();
-		}else{
-			echo $this->_twig->render('404.twig');
-		}
-
 	}
 
 	public function profile(){
 
 		$key = (new Session)->getKey('user');
+
 		if (isset($this->_params['identifiant'])){
 			$this->checkMailProfile();
 		}elseif (isset($this->_params['password'])){
@@ -53,10 +47,11 @@ class ControllerAdmin {
 			$this->avatar();
 		}else{
 			echo $this->_twig->render('profile.twig', ['logged' => TRUE,
-			                                          'user'   => $key['pseudo'],
-			                                          'value'  => $key['email'],
+			                                           'user'   => $key['pseudo'],
+			                                           'value'  => $key['email'],
+			                                           'admin' => $key['admin'],
 			                                           'server' => $this->_server,
-			                                          'avatar'=> $key['avatar']]);
+			                                           'avatar'=> $key['avatar']]);
 		}
 	}
 
@@ -79,7 +74,7 @@ class ControllerAdmin {
 
 	public function validate(){
 
-		$commentId = $this->_method[3];
+		$commentId = $this->_slug;
 		$validComment = $this->_commentManager->validComments((int)$commentId);
 
 		if ($validComment){
@@ -109,6 +104,7 @@ class ControllerAdmin {
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
+			                                           'admin' => $key['admin'],
 			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
@@ -119,6 +115,7 @@ class ControllerAdmin {
 			                                           'server' => $this->_server,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
+			                                           'admin' => $key['admin'],
 			                                           'avatar'=> $key['avatar']]);
 		}
 
@@ -133,6 +130,7 @@ class ControllerAdmin {
 				                                           'logged' => TRUE,
 				                                           'user' => $key['pseudo'],
 				                                           'value' => $key['email'],
+				                                           'admin' => $key['admin'],
 				                                           'avatar'=> $key['avatar']]);
 
 			}
@@ -155,6 +153,7 @@ class ControllerAdmin {
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
+			                                           'admin' => $key['admin'],
 			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
@@ -167,6 +166,7 @@ class ControllerAdmin {
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
+			                                           'admin' => $key['admin'],
 			                                           'avatar'=> $key['avatar']]);
 
 		}
@@ -182,6 +182,7 @@ class ControllerAdmin {
 				                                           'server' => $this->_server,
 				                                           'logged'=> TRUE,
 				                                           'user'=> $key['pseudo'],
+				                                           'admin' => $key['admin'],
 				                                           'value'=> $key['email']]);
 				exit();
 			}
@@ -192,6 +193,7 @@ class ControllerAdmin {
 				                                           'server' => $this->_server,
 				                                           'logged'=> TRUE,
 				                                           'user'=> $key['pseudo'],
+				                                           'admin' => $key['admin'],
 				                                           'value'=> $key['email']]);
 				exit();
 			}
@@ -215,6 +217,7 @@ class ControllerAdmin {
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
+			                                           'admin' => $key['admin'],
 			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
@@ -226,6 +229,7 @@ class ControllerAdmin {
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
+			                                           'admin' => $key['admin'],
 			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
@@ -239,6 +243,7 @@ class ControllerAdmin {
 			                                           'logged'=> TRUE,
 			                                           'user'=> $key['pseudo'],
 			                                           'value'=> $key['email'],
+			                                           'admin' => $key['admin'],
 			                                           'avatar'=> $key['avatar']]);
 			exit();
 		}
@@ -261,6 +266,7 @@ class ControllerAdmin {
 				                                           'logged'=> TRUE,
 				                                           'user'=> $key['pseudo'],
 				                                           'value'=> $key['email'],
+				                                           'admin' => $key['admin'],
 				                                           'avatar'=> $key['avatar']]);
 
 

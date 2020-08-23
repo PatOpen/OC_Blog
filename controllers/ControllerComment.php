@@ -3,7 +3,7 @@
 namespace OC_Blog\Controllers;
 
 use GuzzleHttp\Psr7\ServerRequest;
-use OC_Blog\Config\ConstantGlobal;
+use OC_Blog\Tools\ConstantGlobal;
 use OC_Blog\Models\CommentsManager;
 use OC_Blog\Tools\Session;
 
@@ -11,24 +11,18 @@ use OC_Blog\Tools\Session;
 class ControllerComment {
 
 	private array $_params;
-	private array $_method;
+	private int $_slug;
 	private object $_twig;
 	private object $_commentManager;
 	private string $_server;
 
 
-	public function __construct($method, $twig, $params){
-		$this->_method = $method;
+	public function __construct( $twig, $slug, $params){
+		$this->_slug = $slug;
 		$this->_twig = $twig;
 		$this->_params = $params;
 		$this->_commentManager = new CommentsManager();
 		$this->_server = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerName()['SERVER_NAME'];
-		$target = $method[2];
-		if (method_exists(ControllerComment::class, $target) ) {
-			$this->$target();
-		}else{
-			echo $this->_twig->render('404.twig');
-		}
 	}
 
 	public function addCommentPost(){
@@ -47,30 +41,32 @@ class ControllerComment {
 			$good = $this->_commentManager->addComment($userId, $comment, $postId['id']);
 
 			if ($good){
-				header("Location: http://".$this->_server."/Post/".$postId['id']);
+				header("Location: http://".$this->_server."/Post/viewPost/".$postId['id']);
 			}else{
 				echo 'Une erreur c\'est produite veuillez recommencer !' ;
 			}
 		}
 	}
 
-	private function updateComment(){
+	public function updateComment(){
 
-		$key = (new Session)->getKey('post');
-		$commentId = $this->_method[3];
+		$keyPost = (new Session)->getKey('post');
+		$keyUser = (new Session)->getKey('user');
 		$post = $this->_params;
 
 		if (isset($post['message'])){
-			$this->checkComment($post['message'], $commentId, $key['id']);
+			$this->checkComment($post['message'], $this->_slug, $keyPost['id']);
 		}
 
 
 
-		$content = $this->_commentManager->oneComment((int) $commentId);
+		$content = $this->_commentManager->oneComment((int) $this->_slug);
 
 		echo $this->_twig->render( 'comment.twig', ['logged'=> TRUE,
 		                                            'server' => $this->_server,
 		                                            'id' => $content['id'],
+		                                            'admin' => $keyUser['admin'],
+		                                            'user' => $keyUser['pseudo'],
 		                                            'content'=> html_entity_decode($content['content'])]);
 
 	}
@@ -81,7 +77,7 @@ class ControllerComment {
 		$update = $this->_commentManager->updateComment($content, $commentId);
 
 		if ($update){
-			header('location: http://'.$this->_server.'/Post/'.$postId);
+			header('location: http://'.$this->_server.'/Post/viewPost/'.$postId);
 		}else{
 			echo $this->_twig->render( 'comment.twig', ['logged'=> TRUE,
 			                                            'error' => TRUE,
@@ -94,8 +90,8 @@ class ControllerComment {
 	public function deleteComment(){
 
 		$key = (new Session)->getKey('post');
-		$this->_commentManager->deleteComment($this->_method[3]);
-		header('location: http://'.$this->_server.'/Post/'. $key['id']);
+		$this->_commentManager->deleteComment($this->_slug);
+		header('location: http://'.$this->_server.'/Post/viewPost/'. $key['id']);
 	}
 
 }

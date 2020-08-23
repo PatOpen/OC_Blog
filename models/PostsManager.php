@@ -47,9 +47,8 @@ class PostsManager extends Manager {
 					   WHERE p.id = :id";
 
 		$req = $this->getBdd()->prepare($sql);
-		$req->bindValue(':id', $id);
-		$req->execute();
-		$req->setFetchMode( PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Posts' );
+		$req->execute([':id' => $id]);
+		$req->setFetchMode( PDO::FETCH_ASSOC);
 		$post = $req->fetchAll();
 
 		$req->closeCursor();

@@ -4,16 +4,17 @@ namespace OC_Blog\Models;
 
 use Exception;
 use PDO;
-use const OC_Blog\Config\DBConstant\{DSN, USERNAME, PASSWORD};
+use const OC_Blog\Config\DBConstant\{DBNAME, DBHOST, USERNAME, PASSWORD};
 
 abstract class Manager {
 
 	private static object $_bdd;
 
+
 	private static function setBdd() {
 		try {
 			require_once '../config/DBConstant.php';
-			self::$_bdd = new PDO( DSN, USERNAME, PASSWORD );
+			self::$_bdd = new PDO( 'pgsql:dbname='.DBNAME.';host='.DBHOST, USERNAME, PASSWORD );
 			self::$_bdd->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 			self::$_bdd->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ );
 		}

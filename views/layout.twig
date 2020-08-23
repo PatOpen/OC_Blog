@@ -23,7 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/Home">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="http://{{ server }}">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
@@ -39,7 +39,9 @@
                     <a href="#" class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Bonjour {{ user }}</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown01">
                         <a href="http://{{ server }}/Admin/profile" class="dropdown-item">Mon profile</a>
+                        {% if admin %}
                         <a href="http://{{ server }}/Admin/admin" class="dropdown-item">Administration</a>
+                        {% endif %}
                         <a href="http://{{ server }}/Auth/logout" class="dropdown-item">Déconnexion</a>
                     </div>
                 </li>

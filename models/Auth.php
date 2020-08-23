@@ -10,6 +10,7 @@ class Auth {
 	private $_password;
 	private $_create_at;
 	private $_avatar;
+	private $_admin;
 
 	public function __construct(array $data)
 	{
@@ -121,6 +122,19 @@ class Auth {
 		$this->_avatar = $avatar;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getAdmin() {
+		return $this->_admin;
+	}
+
+	/**
+	 * @param mixed $admin
+	 */
+	public function setAdmin( $admin ): void {
+		$this->_admin = $admin;
+	}
 
 
 }

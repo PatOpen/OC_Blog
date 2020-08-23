@@ -1,6 +1,6 @@
 <?php
 
-//use DI\ContainerBuilder;
+use DI\ContainerBuilder;
 use OC_Blog\Controllers\Router;
 use Whoops\Handler\PrettyPageHandler;
 
@@ -8,12 +8,13 @@ use Whoops\Handler\PrettyPageHandler;
 require (dirname(__DIR__).DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php');
 
 //Conteneur de dépendance
-/*$builder = new ContainerBuilder();
+$builder = new ContainerBuilder();
 try {
 	$builder->addDefinitions(dirname(__DIR__).'/config/config.php');
+	$builder->useAutowiring(true);
 	$container = $builder->build();
 } catch ( Exception $e ) {
-}*/
+}
 
 //Debug error
 $whoops = new Whoops\Run;
