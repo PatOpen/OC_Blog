@@ -4,7 +4,7 @@
 namespace OC_Blog\Tools;
 
 
-class HtmlResponse {
+class TwigRenderer {
 	protected $twig;
 	protected $statusCode;
 	protected $data;
