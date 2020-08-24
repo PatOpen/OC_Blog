@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+  mysql:
+    image: mysql
+    env_file:
+      - ".env"
+    volumes:
+      - "./data/mysql:/var/lib/mysql"
+    networks:
+      - project_network
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ".env"
+    networks:
+      - project_network
+    volumes: 
+      - "./:/usr/src/app"
+    ports:
+        - "9090:80"
+
+  adminer:
+    image: adminer
+    restart: on-failure
+    ports:
+      - "8081:8080"
+    networks:
+      - project_network
+
+  mail:
+    image: mailhog/mailhog:v1.0.0
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - project_network
+
+networks:
+  project_network:
+    driver: bridge
