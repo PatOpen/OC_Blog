@@ -2,100 +2,100 @@
 
 namespace OC_Blog\Controllers;
 
-use GuzzleHttp\Psr7\ServerRequest;
-use OC_Blog\Config\ConstantGlobal;
 use OC_Blog\Models\CommentsManager;
+use OC_Blog\Tools\ControllerFactory;
 use OC_Blog\Tools\Session;
 
 
-class ControllerComment {
+class ControllerComment extends ControllerFactory {
 
-	private array $_params;
-	private array $_method;
-	private object $_twig;
-	private object $_commentManager;
-	private string $_server;
-
-
-	public function __construct($method, $twig, $params){
-		$this->_method = $method;
-		$this->_twig = $twig;
-		$this->_params = $params;
-		$this->_commentManager = new CommentsManager();
-		$this->_server = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerName()['SERVER_NAME'];
-		$target = $method[2];
-		if (method_exists(ControllerComment::class, $target) ) {
-			$this->$target();
-		}else{
-			echo $this->_twig->render('404.twig');
-		}
-	}
-
-	public function addCommentPost(){
+	/**
+	 *Ajoute un commentaire à post en BDD.
+	 *
+	 * Si l'utilisateur n'est pas connecté, renvoi sur la page de connexion.
+	 */
+	public function addCommentPost(): void {
 		$key = (new Session)->getKey('user');
 
 
 		if (!isset($key)){
-			header("Location: http://".$this->_server."/Auth/login");
+			header("Location: http://".$this->getServer()."/Auth/login");
 			exit();
 		}else{
 
 			$userId = $key['id'];
-			$comment = htmlentities(trim($this->_params['message']));
+			$comment = htmlentities(trim($this->getPost()['message']));
 			$postId = (new Session)->getKey('post');
 
-			$good = $this->_commentManager->addComment($userId, $comment, $postId['id']);
+			$good = (new CommentsManager())->addComment($userId, $comment, $postId['id']);
 
 			if ($good){
-				header("Location: http://".$this->_server."/Post/".$postId['id']);
+				header("Location: http://".$this->getServer()."/Post/viewPost/".$postId['id']);
 			}else{
 				echo 'Une erreur c\'est produite veuillez recommencer !' ;
 			}
 		}
 	}
 
-	private function updateComment(){
+	/**
+	 * Modification d'un commentaire en BDD.
+	 *
+	 * Renvoi sur la page du post concerné.
+	 */
+	public function updateComment(): void {
 
-		$key = (new Session)->getKey('post');
-		$commentId = $this->_method[3];
-		$post = $this->_params;
+		$keyPost = (new Session)->getKey('post');
+		$keyUser = (new Session)->getKey('user');
+		$post = $this->getPost();
 
 		if (isset($post['message'])){
-			$this->checkComment($post['message'], $commentId, $key['id']);
+			$this->checkComment($post['message'], $this->getSlug(), $keyPost['id']);
 		}
 
+		$content = (new CommentsManager())->oneComment((int) $this->getSlug());
 
-
-		$content = $this->_commentManager->oneComment((int) $commentId);
-
-		echo $this->_twig->render( 'comment.twig', ['logged'=> TRUE,
-		                                            'server' => $this->_server,
-		                                            'id' => $content['id'],
-		                                            'content'=> html_entity_decode($content['content'])]);
+		echo $this->getTwig()->render( 'comment.twig', ['logged'=> TRUE,
+		                                                'server' => $this->getServer(),
+		                                                'id' => $content['id'],
+		                                                'admin' => $keyUser['admin'],
+		                                                'user' => $keyUser['pseudo'],
+		                                                'content'=> html_entity_decode($content['content'])]);
 
 	}
 
-	public function checkComment(string $comment, int $commentId, int $postId){
+	/**
+	 *Vérification des informations $_POST et enregistrement du commentaire.
+	 *
+	 * @param string $comment
+	 * @param int $commentId
+	 * @param int $postId
+	 */
+	public function checkComment(string $comment, int $commentId, int $postId): void {
 
 		$content = htmlentities(trim($comment), ENT_QUOTES);
-		$update = $this->_commentManager->updateComment($content, $commentId);
+		$update = (new CommentsManager())->updateComment($content, $commentId);
 
 		if ($update){
-			header('location: http://'.$this->_server.'/Post/'.$postId);
+			header('location: http://'.$this->getServer().'/Post/viewPost/'.$postId);
 		}else{
-			echo $this->_twig->render( 'comment.twig', ['logged'=> TRUE,
-			                                            'error' => TRUE,
-			                                            'server' => $this->_server,
-			                                            'id' => $commentId,
-			                                            'content'=> $content]);
+			echo $this->getTwig()->render( 'comment.twig', ['logged'=> TRUE,
+			                                                'error' => TRUE,
+			                                                'server' => $this->getServer(),
+			                                                'id' => $commentId,
+			                                                'content'=> $content]);
 		}
 	}
 
-	public function deleteComment(){
+	/**
+	 * Supprime un commentaire via l'auteur du commentaire.
+	 *
+	 * Renvoi sur la page du post concerné.
+	 */
+	public function deleteComment(): void {
 
 		$key = (new Session)->getKey('post');
-		$this->_commentManager->deleteComment($this->_method[3]);
-		header('location: http://'.$this->_server.'/Post/'. $key['id']);
+		(new CommentsManager())->deleteComment($this->getSlug());
+		header('location: http://'.$this->getServer().'/Post/viewPost/'. $key['id']);
 	}
-
 }
+

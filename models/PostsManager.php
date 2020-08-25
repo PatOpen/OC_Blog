@@ -6,8 +6,12 @@ use PDO;
 
 class PostsManager extends Manager {
 
-
-	public function listPosts() {
+	/**
+	 * Récupère tous les post de la BDD.
+	 *
+	 * @return array
+	 */
+	public function listPosts(): array {
 
 		$sql = "SELECT id,
 					   title,
@@ -28,10 +32,16 @@ class PostsManager extends Manager {
 		$req->closeCursor();
 
 		return $listPosts;
-
 	}
 
-	public function getPost($id){
+	/**
+	 *Récupère les information d'un post et les infos de l'auteur de ce post.
+	 *
+	 * @param int $id
+	 *
+	 * @return array
+	 */
+	public function getPost(int $id): array {
 		$sql = "SELECT p.id,
 					   title,
 					   chapo,
@@ -47,16 +57,12 @@ class PostsManager extends Manager {
 					   WHERE p.id = :id";
 
 		$req = $this->getBdd()->prepare($sql);
-		$req->bindValue(':id', $id);
-		$req->execute();
-		$req->setFetchMode( PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Posts' );
+		$req->execute([':id' => $id]);
+		$req->setFetchMode( PDO::FETCH_ASSOC);
 		$post = $req->fetchAll();
 
 		$req->closeCursor();
 
 		return $post;
 	}
-
-
-
 }

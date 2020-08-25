@@ -3,123 +3,120 @@
 
 namespace OC_Blog\Controllers;
 
-use GuzzleHttp\Psr7\ServerRequest;
-use OC_Blog\Config\ConstantGlobal;
 use OC_Blog\Models\AuthManager;
+use OC_Blog\Tools\ControllerFactory;
 use OC_Blog\Tools\Session;
 
 
-class ControllerAuth extends AuthManager{
+class ControllerAuth extends ControllerFactory {
 
-	private array $_params;
-	private array $_method;
-	private object $_twig;
-	private string $_server;
+	/**
+	 * Afiche la page de connexion.
+	 */
+	public function login(): void {
 
-
-	public function __construct( $method, $twig, $params){
-		$this->_method = $method;
-		$this->_twig = $twig;
-		$this->_params = $params;
-		$target = $method[2];
-		$this->_server = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerName()['SERVER_NAME'];
-
-		if (method_exists(ControllerAuth::class, $target) ) {
-			$this->$target();
-		}else{
-			echo $this->_twig->render('404.twig', ['server' => $this->_server]);
-		}
-
-	}
-
-	public function login() {
-
-		if (!empty($this->_params)){
+		if (!empty($this->getPost())){
 			$this->checkAuth();
 		}
 
-		echo $this->_twig->render('login.twig', ['server' => $this->_server]);
+		echo $this->getTwig()->render('login.twig', ['server' => $this->getServer()]);
 
 	}
 
-	public function logout(){
+	/**
+	 * Permet de se déconnecter.
+	 *
+	 * Redirige sur la page d'accueil.
+	 */
+	public function logout(): void {
 		session_destroy();
-		header("Location: http://".$this->_server."/Home");
+		header("Location: http://".$this->getServer());
 	}
 
-	public function register(){
+	/**
+	 * Affiche la page d'enregistrement.
+	 */
+	public function register(): void {
 
-		echo $this->_twig->render('register.twig', ['server' => $this->_server]);
+		echo $this->getTwig()->render('register.twig', ['server' => $this->getServer()]);
 	}
 
-	public function addUser($params){
+	/**
+	 * Permet d'ajouter un utilisateur et renvoi sur la page de connexion.
+	 *
+	 * @param array $params
+	 */
+	public function addUser(array $params): void {
 
-		$this->registerUser($params);
-		echo $this->_twig->render('login.twig', ['valid' => TRUE,
-		                                         'server' => $this->_server]);
+		(new AuthManager())->registerUser($params);
+		echo $this->getTwig()->render('login.twig', ['valid' => TRUE,
+		                                         'server' => $this->getServer()]);
 
 	}
 
-	public function checkAuth(){
-		$params = $this->_params;
-		$user = $this->checkLogin($params);
-		$key = 'user';
+	/**
+	 * Permet de vérifier les identifiants envoyé par l'utilisateur.
+	 */
+	public function checkAuth(): void {
+		$params = $this->getPost();
+		$user = (new AuthManager())->checkLogin($params);
 
 		if ($user === false){
-			echo $this->_twig->render('login.twig', ['notValid' => TRUE,
-			                                         'server' => $this->_server]);
+			echo $this->getTwig()->render('login.twig', ['notValid' => TRUE,
+			                                         'server' => $this->getServer()]);
 			exit();
 		}else{
-			( new Session )->setKey($key, $user);
-			header("Location: http://".$this->_server."/Home");
+			( new Session )->setKey('user', $user);
+			header("Location: http://".$this->getServer());
 		}
-
-
 	}
 
-	public function check(){
-		$params = $this->_params;
+	/**
+	 * Permet de vérifier les information envoyé par $_POST.
+	 */
+	public function check(): void {
+		$params = $this->getPost();
+		$userManager = new AuthManager;
 
 		foreach ($params as $key => $value){
 
 			if ($value != preg_replace('/\s+/', '', $value)){
-				echo $this->_twig->render('register.twig', ['space' => TRUE,
-				                                            'server' => $this->_server,
+				echo $this->getTwig()->render('register.twig', ['space' => TRUE,
+				                                            'server' => $this->getServer(),
 				                                            'key' => $params]);
 				exit();
 			}
 
 			if (strlen($value) < 3){
-				echo $this->_twig->render('register.twig', ['noValid' => TRUE,
-				                                            'server' => $this->_server,
+				echo $this->getTwig()->render('register.twig', ['noValid' => TRUE,
+				                                            'server' => $this->getServer(),
 				                                            'key' => $params]);
 				exit();
 			}
 		}
 
 		if($params['password'] != $params['confirme']){
-			echo $this->_twig->render('register.twig', ['valid' => TRUE,
-			                                            'server' => $this->_server,
+			echo $this->getTwig()->render('register.twig', ['valid' => TRUE,
+			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
 			exit();
 		}
 
-		if ($this->checkUser($params['pseudo'])){
-			echo $this->_twig->render('register.twig', ['noPseudo' => TRUE,
-			                                            'server' => $this->_server,
+		if ($userManager->checkUser($params['pseudo'])){
+			echo $this->getTwig()->render('register.twig', ['noPseudo' => TRUE,
+			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
 			exit();
 		}
 
-		if ($this->checkEmail($params['identifiant'])){
-			echo $this->_twig->render('register.twig', ['noEmail' => TRUE,
-			                                            'server' => $this->_server,
+		if ($userManager->checkEmail($params['identifiant'])){
+			echo $this->getTwig()->render('register.twig', ['noEmail' => TRUE,
+			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
 			exit();
 		}
 
 		$this->addUser($params);
 	}
-
-
 }
+

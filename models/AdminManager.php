@@ -8,7 +8,14 @@ use PDO;
 
 class AdminManager extends Manager {
 
-	public function checkAdmin(int $userId){
+	/**
+	 * Vérifie si l'utilisateur est un administrateur.
+	 *
+	 * @param int $userId
+	 *
+	 * @return bool
+	 */
+	public function checkAdmin(int $userId): bool {
 
 		$sql = "SELECT * FROM admin WHERE user_id = ?";
 		$req = $this->getBdd()->prepare($sql);
@@ -25,7 +32,12 @@ class AdminManager extends Manager {
 
 	}
 
-	public function commentsPost(){
+	/**
+	 *Récupération de tout les commentaires qui n'ont pas été validé.
+	 *
+	 * @return array
+	 */
+	public function commentsPost(): array {
 		$sql = "SELECT c.id AS commentId,
 					   p.id AS postId,
 					   u.id AS userId,
@@ -55,5 +67,4 @@ class AdminManager extends Manager {
 		return $result;
 
 	}
-
 }

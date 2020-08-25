@@ -7,8 +7,12 @@ use PDO;
 
 class AuthManager extends Manager {
 
-
-	public function registerUser($params){
+	/**
+	 * Enregistre un utilisateur.
+	 *
+	 * @param array $params
+	 */
+	public function registerUser(array $params): void {
 		$pass = password_hash($params['password'], PASSWORD_DEFAULT);
 		$sql = "INSERT INTO users (pseudo, email, password, create_at) VALUES (:pseudo, :email, :password, now())";
 		$req = $this->getBdd()->prepare($sql);
@@ -21,8 +25,14 @@ class AuthManager extends Manager {
 		$req->closeCursor();
 	}
 
-	public function checkUser($user):bool
-	{
+	/**
+	 * Vérifie si un pseudo existe déjà.
+	 *
+	 * @param string $user
+	 *
+	 * @return bool
+	 */
+	public function checkUser(string $user): bool {
 		$pseudo = $user;
 		$sql = "SELECT * FROM users WHERE pseudo = ?";
 		$req = $this->getBdd()->prepare($sql);
@@ -36,12 +46,16 @@ class AuthManager extends Manager {
 		}else{
 			return false;
 		}
-
-
 	}
 
-	public function checkEmail($mail):bool
-	{
+	/**
+	 * Vérifie si un email existe déjà.
+	 *
+	 * @param string $mail
+	 *
+	 * @return bool
+	 */
+	public function checkEmail(string $mail): bool {
 		$email = $mail;
 		$sql = "SELECT * FROM users WHERE email = ?";
 		$req = $this->getBdd()->prepare($sql);
@@ -55,12 +69,16 @@ class AuthManager extends Manager {
 		}else{
 			return false;
 		}
-
-
 	}
 
-	public function checkLogin($params)
-	{
+	/**
+	 * Vérifie si les identifiants pour se connecter.
+	 *
+	 * @param array $params
+	 *
+	 * @return array|false
+	 */
+	public function checkLogin(array $params): array {
 		$email = $params['identifiant'];
 
 		$sql = "SELECT * FROM users WHERE email = ?";
@@ -75,10 +93,17 @@ class AuthManager extends Manager {
 			}else{
 				return false;
 			}
-
 	}
 
-	public function updateUserMail($params, $userKey){
+	/**
+	 * Met à jour l'email d'un utilisateur.
+	 *
+	 * @param string $params
+	 * @param array $userKey
+	 *
+	 * @return bool
+	 */
+	public function updateUserMail(string $params, array $userKey): bool {
 
 		$user = new Auth($userKey);
 		$sql ="UPDATE users SET email = :email WHERE id = :id";
@@ -93,10 +118,15 @@ class AuthManager extends Manager {
 		}else{
 			return false;
 		}
-
 	}
 
-	public function updateUserPass($params, $userKey){
+	/**
+	 * Modofie le mot de passe.
+	 *
+	 * @param array $params
+	 * @param array $userKey
+	 */
+	public function updateUserPass(array $params,array $userKey): void {
 		$pass = password_hash($params['password'], PASSWORD_DEFAULT);
 
 		$user = new Auth($userKey);
@@ -106,10 +136,17 @@ class AuthManager extends Manager {
 		               ':password'=> $pass]);
 
 		$req->closeCursor();
-
 	}
 
-	public function updateAvatar($params, $userId){
+	/**
+	 * Enregistre le nom de l'avatar d'un utilisteur.
+	 *
+	 * @param string $params
+	 * @param array $userId
+	 *
+	 * @return bool
+	 */
+	public function updateAvatar(string $params, array $userId): bool {
 
 		$user = new Auth($userId);
 		$sql ="UPDATE users SET avatar = :avatar WHERE id = :id";
@@ -124,7 +161,6 @@ class AuthManager extends Manager {
 		}else{
 			return false;
 		}
-
 	}
-
 }
+
