@@ -6,17 +6,14 @@ use PDO;
 
 class CommentsManager extends Manager {
 
-	public function listComments($postId){
-
-		$req = $this->getBdd()->prepare("SELECT id, user_id, DATE_FORMAT(create_at, '%d/%m/%Y à %Hh%i') AS create_date, content, validation FROM comment WHERE post_id = :post_id ORDER BY id DESC");
-		$req->execute([':post_id'=> $postId]);
-		$req->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Comments');
-
-		return $req->fetchAll();
-
-	}
-
-	public function postComment($postId){
+	/**
+	 * Récupère les commentaire validé du post donné.
+	 *
+	 * @param int $postId
+	 *
+	 * @return array
+	 */
+	public function postComment(int $postId): array{
 		$sql = "SELECT c.id,
 					   c.user_id,
 					   c.post_id,
@@ -32,8 +29,7 @@ class CommentsManager extends Manager {
 					   WHERE post_id = :postId AND validation = true ";
 
 		$req = $this->getBdd()->prepare($sql);
-		$req->bindValue(':postId', $postId);
-		$req->execute();
+		$req->execute([':postId'=> $postId]);
 		$req->setFetchMode( PDO::FETCH_ASSOC);
 		$comments = $req->fetchAll();
 
@@ -42,7 +38,14 @@ class CommentsManager extends Manager {
 		return $comments;
 	}
 
-	public function oneComment($commentId){
+	/**
+	 * Récupère un commentaire pour le modifier.
+	 *
+	 * @param int $commentId
+	 *
+	 * @return array
+	 */
+	public function oneComment(int $commentId): array{
 		$sql = "SELECT id,
 					   post_id,
 					   content
@@ -50,8 +53,7 @@ class CommentsManager extends Manager {
 					   WHERE id = :commentId";
 
 		$req = $this->getBdd()->prepare($sql);
-		$req->bindValue(':commentId', $commentId);
-		$req->execute();
+		$req->execute([':commentId'=> $commentId]);
 		$req->setFetchMode( PDO::FETCH_ASSOC);
 		$comments = $req->fetch();
 
@@ -60,11 +62,19 @@ class CommentsManager extends Manager {
 		return $comments;
 	}
 
+	/**
+	 * Ajoute un commentaire pour un post en BDD.
+	 *
+	 * @param int $userId
+	 * @param string $comment
+	 * @param int $postId
+	 *
+	 * @return bool
+	 */
+	public function addComment(int $userId, string $comment, int $postId): bool {
 
-
-	public function addComment($userId, $comment, $postId){
-
-		$sql = "INSERT INTO comment (user_id, post_id, create_at, content, validation, modified_at) VALUES (:user_id, :post_id, now(), :content, false, null )";
+		$sql = "INSERT INTO comment (user_id, post_id, create_at, content, validation, modified_at) 
+				VALUES (:user_id, :post_id, now(), :content, false, null )";
 		$req = $this->getBdd()->prepare($sql);
 		$result = $req->execute([
 			':user_id' => $userId,
@@ -79,16 +89,28 @@ class CommentsManager extends Manager {
 		}else{
 			return  false;
 		}
-
 	}
 
-	public function deleteComment($id){
+	/**
+	 * Supprime un commentaire.
+	 *
+	 * @param int $id
+	 */
+	public function deleteComment(int $id):void {
 
 		$this->getBdd()->exec('DELETE FROM comment WHERE id = ' . (int) $id);
 
 	}
 
-	public function updateComment(string $content,int $id){
+	/**
+	 * Enregistre la modification d'un commentaire.
+	 *
+	 * @param string $content
+	 * @param int $id
+	 *
+	 * @return bool
+	 */
+	public function updateComment(string $content,int $id): bool {
 
 		$sql = "UPDATE comment SET modified_at = NOW(), content = :content, validation = false WHERE id = :id";
 		$req = $this->getBdd()->prepare($sql);
@@ -102,10 +124,16 @@ class CommentsManager extends Manager {
 		}else{
 			return false;
 		}
-
 	}
 
-	public function validComments(int $commentId){
+	/**
+	 * Enregistre la validation d'un commentaire.
+	 *
+	 * @param int $commentId
+	 *
+	 * @return bool
+	 */
+	public function validComments(int $commentId): bool {
 
 		$req = $this->getBdd()->prepare('UPDATE comment SET validation = true WHERE id = :id');
 		$valid = $req->execute([':id' => $commentId]);
@@ -117,6 +145,5 @@ class CommentsManager extends Manager {
 		}else{
 			return false;
 		}
-
 	}
 }

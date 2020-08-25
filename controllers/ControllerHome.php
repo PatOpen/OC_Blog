@@ -2,8 +2,6 @@
 
 namespace OC_Blog\Controllers;
 
-//use GuzzleHttp\Psr7\ServerRequest;
-//use OC_Blog\Tools\ConstantGlobal;
 use OC_Blog\Models\PostsManager;
 use OC_Blog\Tools\ControllerFactory;
 use OC_Blog\Tools\Session;
@@ -11,7 +9,10 @@ use OC_Blog\Tools\Session;
 
 class ControllerHome extends ControllerFactory {
 
-	public function home(){
+	/**
+	 * Affiche la page d'accueil.
+	 */
+	public function home(): void {
 		$posts = new PostsManager();
 		$allPosts = $posts->listPosts();
 		$key = (new Session)->getKey('user');

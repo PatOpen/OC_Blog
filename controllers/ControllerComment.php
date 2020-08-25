@@ -9,7 +9,12 @@ use OC_Blog\Tools\Session;
 
 class ControllerComment extends ControllerFactory {
 
-	public function addCommentPost(){
+	/**
+	 *Ajoute un commentaire à post en BDD.
+	 *
+	 * Si l'utilisateur n'est pas connecté, renvoi sur la page de connexion.
+	 */
+	public function addCommentPost(): void {
 		$key = (new Session)->getKey('user');
 
 
@@ -32,7 +37,12 @@ class ControllerComment extends ControllerFactory {
 		}
 	}
 
-	public function updateComment(){
+	/**
+	 * Modification d'un commentaire en BDD.
+	 *
+	 * Renvoi sur la page du post concerné.
+	 */
+	public function updateComment(): void {
 
 		$keyPost = (new Session)->getKey('post');
 		$keyUser = (new Session)->getKey('user');
@@ -45,15 +55,22 @@ class ControllerComment extends ControllerFactory {
 		$content = (new CommentsManager())->oneComment((int) $this->getSlug());
 
 		echo $this->getTwig()->render( 'comment.twig', ['logged'=> TRUE,
-		                                            'server' => $this->getServer(),
-		                                            'id' => $content['id'],
-		                                            'admin' => $keyUser['admin'],
-		                                            'user' => $keyUser['pseudo'],
-		                                            'content'=> html_entity_decode($content['content'])]);
+		                                                'server' => $this->getServer(),
+		                                                'id' => $content['id'],
+		                                                'admin' => $keyUser['admin'],
+		                                                'user' => $keyUser['pseudo'],
+		                                                'content'=> html_entity_decode($content['content'])]);
 
 	}
 
-	public function checkComment(string $comment, int $commentId, int $postId){
+	/**
+	 *Vérification des informations $_POST et enregistrement du commentaire.
+	 *
+	 * @param string $comment
+	 * @param int $commentId
+	 * @param int $postId
+	 */
+	public function checkComment(string $comment, int $commentId, int $postId): void {
 
 		$content = htmlentities(trim($comment), ENT_QUOTES);
 		$update = (new CommentsManager())->updateComment($content, $commentId);
@@ -62,18 +79,23 @@ class ControllerComment extends ControllerFactory {
 			header('location: http://'.$this->getServer().'/Post/viewPost/'.$postId);
 		}else{
 			echo $this->getTwig()->render( 'comment.twig', ['logged'=> TRUE,
-			                                            'error' => TRUE,
-			                                            'server' => $this->getServer(),
-			                                            'id' => $commentId,
-			                                            'content'=> $content]);
+			                                                'error' => TRUE,
+			                                                'server' => $this->getServer(),
+			                                                'id' => $commentId,
+			                                                'content'=> $content]);
 		}
 	}
 
-	public function deleteComment(){
+	/**
+	 * Supprime un commentaire via l'auteur du commentaire.
+	 *
+	 * Renvoi sur la page du post concerné.
+	 */
+	public function deleteComment(): void {
 
 		$key = (new Session)->getKey('post');
 		(new CommentsManager())->deleteComment($this->getSlug());
 		header('location: http://'.$this->getServer().'/Post/viewPost/'. $key['id']);
 	}
-
 }
+

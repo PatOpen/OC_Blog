@@ -10,7 +10,9 @@ abstract class Manager {
 
 	private static object $_bdd;
 
-
+	/**
+	 * Connexion à la base de donnée.
+	 */
 	private static function setBdd() {
 		try {
 			require_once '../config/DBConstant.php';
@@ -24,7 +26,12 @@ abstract class Manager {
 		}
 	}
 
-	protected function getBdd() {
+	/**
+	 * Retourne une instance de PDO.
+	 *
+	 * @return object
+	 */
+	protected function getBdd(): object {
 		if ( empty(self::$_bdd) ) {
 			self::setBdd();
 		}

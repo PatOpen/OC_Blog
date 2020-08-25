@@ -6,6 +6,13 @@ namespace OC_Blog\Tools;
 
 use GuzzleHttp\Psr7\ServerRequest;
 
+/**
+ * Class ControllerFactory
+ *
+ * Classe Parent de tous les controleurs.
+ *
+ * @package OC_Blog\Tools
+ */
 class ControllerFactory {
 
 	/**
@@ -31,8 +38,20 @@ class ControllerFactory {
 	/**
 	 * @var array
 	 */
+
+	/**
+	 * @var array
+	 */
 	private array $post;
 
+
+	/**
+	 * ControllerFactory constructor.
+	 *
+	 * @param object $twig
+	 * @param int $slug
+	 * @param array $post
+	 */
 	public function __construct(object $twig,int $slug = 0, array $post = []){
 
 		$this->twig = $twig;
@@ -42,21 +61,44 @@ class ControllerFactory {
 
 }
 
+	/**
+	 * Renvoi un objet Twig.
+	 *
+	 * @return object
+	 */
 	public function getTwig(): object {
 		return $this->twig;
 	}
 
+	/**
+	 * Renvoi une instance de ServerRequest.
+	 *
+	 * Permet d'utiliser la variable global de $_SERVER['SERVER_NAME'].
+	 *
+	 * @return string
+	 */
 	public function getServer(): string {
 		return $this->server;
 	}
 
+	/**
+	 * Renvoi le slug de l'url.
+	 *
+	 * @return int
+	 */
 	public function getSlug(): int {
 		return $this->slug;
 	}
 
+	/**
+	 * Renvoi les informations posté par l'utilisateur $_POST.
+	 *
+	 * @return array
+	 */
 	public function getPost(): array {
 		return $this->post;
 	}
+
 
 	public function addData($key, $value) {
 		$this->data[$key] = $value;

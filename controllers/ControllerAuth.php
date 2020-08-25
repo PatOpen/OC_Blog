@@ -10,7 +10,10 @@ use OC_Blog\Tools\Session;
 
 class ControllerAuth extends ControllerFactory {
 
-	public function login() {
+	/**
+	 * Afiche la page de connexion.
+	 */
+	public function login(): void {
 
 		if (!empty($this->getPost())){
 			$this->checkAuth();
@@ -20,17 +23,30 @@ class ControllerAuth extends ControllerFactory {
 
 	}
 
-	public function logout(){
+	/**
+	 * Permet de se déconnecter.
+	 *
+	 * Redirige sur la page d'accueil.
+	 */
+	public function logout(): void {
 		session_destroy();
 		header("Location: http://".$this->getServer());
 	}
 
-	public function register(){
+	/**
+	 * Affiche la page d'enregistrement.
+	 */
+	public function register(): void {
 
 		echo $this->getTwig()->render('register.twig', ['server' => $this->getServer()]);
 	}
 
-	public function addUser($params){
+	/**
+	 * Permet d'ajouter un utilisateur et renvoi sur la page de connexion.
+	 *
+	 * @param array $params
+	 */
+	public function addUser(array $params): void {
 
 		(new AuthManager())->registerUser($params);
 		echo $this->getTwig()->render('login.twig', ['valid' => TRUE,
@@ -38,7 +54,10 @@ class ControllerAuth extends ControllerFactory {
 
 	}
 
-	public function checkAuth(){
+	/**
+	 * Permet de vérifier les identifiants envoyé par l'utilisateur.
+	 */
+	public function checkAuth(): void {
 		$params = $this->getPost();
 		$user = (new AuthManager())->checkLogin($params);
 
@@ -50,11 +69,12 @@ class ControllerAuth extends ControllerFactory {
 			( new Session )->setKey('user', $user);
 			header("Location: http://".$this->getServer());
 		}
-
-
 	}
 
-	public function check(){
+	/**
+	 * Permet de vérifier les information envoyé par $_POST.
+	 */
+	public function check(): void {
 		$params = $this->getPost();
 		$userManager = new AuthManager;
 
@@ -98,6 +118,5 @@ class ControllerAuth extends ControllerFactory {
 
 		$this->addUser($params);
 	}
-
-
 }
+

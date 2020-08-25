@@ -11,15 +11,16 @@ use OC_Blog\Tools\ConstantGlobal;
 
 class Router {
 
-
-	public function run($twig){
+	/**
+	 * Décompose l'url et instancie le controller demandé.
+	 *
+	 * @param object $twig
+	 */
+	public function run(object $twig): void {
 
 		$url = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerUri();
-		$url = $this->cleanUri($url);
-		$this->routeRequest($twig, $url);
-	}
+		$uri = $this->cleanUri($url);
 
-	public function routeRequest( $twig, $uri ) {
 		try {
 			$url = explode( '/', filter_var( $uri, FILTER_SANITIZE_URL ) );
 			$slug = $this->slug($url);
@@ -51,12 +52,27 @@ class Router {
 		}
 	}
 
+	/**
+	 * Supprime les doublons des slashes.
+	 *
+	 * @param $url
+	 *
+	 * @return string
+	 */
 	public function cleanUri($url): string {
 		$uri = new Uri($url);
 		return UriNormalizer::normalize($uri,UriNormalizer::REMOVE_DUPLICATE_SLASHES);
 	}
 
-	public function getMethod(array $method, $controller) {
+	/**
+	 * Récupère la méthode associé de la classe dans l'url.
+	 *
+	 * @param array $method
+	 * @param string $controller
+	 *
+	 * @return string|null
+	 */
+	public function getMethod(array $method, string $controller): ?string {
 		if (empty($controller)){
 			$controller = 'Home';
 			$method = "home";
@@ -70,7 +86,14 @@ class Router {
 		}
 	}
 
-	public function slug(array $url) {
+	/**
+	 * Récupère le slug si il existe dans l'url
+	 *
+	 * @param array $url
+	 *
+	 * @return int
+	 */
+	public function slug(array $url): int {
 		if (isset($url[3])){
 			return $url[3];
 		}else{

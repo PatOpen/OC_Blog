@@ -9,8 +9,10 @@ use OC_Blog\Tools\Session;
 
 class ControllerPost extends ControllerFactory {
 
-
-	public function viewPost(){
+	/**
+	 * Récupère les commentaires d'un post avant d'affiche la page du post et ses commantaires.
+	 */
+	public function viewPost() : void {
 
 		$post = new PostsManager();
 		$comments = new CommentsManager();
@@ -23,17 +25,18 @@ class ControllerPost extends ControllerFactory {
 		if (!empty($key)){
 			$modifComment = $key['id'];
 			echo $this->getTwig()->render( 'post.twig', ['thePost' => $thePost,
-			                                         'allComments' => $allComments,
-			                                         'logged'=> TRUE,
-			                                         'user'=> $key['pseudo'],
-			                                         'server' => $this->getServer(),
-			                                         'admin' => $key['admin'],
-													 'modifComment' => $modifComment]);
+			                                             'allComments' => $allComments,
+			                                             'logged'=> TRUE,
+			                                             'user'=> $key['pseudo'],
+			                                             'server' => $this->getServer(),
+			                                             'admin' => $key['admin'],
+														 'modifComment' => $modifComment]);
 		}else{
 			echo $this->getTwig()->render( 'post.twig', ['thePost' => $thePost,
-			                                        'allComments' => $allComments,
-			                                         'server' => $this->getServer(),
-			                                        'logged'=> FALSE]);
+			                                             'allComments' => $allComments,
+			                                             'server' => $this->getServer(),
+			                                             'logged'=> FALSE]);
 		}
 	}
 }
+

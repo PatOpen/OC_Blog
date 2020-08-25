@@ -2,15 +2,16 @@
 
 namespace OC_Blog\Models;
 
+
 class Auth {
 
-	private $_id;
-	private $_pseudo;
-	private $_email;
-	private $_password;
-	private $_create_at;
-	private $_avatar;
-	private $_admin;
+	private int $_id;
+	private string $_pseudo;
+	private string $_email;
+	private string $_password;
+	private string $_create_at;
+	private string $_avatar;
+	private bool $_admin;
 
 	public function __construct(array $data)
 	{
@@ -35,51 +36,51 @@ class Auth {
 	}
 
 	/**
-	 * @return mixed
+	 * @return int
 	 */
-	public function getId() {
+	public function getId(): int {
 		return $this->_id;
 	}
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
-	public function getPseudo() {
+	public function getPseudo(): string {
 		return $this->_pseudo;
 	}
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
-	public function getEmail() {
+	public function getEmail(): string {
 		return $this->_email;
 	}
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
-	public function getPassword() {
+	public function getPassword(): string {
 		return $this->_password;
 	}
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
-	public function getCreateAt() {
+	public function getCreateAt(): string {
 		return $this->_create_at;
 	}
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
-	public function getAvatar() {
+	public function getAvatar(): string {
 		return $this->_avatar;
 	}
 
 	/**
-	 * @param mixed $id
+	 * @param int $id
 	 */
-	public function setId(int $id ) {
+	public function setId(int $id ): void {
 
 			if($id > 0){
 				$this->_id = $id;
@@ -87,7 +88,7 @@ class Auth {
 	}
 
 	/**
-	 * @param mixed $pseudo
+	 * @param string $pseudo
 	 */
 	public function setPseudo(string $pseudo ) {
 
@@ -95,46 +96,42 @@ class Auth {
 	}
 
 	/**
-	 * @param mixed $email
+	 * @param string $email
 	 */
 	public function setEmail(string $email ) {
 		$this->_email = $email;
 	}
 
 	/**
-	 * @param mixed $password
+	 * @param string $password
 	 */
 	public function setPassword(string $password ) {
 		$this->_password = $password;
 	}
 
 	/**
-	 * @param mixed $create_at
+	 * @param $create_at
 	 */
 	public function setCreateAt( $create_at ) {
 		$this->_create_at = $create_at;
 	}
 
-	/**
-	 * @param mixed $avatar
-	 */
+
 	public function setAvatar( $avatar ) {
 		$this->_avatar = $avatar;
 	}
 
 	/**
-	 * @return mixed
+	 * @return bool
 	 */
-	public function getAdmin() {
+	public function getAdmin(): bool {
 		return $this->_admin;
 	}
 
 	/**
-	 * @param mixed $admin
+	 * @param bool $admin
 	 */
-	public function setAdmin( $admin ): void {
+	public function setAdmin(bool $admin ): void {
 		$this->_admin = $admin;
 	}
-
-
 }
