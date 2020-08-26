@@ -24,10 +24,10 @@ class ControllerAdmin extends ControllerFactory {
 			$this->checkMailProfile();
 		}elseif (isset($this->getPost()['password'])){
 			$this->checkPassProfile();
-		}elseif (isset($_FILES['avatar'])){
+		}elseif (isset($this->getUpFile()['avatar'])){
 			$this->avatar();
 		}else{
-			echo $this->getTwig()->render('profile.twig', ['logged' => TRUE,
+			$this->render('profile.twig', ['logged' => TRUE,
 			                                               'user'   => $key['pseudo'],
 			                                               'value'  => $key['email'],
 			                                               'admin' => $key['admin'],
@@ -49,12 +49,13 @@ class ControllerAdmin extends ControllerFactory {
 
 		if ($admin){
 			$allComments = $adminManager->commentsPost();
-			echo $this->getTwig()->render('admin.twig', ['logged' => TRUE,
+			$this->render('admin.twig', ['logged' => TRUE,
 												         'user' => $key['pseudo'],
 												         'allComments' => $allComments,
 												         'server' => $this->getServer(),]);
 		}else{
-			echo 'une erreur est survenue';
+			$errorMsg = 'Une erreur est survenue';
+			$this->render( '404.twig', ['error'=> $errorMsg] );
 		}
 	}
 
@@ -70,7 +71,8 @@ class ControllerAdmin extends ControllerFactory {
 		if ($validComment){
 			header("location: http://".$this->getServer()."/Admin/admin");
 		}else{
-			echo 'Une erreur est survenue';
+			$errorMsg = 'Une erreur est survenue';
+			$this->render( '404.twig', ['error'=> $errorMsg] );
 		}
 	}
 
@@ -92,7 +94,7 @@ class ControllerAdmin extends ControllerFactory {
 
 		if ($params['identifiant'] != $key['email'] && $emailExist == true)
 		{
-			echo $this->getTwig()->render('profile.twig', ['noEmail' => TRUE,
+			$this->render('profile.twig', ['noEmail' => TRUE,
 			                                               'server' => $this->getServer(),
 			                                               'logged'=> TRUE,
 			                                               'user'=> $key['pseudo'],
@@ -104,7 +106,7 @@ class ControllerAdmin extends ControllerFactory {
 
 		elseif ($params['identifiant'] === $key['email'])
 		{
-			echo $this->getTwig()->render('profile.twig', ['logged'=> TRUE,
+			$this->render('profile.twig', ['logged'=> TRUE,
 			                                               'server' => $this->getServer(),
 			                                               'user'=> $key['pseudo'],
 			                                               'value'=> $key['email'],
@@ -120,7 +122,7 @@ class ControllerAdmin extends ControllerFactory {
 				(new Session)->setValueKey('user', 'email', $params['identifiant']);
 				$key['email'] = $params['identifiant'];
 
-				echo $this->getTwig()->render('profile.twig', ['confirm' => TRUE,
+				$this->render('profile.twig', ['confirm' => TRUE,
 				                                               'server' => $this->getServer(),
 				                                               'logged' => TRUE,
 				                                               'user' => $key['pseudo'],
@@ -146,7 +148,7 @@ class ControllerAdmin extends ControllerFactory {
 
 		if($params['password'] != $params['confirme']){
 
-			echo $this->getTwig()->render('profile.twig', ['valid' => TRUE,
+			$this->render('profile.twig', ['valid' => TRUE,
 			                                               'server' => $this->getServer(),
 			                                               'logged'=> TRUE,
 			                                               'user'=> $key['pseudo'],
@@ -160,7 +162,7 @@ class ControllerAdmin extends ControllerFactory {
 
 			(new AuthManager)->updateUserPass($params, $key);
 
-			echo $this->getTwig()->render('profile.twig', ['confirm' => TRUE,
+			$this->render('profile.twig', ['confirm' => TRUE,
 			                                               'server' => $this->getServer(),
 			                                               'logged'=> TRUE,
 			                                               'user'=> $key['pseudo'],
@@ -182,7 +184,7 @@ class ControllerAdmin extends ControllerFactory {
 		foreach ($params as $key => $value){
 
 			if ($value != preg_replace('/\s+/', '', $value)){
-				echo $this->getTwig()->render('profile.twig', ['space' => TRUE,
+				$this->render('profile.twig', ['space' => TRUE,
 				                                               'server' => $this->getServer(),
 				                                               'logged'=> TRUE,
 				                                               'user'=> $key['pseudo'],
@@ -192,7 +194,7 @@ class ControllerAdmin extends ControllerFactory {
 			}
 
 			if (strlen($value) < 4){
-				echo $this->getTwig()->render('profile.twig', ['noValid' => TRUE,
+				$this->render('profile.twig', ['noValid' => TRUE,
 				                                               'server' => $this->getServer(),
 				                                               'logged'=> TRUE,
 				                                               'user'=> $key['pseudo'],
@@ -211,16 +213,17 @@ class ControllerAdmin extends ControllerFactory {
 
 	public function avatar(){
 
+		$normalizeFile = $this->getUpFile();
+
 		$maxSize = 500000;
-		$fileSize = $_FILES['avatar']['size'];
-		$tmpName = $_FILES['avatar']['tmp_name'];
-		$fileName = $_FILES['avatar']['name'];
+		$fileSize = $normalizeFile['avatar']->getSize();
+		$fileName = $normalizeFile['avatar']->getClientFilename();
 		$extension = ['jpg', 'jpeg', 'gif', 'png'];
 
 		$key = (new Session)->getKey('user');
 
-		if($_FILES['avatar']['error'] > 0){
-			echo $this->getTwig()->render('profile.twig', ['error' => TRUE,
+		if($normalizeFile['avatar']->getError() > 0){
+			$this->render('profile.twig', ['error' => TRUE,
 			                                               'server' => $this->getServer(),
 			                                               'logged'=> TRUE,
 			                                               'user'=> $key['pseudo'],
@@ -231,7 +234,7 @@ class ControllerAdmin extends ControllerFactory {
 		}
 
 		if ($fileSize > $maxSize){
-			echo $this->getTwig()->render('profile.twig', ['size' => TRUE,
+			$this->render('profile.twig', ['size' => TRUE,
 			                                               'server' => $this->getServer(),
 			                                               'logged'=> TRUE,
 			                                               'user'=> $key['pseudo'],
@@ -244,7 +247,7 @@ class ControllerAdmin extends ControllerFactory {
 		$fileExtension = strtolower(substr($fileName, -3));
 
 		if (!in_array($fileExtension, $extension)){
-			echo $this->getTwig()->render('profile.twig', ['ext' => TRUE,
+			$this->render('profile.twig', ['ext' => TRUE,
 			                                               'server' => $this->getServer(),
 			                                               'logged'=> TRUE,
 			                                               'user'=> $key['pseudo'],
@@ -257,7 +260,8 @@ class ControllerAdmin extends ControllerFactory {
 		$uniqName = md5(uniqid(rand(), true));
 		$newNameFile = $uniqName . "." . $fileExtension;
 		$pathFile = "../public/images/avatar/". $newNameFile;
-		$moveFile = move_uploaded_file($tmpName, $pathFile);
+		$normalizeFile['avatar']->moveTo($pathFile);
+		$moveFile = $normalizeFile['avatar']->isMoved();
 		$oldFile = "../public/images/avatar/" . $key['avatar'];
 
 		if ($moveFile){
@@ -268,7 +272,7 @@ class ControllerAdmin extends ControllerFactory {
 
 				(new Session)->setValueKey('user', 'avatar', $newNameFile);
 				$key['avatar'] = $newNameFile;
-				echo $this->getTwig()->render('profile.twig', ['confirm' => TRUE,
+				$this->render('profile.twig', ['confirm' => TRUE,
 				                                               'server' => $this->getServer(),
 				                                               'logged'=> TRUE,
 				                                               'user'=> $key['pseudo'],

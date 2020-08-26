@@ -24,7 +24,7 @@ class ControllerPost extends ControllerFactory {
 		$key = (new Session)->getKey('user');
 		if (!empty($key)){
 			$modifComment = $key['id'];
-			echo $this->getTwig()->render( 'post.twig', ['thePost' => $thePost,
+			$this->render( 'post.twig', ['thePost' => $thePost,
 			                                             'allComments' => $allComments,
 			                                             'logged'=> TRUE,
 			                                             'user'=> $key['pseudo'],
@@ -32,7 +32,7 @@ class ControllerPost extends ControllerFactory {
 			                                             'admin' => $key['admin'],
 														 'modifComment' => $modifComment]);
 		}else{
-			echo $this->getTwig()->render( 'post.twig', ['thePost' => $thePost,
+			$this->render( 'post.twig', ['thePost' => $thePost,
 			                                             'allComments' => $allComments,
 			                                             'server' => $this->getServer(),
 			                                             'logged'=> FALSE]);

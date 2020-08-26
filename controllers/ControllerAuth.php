@@ -19,7 +19,7 @@ class ControllerAuth extends ControllerFactory {
 			$this->checkAuth();
 		}
 
-		echo $this->getTwig()->render('login.twig', ['server' => $this->getServer()]);
+		$this->render('login.twig', ['server' => $this->getServer()]);
 
 	}
 
@@ -38,7 +38,7 @@ class ControllerAuth extends ControllerFactory {
 	 */
 	public function register(): void {
 
-		echo $this->getTwig()->render('register.twig', ['server' => $this->getServer()]);
+		$this->render('register.twig', ['server' => $this->getServer()]);
 	}
 
 	/**
@@ -49,7 +49,7 @@ class ControllerAuth extends ControllerFactory {
 	public function addUser(array $params): void {
 
 		(new AuthManager())->registerUser($params);
-		echo $this->getTwig()->render('login.twig', ['valid' => TRUE,
+		$this->render('login.twig', ['valid' => TRUE,
 		                                         'server' => $this->getServer()]);
 
 	}
@@ -62,7 +62,7 @@ class ControllerAuth extends ControllerFactory {
 		$user = (new AuthManager())->checkLogin($params);
 
 		if ($user === false){
-			echo $this->getTwig()->render('login.twig', ['notValid' => TRUE,
+			$this->render('login.twig', ['notValid' => TRUE,
 			                                         'server' => $this->getServer()]);
 			exit();
 		}else{
@@ -81,14 +81,14 @@ class ControllerAuth extends ControllerFactory {
 		foreach ($params as $key => $value){
 
 			if ($value != preg_replace('/\s+/', '', $value)){
-				echo $this->getTwig()->render('register.twig', ['space' => TRUE,
+				$this->render('register.twig', ['space' => TRUE,
 				                                            'server' => $this->getServer(),
 				                                            'key' => $params]);
 				exit();
 			}
 
 			if (strlen($value) < 3){
-				echo $this->getTwig()->render('register.twig', ['noValid' => TRUE,
+				$this->render('register.twig', ['noValid' => TRUE,
 				                                            'server' => $this->getServer(),
 				                                            'key' => $params]);
 				exit();
@@ -96,21 +96,21 @@ class ControllerAuth extends ControllerFactory {
 		}
 
 		if($params['password'] != $params['confirme']){
-			echo $this->getTwig()->render('register.twig', ['valid' => TRUE,
+			$this->render('register.twig', ['valid' => TRUE,
 			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
 			exit();
 		}
 
 		if ($userManager->checkUser($params['pseudo'])){
-			echo $this->getTwig()->render('register.twig', ['noPseudo' => TRUE,
+			$this->render('register.twig', ['noPseudo' => TRUE,
 			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
 			exit();
 		}
 
 		if ($userManager->checkEmail($params['identifiant'])){
-			echo $this->getTwig()->render('register.twig', ['noEmail' => TRUE,
+			$this->render('register.twig', ['noEmail' => TRUE,
 			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
 			exit();
