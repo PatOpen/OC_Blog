@@ -24,7 +24,7 @@ class ControllerAdmin extends ControllerFactory {
 			$this->checkMailProfile();
 		}elseif (isset($this->getPost()['password'])){
 			$this->checkPassProfile();
-		}elseif (isset($_FILES['avatar'])){
+		}elseif (isset($this->getUpFile()['avatar'])){
 			$this->avatar();
 		}else{
 			$this->render('profile.twig', ['logged' => TRUE,
