@@ -100,5 +100,5 @@ class Router {
 			return 0;
 		}
 	}
-
 }
+

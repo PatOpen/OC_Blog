@@ -19,13 +19,13 @@ class ControllerHome extends ControllerFactory {
 
 
 		if(!empty($key)){
-			echo $this->getTwig()->render( 'home.twig', ['allPosts' => $allPosts,
+			$this->render( 'home.twig', ['allPosts' => $allPosts,
 			                                         'logged'=> TRUE,
 			                                         'user'=> $key['pseudo'],
 			                                         'admin' => $key['admin'],
 			                                         'server' => $this->getServer()]);
 		}else{
-			echo $this->getTwig()->render( 'home.twig', ['allPosts' => $allPosts,
+			$this->render( 'home.twig', ['allPosts' => $allPosts,
 			                                         'logged' => FALSE,
 													 'server'=> $this->getServer()]);
 		}

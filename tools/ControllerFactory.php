@@ -57,7 +57,7 @@ class ControllerFactory {
 		$this->twig = $twig;
 		$this->slug = $slug;
 		$this->post = $post;
-		$this->server = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerName()['SERVER_NAME'];
+		$this->server = ( new ConstantGlobal(ServerRequest::fromGlobals()));
 
 }
 
@@ -78,7 +78,11 @@ class ControllerFactory {
 	 * @return string
 	 */
 	public function getServer(): string {
-		return $this->server;
+		return $this->server->getServerName()['SERVER_NAME'];
+	}
+
+	public function getUpFile(): array {
+		return $this->server->getFile();
 	}
 
 	/**
@@ -99,14 +103,14 @@ class ControllerFactory {
 		return $this->post;
 	}
 
-
-	public function addData($key, $value) {
-		$this->data[$key] = $value;
+	/**
+	 * Affiche la page demandé avec Twig.
+	 *
+	 * @param string $twigPath
+	 * @param array $data
+	 */
+	public function render(string $twigPath, array $data): void {
+		echo $this->twig->render($twigPath, $data);
 	}
-
-	public function render($twigPath, $data) {
-		echo $this->twig->rrender($twigPath, $data);
-	}
-
-
 }
+

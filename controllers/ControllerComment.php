@@ -32,7 +32,8 @@ class ControllerComment extends ControllerFactory {
 			if ($good){
 				header("Location: http://".$this->getServer()."/Post/viewPost/".$postId['id']);
 			}else{
-				echo 'Une erreur c\'est produite veuillez recommencer !' ;
+				$errorMsg = 'Une erreur c\'est produite veuillez recommencer !';
+				$this->render( '404.twig', ['error'=> $errorMsg] );
 			}
 		}
 	}
@@ -54,7 +55,7 @@ class ControllerComment extends ControllerFactory {
 
 		$content = (new CommentsManager())->oneComment((int) $this->getSlug());
 
-		echo $this->getTwig()->render( 'comment.twig', ['logged'=> TRUE,
+		$this->render( 'comment.twig', ['logged'=> TRUE,
 		                                                'server' => $this->getServer(),
 		                                                'id' => $content['id'],
 		                                                'admin' => $keyUser['admin'],
@@ -78,7 +79,7 @@ class ControllerComment extends ControllerFactory {
 		if ($update){
 			header('location: http://'.$this->getServer().'/Post/viewPost/'.$postId);
 		}else{
-			echo $this->getTwig()->render( 'comment.twig', ['logged'=> TRUE,
+			$this->render( 'comment.twig', ['logged'=> TRUE,
 			                                                'error' => TRUE,
 			                                                'server' => $this->getServer(),
 			                                                'id' => $commentId,
