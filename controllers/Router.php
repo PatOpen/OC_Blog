@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriNormalizer;
 use OC_Blog\Tools\ConstantGlobal;
+use OC_Blog\Tools\ControllerFactory;
 
 
 class Router {
@@ -18,7 +19,8 @@ class Router {
 	 */
 	public function run(object $twig): void {
 
-		$url = ( new ConstantGlobal(ServerRequest::fromGlobals()) )->getServerUri();
+		$constant = new ConstantGlobal(ServerRequest::fromGlobals());
+		$url = $constant->getServerUri();
 		$uri = $this->cleanUri($url);
 
 		try {
@@ -31,8 +33,8 @@ class Router {
 				$controllerClass = "OC_Blog\\Controllers\\Controller" . $controller;
 				$method = $this->getMethod($url, $controller);
 
-				if (class_exists( $controllerClass)  && !empty($_POST)){
-					$params = $_POST;
+				if (class_exists( $controllerClass)  && !empty($constant->getPost())){
+					$params = $constant->getPost();
 					(new $controllerClass( $twig, $slug, $params))->$method();
 				}
 				elseif ( class_exists( $controllerClass)  && isset($method)) {
@@ -47,8 +49,9 @@ class Router {
 
 
 		} catch ( Exception $e ) {
+			$error = new ControllerFactory($twig);
 			$errorMsg = $e->getMessage();
-			echo $twig->render( '404.twig', ['error'=> $errorMsg] );
+			$error->render( '404.twig', ['error'=> $errorMsg] );
 		}
 	}
 

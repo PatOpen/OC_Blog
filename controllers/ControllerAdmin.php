@@ -69,7 +69,8 @@ class ControllerAdmin extends ControllerFactory {
 		$validComment = (new CommentsManager)->validComments((int)$commentId);
 
 		if ($validComment){
-			header("location: http://".$this->getServer()."/Admin/admin");
+			$path = $this->getServer()."/Admin/admin";
+			$this->redirect($path);
 		}else{
 			$errorMsg = 'Une erreur est survenue';
 			$this->render( '404.twig', ['error'=> $errorMsg] );
@@ -101,7 +102,7 @@ class ControllerAdmin extends ControllerFactory {
 			                                               'value'=> $key['email'],
 			                                               'admin' => $key['admin'],
 			                                               'avatar'=> $key['avatar']]);
-			exit();
+			exit(0);
 		}
 
 		elseif ($params['identifiant'] === $key['email'])
@@ -190,7 +191,7 @@ class ControllerAdmin extends ControllerFactory {
 				                                               'user'=> $key['pseudo'],
 				                                               'admin' => $key['admin'],
 				                                               'value'=> $key['email']]);
-				exit();
+				exit(0);
 			}
 
 			if (strlen($value) < 4){
@@ -200,7 +201,7 @@ class ControllerAdmin extends ControllerFactory {
 				                                               'user'=> $key['pseudo'],
 				                                               'admin' => $key['admin'],
 				                                               'value'=> $key['email']]);
-				exit();
+				exit(0);
 			}
 		}
 	}
@@ -230,7 +231,6 @@ class ControllerAdmin extends ControllerFactory {
 			                                               'value'=> $key['email'],
 			                                               'admin' => $key['admin'],
 			                                               'avatar'=> $key['avatar']]);
-			exit();
 		}
 
 		if ($fileSize > $maxSize){
@@ -241,7 +241,6 @@ class ControllerAdmin extends ControllerFactory {
 			                                               'value'=> $key['email'],
 			                                               'admin' => $key['admin'],
 			                                               'avatar'=> $key['avatar']]);
-			exit();
 		}
 
 		$fileExtension = strtolower(substr($fileName, -3));
@@ -254,7 +253,6 @@ class ControllerAdmin extends ControllerFactory {
 			                                               'value'=> $key['email'],
 			                                               'admin' => $key['admin'],
 			                                               'avatar'=> $key['avatar']]);
-			exit();
 		}
 
 		$uniqName = md5(uniqid(rand(), true));
@@ -268,6 +266,10 @@ class ControllerAdmin extends ControllerFactory {
 			$userManager = new AuthManager();
 			$upload = $userManager->updateAvatar($newNameFile, $key);
 
+			if (file_exists($oldFile)){
+				unlink($oldFile);
+			}
+
 			if ($upload){
 
 				(new Session)->setValueKey('user', 'avatar', $newNameFile);
@@ -279,13 +281,7 @@ class ControllerAdmin extends ControllerFactory {
 				                                               'value'=> $key['email'],
 				                                               'admin' => $key['admin'],
 				                                               'avatar'=> $key['avatar']]);
-
-
-				if (file_exists($oldFile)){
-					unlink($oldFile);
-				}
 			}
-			exit();
 		}
 	}
 }

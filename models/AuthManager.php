@@ -76,9 +76,9 @@ class AuthManager extends Manager {
 	 *
 	 * @param array $params
 	 *
-	 * @return array|false
+	 * @return array|null
 	 */
-	public function checkLogin(array $params): array {
+	public function checkLogin(array $params): ?array {
 		$email = $params['identifiant'];
 
 		$sql = "SELECT * FROM users WHERE email = ?";
@@ -91,7 +91,7 @@ class AuthManager extends Manager {
 		if ($user && password_verify($params['password'], $user['password'])){
 				return $user;
 			}else{
-				return false;
+				return null;
 			}
 	}
 
