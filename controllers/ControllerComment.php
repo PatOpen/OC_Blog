@@ -19,7 +19,8 @@ class ControllerComment extends ControllerFactory {
 
 
 		if (!isset($key)){
-			header("Location: http://".$this->getServer()."/Auth/login");
+			$path = $this->getServer()."/Auth/login";
+			$this->redirect($path);
 			exit();
 		}else{
 
@@ -30,7 +31,8 @@ class ControllerComment extends ControllerFactory {
 			$good = (new CommentsManager())->addComment($userId, $comment, $postId['id']);
 
 			if ($good){
-				header("Location: http://".$this->getServer()."/Post/viewPost/".$postId['id']);
+				$path = $this->getServer()."/Post/viewPost/".$postId['id'];
+				$this->redirect($path);
 			}else{
 				$errorMsg = 'Une erreur c\'est produite veuillez recommencer !';
 				$this->render( '404.twig', ['error'=> $errorMsg] );
@@ -77,7 +79,8 @@ class ControllerComment extends ControllerFactory {
 		$update = (new CommentsManager())->updateComment($content, $commentId);
 
 		if ($update){
-			header('location: http://'.$this->getServer().'/Post/viewPost/'.$postId);
+			$path = $this->getServer().'/Post/viewPost/'.$postId;
+			$this->redirect($path);
 		}else{
 			$this->render( 'comment.twig', ['logged'=> TRUE,
 			                                                'error' => TRUE,
@@ -96,7 +99,8 @@ class ControllerComment extends ControllerFactory {
 
 		$key = (new Session)->getKey('post');
 		(new CommentsManager())->deleteComment($this->getSlug());
-		header('location: http://'.$this->getServer().'/Post/viewPost/'. $key['id']);
+		$path = $this->getServer().'/Post/viewPost/'. $key['id'];
+		$this->redirect($path);
 	}
 }
 

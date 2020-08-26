@@ -30,7 +30,7 @@ class ControllerAuth extends ControllerFactory {
 	 */
 	public function logout(): void {
 		session_destroy();
-		header("Location: http://".$this->getServer());
+		$this->redirect($this->getServer());
 	}
 
 	/**
@@ -61,13 +61,13 @@ class ControllerAuth extends ControllerFactory {
 		$params = $this->getPost();
 		$user = (new AuthManager())->checkLogin($params);
 
-		if ($user === false){
+		if ($user === null){
 			$this->render('login.twig', ['notValid' => TRUE,
 			                                         'server' => $this->getServer()]);
-			exit();
+			exit(0);
 		}else{
 			( new Session )->setKey('user', $user);
-			header("Location: http://".$this->getServer());
+			$this->redirect($this->getServer());
 		}
 	}
 
@@ -84,14 +84,14 @@ class ControllerAuth extends ControllerFactory {
 				$this->render('register.twig', ['space' => TRUE,
 				                                            'server' => $this->getServer(),
 				                                            'key' => $params]);
-				exit();
+				exit(0);
 			}
 
 			if (strlen($value) < 3){
 				$this->render('register.twig', ['noValid' => TRUE,
 				                                            'server' => $this->getServer(),
 				                                            'key' => $params]);
-				exit();
+				exit(0);
 			}
 		}
 
@@ -99,21 +99,21 @@ class ControllerAuth extends ControllerFactory {
 			$this->render('register.twig', ['valid' => TRUE,
 			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
-			exit();
+			exit(0);
 		}
 
 		if ($userManager->checkUser($params['pseudo'])){
 			$this->render('register.twig', ['noPseudo' => TRUE,
 			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
-			exit();
+			exit(0);
 		}
 
 		if ($userManager->checkEmail($params['identifiant'])){
 			$this->render('register.twig', ['noEmail' => TRUE,
 			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
-			exit();
+			exit(0);
 		}
 
 		$this->addUser($params);

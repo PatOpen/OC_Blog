@@ -112,5 +112,9 @@ class ControllerFactory {
 	public function render(string $twigPath, array $data): void {
 		echo $this->twig->render($twigPath, $data);
 	}
+
+	public function redirect($path){
+		header('location: http://'.$path);
+	}
 }
 

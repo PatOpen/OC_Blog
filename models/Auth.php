@@ -10,7 +10,7 @@ class Auth {
 	private string $_email;
 	private string $_password;
 	private string $_create_at;
-	private string $_avatar;
+	private $_avatar;
 	private bool $_admin;
 
 	public function __construct(array $data)
