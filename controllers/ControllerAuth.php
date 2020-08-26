@@ -14,13 +14,15 @@ class ControllerAuth extends ControllerFactory {
 	 * Afiche la page de connexion.
 	 */
 	public function login(): void {
+		$valid = true;
 
 		if (!empty($this->getPost())){
-			$this->checkAuth();
+			$valid = $this->checkAuth();
 		}
 
-		$this->render('login.twig', ['server' => $this->getServer()]);
-
+		if ($valid){
+			$this->render('login.twig', ['server' => $this->getServer()]);
+		}
 	}
 
 	/**
@@ -38,7 +40,15 @@ class ControllerAuth extends ControllerFactory {
 	 */
 	public function register(): void {
 
-		$this->render('register.twig', ['server' => $this->getServer()]);
+		$valid = true;
+
+		if (!empty($this->getPost())){
+			$valid = $this->check();
+		}
+
+		if ($valid){
+			$this->render('register.twig', ['server' => $this->getServer()]);
+		}
 	}
 
 	/**
@@ -56,25 +66,30 @@ class ControllerAuth extends ControllerFactory {
 
 	/**
 	 * Permet de vérifier les identifiants envoyé par l'utilisateur.
+	 *
+	 * @return bool|void
 	 */
-	public function checkAuth(): void {
+	public function checkAuth(): ?bool {
 		$params = $this->getPost();
 		$user = (new AuthManager())->checkLogin($params);
 
 		if ($user === null){
 			$this->render('login.twig', ['notValid' => TRUE,
 			                                         'server' => $this->getServer()]);
-			exit(0);
+			return false;
 		}else{
 			( new Session )->setKey('user', $user);
 			$this->redirect($this->getServer());
+			return null;
 		}
 	}
 
 	/**
 	 * Permet de vérifier les information envoyé par $_POST.
+	 *
+	 * @return bool|null
 	 */
-	public function check(): void {
+	public function check(): ?bool {
 		$params = $this->getPost();
 		$userManager = new AuthManager;
 
@@ -84,14 +99,14 @@ class ControllerAuth extends ControllerFactory {
 				$this->render('register.twig', ['space' => TRUE,
 				                                            'server' => $this->getServer(),
 				                                            'key' => $params]);
-				exit(0);
+				return false;
 			}
 
 			if (strlen($value) < 3){
 				$this->render('register.twig', ['noValid' => TRUE,
 				                                            'server' => $this->getServer(),
 				                                            'key' => $params]);
-				exit(0);
+				return false;
 			}
 		}
 
@@ -99,21 +114,21 @@ class ControllerAuth extends ControllerFactory {
 			$this->render('register.twig', ['valid' => TRUE,
 			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
-			exit(0);
+			return false;
 		}
 
 		if ($userManager->checkUser($params['pseudo'])){
 			$this->render('register.twig', ['noPseudo' => TRUE,
 			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
-			exit(0);
+			return false;
 		}
 
 		if ($userManager->checkEmail($params['identifiant'])){
 			$this->render('register.twig', ['noEmail' => TRUE,
 			                                            'server' => $this->getServer(),
 			                                            'key' => $params]);
-			exit(0);
+			return false;
 		}
 
 		$this->addUser($params);
