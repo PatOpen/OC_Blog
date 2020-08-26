@@ -123,11 +123,11 @@ class AuthManager extends Manager {
 	/**
 	 * Modofie le mot de passe.
 	 *
-	 * @param array $params
+	 * @param string $pass
 	 * @param array $userKey
 	 */
-	public function updateUserPass(array $params,array $userKey): void {
-		$pass = password_hash($params['password'], PASSWORD_DEFAULT);
+	public function updateUserPass(string $pass, array $userKey): void {
+		$pass = password_hash($pass, PASSWORD_DEFAULT);
 
 		$user = new Auth($userKey);
 		$sql ="UPDATE users SET password = :password WHERE id = :id";

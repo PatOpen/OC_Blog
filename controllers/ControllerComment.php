@@ -21,7 +21,6 @@ class ControllerComment extends ControllerFactory {
 		if (!isset($key)){
 			$path = $this->getServer()."/Auth/login";
 			$this->redirect($path);
-			exit();
 		}else{
 
 			$userId = $key['id'];

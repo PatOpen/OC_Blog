@@ -28,11 +28,11 @@ class ControllerAdmin extends ControllerFactory {
 			$this->avatar();
 		}else{
 			$this->render('profile.twig', ['logged' => TRUE,
-			                                               'user'   => $key['pseudo'],
-			                                               'value'  => $key['email'],
-			                                               'admin' => $key['admin'],
-			                                               'server' => $this->getServer(),
-			                                               'avatar'=> $key['avatar']]);
+			                               'user'   => $key['pseudo'],
+			                               'value'  => $key['email'],
+			                               'admin' => $key['admin'],
+			                               'server' => $this->getServer(),
+			                               'avatar'=> $key['avatar']]);
 		}
 	}
 
@@ -93,7 +93,8 @@ class ControllerAdmin extends ControllerFactory {
 		$userManager = (new AuthManager);
 		$emailExist = $userManager->checkEmail($params['identifiant']);
 
-		if ($params['identifiant'] != $key['email'] && $emailExist == true)
+
+		if ($params['identifiant'] != $key['email'] && $emailExist === true)
 		{
 			$this->render('profile.twig', ['noEmail' => TRUE,
 			                                               'server' => $this->getServer(),
@@ -102,11 +103,8 @@ class ControllerAdmin extends ControllerFactory {
 			                                               'value'=> $key['email'],
 			                                               'admin' => $key['admin'],
 			                                               'avatar'=> $key['avatar']]);
-			exit(0);
-		}
+		} elseif ($params['identifiant'] === $key['email']){
 
-		elseif ($params['identifiant'] === $key['email'])
-		{
 			$this->render('profile.twig', ['logged'=> TRUE,
 			                                               'server' => $this->getServer(),
 			                                               'user'=> $key['pseudo'],
@@ -115,8 +113,7 @@ class ControllerAdmin extends ControllerFactory {
 			                                               'avatar'=> $key['avatar']]);
 		}
 
-		else
-			{
+		if ( $params['identifiant'] != $key['email'] && $emailExist === false){
 			$validChange = $userManager->updateUserMail($params['identifiant'], $key);
 
 			if ($validChange){
@@ -124,12 +121,12 @@ class ControllerAdmin extends ControllerFactory {
 				$key['email'] = $params['identifiant'];
 
 				$this->render('profile.twig', ['confirm' => TRUE,
-				                                               'server' => $this->getServer(),
-				                                               'logged' => TRUE,
-				                                               'user' => $key['pseudo'],
-				                                               'value' => $key['email'],
-				                                               'admin' => $key['admin'],
-				                                               'avatar'=> $key['avatar']]);
+				                               'server' => $this->getServer(),
+				                               'logged' => TRUE,
+				                               'user' => $key['pseudo'],
+				                               'value' => $key['email'],
+				                               'admin' => $key['admin'],
+				                               'avatar'=> $key['avatar']]);
 
 			}
 		}
@@ -145,9 +142,10 @@ class ControllerAdmin extends ControllerFactory {
 		$params = $this->getPost();
 		$key = (new Session)->getKey('user');
 
-		$this->checkForm($params);
+		$pass = trim($params['password']);
+		$passConfirm = trim($params['confirme']);
 
-		if($params['password'] != $params['confirme']){
+		if(($pass != $passConfirm) || strlen($pass) < 4 ){
 
 			$this->render('profile.twig', ['valid' => TRUE,
 			                                               'server' => $this->getServer(),
@@ -156,12 +154,9 @@ class ControllerAdmin extends ControllerFactory {
 			                                               'value'=> $key['email'],
 			                                               'admin' => $key['admin'],
 			                                               'avatar'=> $key['avatar']]);
-			exit();
-		}
+		}elseif ($pass === $passConfirm){
 
-		if ($params['password'] === $params['confirme']){
-
-			(new AuthManager)->updateUserPass($params, $key);
+			(new AuthManager)->updateUserPass($pass, $key);
 
 			$this->render('profile.twig', ['confirm' => TRUE,
 			                                               'server' => $this->getServer(),
@@ -172,7 +167,6 @@ class ControllerAdmin extends ControllerFactory {
 			                                               'avatar'=> $key['avatar']]);
 
 		}
-
 	}
 
 
@@ -182,6 +176,7 @@ class ControllerAdmin extends ControllerFactory {
 	 * @param array $params
 	 */
 	public function checkForm(array $params){
+
 		foreach ($params as $key => $value){
 
 			if ($value != preg_replace('/\s+/', '', $value)){
@@ -191,7 +186,6 @@ class ControllerAdmin extends ControllerFactory {
 				                                               'user'=> $key['pseudo'],
 				                                               'admin' => $key['admin'],
 				                                               'value'=> $key['email']]);
-				exit(0);
 			}
 
 			if (strlen($value) < 4){
@@ -201,7 +195,6 @@ class ControllerAdmin extends ControllerFactory {
 				                                               'user'=> $key['pseudo'],
 				                                               'admin' => $key['admin'],
 				                                               'value'=> $key['email']]);
-				exit(0);
 			}
 		}
 	}
