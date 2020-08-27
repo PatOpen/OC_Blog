@@ -124,7 +124,7 @@ class Auth {
 	/**
 	 * @return bool
 	 */
-	public function getAdmin(): bool {
+	public function isAdmin(): bool {
 		return $this->_admin;
 	}
 

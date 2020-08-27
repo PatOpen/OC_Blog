@@ -67,7 +67,7 @@ class ControllerAuth extends ControllerFactory {
 	/**
 	 * Permet de vérifier les identifiants envoyé par l'utilisateur.
 	 *
-	 * @return bool|void
+	 * @return bool|null
 	 */
 	public function checkAuth(): ?bool {
 		$params = $this->getPost();
@@ -93,41 +93,41 @@ class ControllerAuth extends ControllerFactory {
 		$params = $this->getPost();
 		$userManager = new AuthManager;
 
-		foreach ($params as $key => $value){
+		foreach ($params as $value){
 
 			if ($value != preg_replace('/\s+/', '', $value)){
 				$this->render('register.twig', ['space' => TRUE,
-				                                            'server' => $this->getServer(),
-				                                            'key' => $params]);
+				                                        'server' => $this->getServer(),
+				                                        'key' => $params]);
 				return false;
 			}
 
 			if (strlen($value) < 3){
 				$this->render('register.twig', ['noValid' => TRUE,
-				                                            'server' => $this->getServer(),
-				                                            'key' => $params]);
+				                                        'server' => $this->getServer(),
+				                                        'key' => $params]);
 				return false;
 			}
 		}
 
 		if($params['password'] != $params['confirme']){
 			$this->render('register.twig', ['valid' => TRUE,
-			                                            'server' => $this->getServer(),
-			                                            'key' => $params]);
+			                                        'server' => $this->getServer(),
+			                                        'key' => $params]);
 			return false;
 		}
 
 		if ($userManager->checkUser($params['pseudo'])){
 			$this->render('register.twig', ['noPseudo' => TRUE,
-			                                            'server' => $this->getServer(),
-			                                            'key' => $params]);
+			                                        'server' => $this->getServer(),
+			                                        'key' => $params]);
 			return false;
 		}
 
 		if ($userManager->checkEmail($params['identifiant'])){
 			$this->render('register.twig', ['noEmail' => TRUE,
-			                                            'server' => $this->getServer(),
-			                                            'key' => $params]);
+			                                        'server' => $this->getServer(),
+			                                        'key' => $params]);
 			return false;
 		}
 
