@@ -12,8 +12,7 @@
             "OC_Blog\\Controllers\\": "controllers/",
             "OC_Blog\\Models\\": "models/",
             "OC_Blog\\Tools\\": "tools/",
-            "OC_Blog\\Config\\": "config/",
-            "OC_Blog\\Config\\DBConstant\\": "config/DBConstant.php"
+            "OC_Blog\\Config\\": "config/"
         }
     },
     "require": {

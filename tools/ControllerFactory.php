@@ -4,6 +4,7 @@
 namespace OC_Blog\Tools;
 
 
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\ServerRequest;
 
 /**
@@ -26,18 +27,9 @@ class ControllerFactory {
 	private object $twig;
 
 	/**
-	 * @var array
-	 */
-	private array $data;
-
-	/**
 	 * @var int
 	 */
 	private int $slug;
-
-	/**
-	 * @var array
-	 */
 
 	/**
 	 * @var array
@@ -52,13 +44,13 @@ class ControllerFactory {
 	 * @param int $slug
 	 * @param array $post
 	 */
-	public function __construct(object $twig,int $slug = 0, array $post = []){
+	public function __construct(object $twig,int $slug = 0, array $post = [], ConstantGlobal $constant_global){
 
 		$this->twig = $twig;
 		$this->slug = $slug;
 		$this->post = $post;
-		$this->server = ( new ConstantGlobal(ServerRequest::fromGlobals()));
-
+		//$this->server = ( new ConstantGlobal(ServerRequest::fromGlobals()));
+		$this->server = $constant_global;
 }
 
 	/**
@@ -81,6 +73,11 @@ class ControllerFactory {
 		return $this->server->getServerName()['SERVER_NAME'];
 	}
 
+	/**
+	 * Permet d'utiliser $_FILE
+	 *
+	 * @return array
+	 */
 	public function getUpFile(): array {
 		return $this->server->getFile();
 	}
@@ -113,7 +110,14 @@ class ControllerFactory {
 		echo $this->twig->render($twigPath, $data);
 	}
 
-	public function redirect($path){
+	/**
+	 * Redirige à l'url demandé.
+	 *
+	 * @param string $path
+	 */
+	public function redirect(string $path): void{
+		header('HTTP/1.1 Moved Permanently', false, 302);
+		header('Status: 302 Moved Permanently', false, 302);
 		header('location: http://'.$path);
 	}
 }

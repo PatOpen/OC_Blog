@@ -2,9 +2,9 @@
 
 namespace OC_Blog\Models;
 
-use Exception;
+
+use OC_Blog\Config\DBConstant;
 use PDO;
-use const OC_Blog\Config\DBConstant\{DBNAME, DBHOST, USERNAME, PASSWORD};
 
 abstract class Manager {
 
@@ -13,17 +13,10 @@ abstract class Manager {
 	/**
 	 * Connexion à la base de donnée.
 	 */
-	private static function setBdd() {
-		try {
-			require_once '../config/DBConstant.php';
-			self::$_bdd = new PDO( 'pgsql:dbname='.DBNAME.';host='.DBHOST, USERNAME, PASSWORD );
+	private function setBdd() {
+			self::$_bdd = new PDO( 'pgsql:dbname='.DBConstant::DBNAME.';host='.DBConstant::DBHOST, DBConstant::USERNAME, DBConstant::PASSWORD );
 			self::$_bdd->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 			self::$_bdd->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ );
-		}
-
-		catch ( Exception $e ) {
-			echo( 'Erreur : ' . $e->getMessage() );
-		}
 	}
 
 	/**

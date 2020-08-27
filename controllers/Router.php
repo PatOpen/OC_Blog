@@ -35,21 +35,21 @@ class Router {
 
 				if (class_exists( $controllerClass)  && !empty($constant->getPost())){
 					$params = $constant->getPost();
-					(new $controllerClass( $twig, $slug, $params))->$method();
+					(new $controllerClass( $twig, $slug, $params, $constant))->$method();
 				}
 				elseif ( class_exists( $controllerClass)  && isset($method)) {
-					(new $controllerClass($twig, $slug, []))->$method();
+					(new $controllerClass($twig, $slug, [], $constant))->$method();
 				}
 
 				else {
-					(new ControllerHome($twig))->home();
+					(new ControllerHome($twig, $slug, [],$constant))->home();
 				}
 
 			}
 
 
 		} catch ( Exception $e ) {
-			$error = new ControllerFactory($twig);
+			$error = new ControllerFactory($twig, $slug = 0, [], $constant);
 			$errorMsg = $e->getMessage();
 			$error->render( '404.twig', ['error'=> $errorMsg] );
 		}

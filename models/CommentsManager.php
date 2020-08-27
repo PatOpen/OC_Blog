@@ -94,11 +94,11 @@ class CommentsManager extends Manager {
 	/**
 	 * Supprime un commentaire.
 	 *
-	 * @param int $id
+	 * @param int $commentId
 	 */
-	public function deleteComment(int $id):void {
+	public function deleteComment(int $commentId):void {
 
-		$this->getBdd()->exec('DELETE FROM comment WHERE id = ' . (int) $id);
+		$this->getBdd()->exec('DELETE FROM comment WHERE id = ' . (int) $commentId);
 
 	}
 
@@ -106,15 +106,15 @@ class CommentsManager extends Manager {
 	 * Enregistre la modification d'un commentaire.
 	 *
 	 * @param string $content
-	 * @param int $id
+	 * @param int $commentId
 	 *
 	 * @return bool
 	 */
-	public function updateComment(string $content,int $id): bool {
+	public function updateComment(string $content,int $commentId): bool {
 
 		$sql = "UPDATE comment SET modified_at = NOW(), content = :content, validation = false WHERE id = :id";
 		$req = $this->getBdd()->prepare($sql);
-		$comments = $req->execute([':id' => $id,
+		$comments = $req->execute([':id' => $commentId,
 								  ':content'=> $content]);
 
 		$req->closeCursor();

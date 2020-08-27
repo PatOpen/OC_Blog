@@ -19,14 +19,19 @@ class ControllerAdmin extends ControllerFactory {
 	public function profile(){
 
 		$key = (new Session)->getKey('user');
+		$noPost = true;
 
 		if (isset($this->getPost()['identifiant'])){
 			$this->checkMailProfile();
+			$noPost = false;
 		}elseif (isset($this->getPost()['password'])){
 			$this->checkPassProfile();
+			$noPost = false;
 		}elseif (isset($this->getUpFile()['avatar'])){
 			$this->avatar();
-		}else{
+			$noPost = false;
+		}
+		if ($noPost){
 			$this->render('profile.twig', ['logged' => TRUE,
 			                               'user'   => $key['pseudo'],
 			                               'value'  => $key['email'],
