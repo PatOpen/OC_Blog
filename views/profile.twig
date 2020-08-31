@@ -10,91 +10,98 @@
             <p>Vos informations ont bien été mis à jour !</p>
         </div>
     {% endif %}
+    <h1 class="text-center">PROFILE</h1>
+    <div class="row section topspace">
 
-    <h1>Profile</h1>
+        <h2 class="section-title"><span>Email</span></h2>
 
-    <form action="http://{{ server }}/Admin/profile" method="post">
-        <div class="row">
+        <form action="http://{{ server }}/Admin/profile" method="post">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-            {{ form.input('identifiant', 'Changer d\'Email', 'email', 'Nouveau Email', value) }}
+                {{ form.input('identifiant', 'Changer d\'Email', 'email', 'Nouveau Email', value) }}
 
-        </div>
-        {% if noEmail %}
-            <div class="bg-warning text-white">
-                <p>Cet Email existe déja !</p>
             </div>
-        {% endif %}
+            {% if noEmail %}
+                <div class="bg-warning text-white">
+                    <p>Cet Email existe déja !</p>
+                </div>
+            {% endif %}
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-        </div>
-    </form>
-
-    <form action="http://{{ server }}/Admin/profile" method="post">
-        <div class="row">
-
-            {{ form.input('password', 'Nouveau mot de passe', 'password', 'Votre nouveau mot de passe') }}
-
-        </div>
-        <div class="row">
-
-            {{ form.input('confirme', 'Confirmation du nouveau mot de passe', 'password', 'Confirmation') }}
-
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-        </div>
-
-        {% if valid %}
-            <div class="bg-danger text-white">
-                <p>les mots de passe ne correspondent pas !</p>
+            <div class="btn-profil">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
-        {% endif %}
-        {% if noValid %}
-            <div class="bg-danger text-white">
-                <p>Les champs doivent avoir au moins 4 caractères et sans espace !</p>
-            </div>
-        {% endif %}
-        {% if space %}
-            <div class="bg-warning text-white">
-                <p>Les champs ne doivent pas contenir d'espaces</p>
-            </div>
-        {% endif %}
-    </form>
+        </form>
+    </div>
 
-    <form action="http://{{ server }}/Admin/profile" method="post" enctype="multipart/form-data">
-        <div class="row">
-            <div class="form-group">
+    <div class="row section topspace">
+        <h2 class="section-title"><span>Mot de passe</span></h2>
+        <form action="http://{{ server }}/Admin/admin" method="post">
+            <div class=" col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+                {{ form.input('password', 'Nouveau mot de passe', 'password', 'Votre nouveau mot de passe') }}
+
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+                {{ form.input('confirme', 'Confirmation du nouveau mot de passe', 'password', 'Confirmation') }}
+
+            </div>
+            <div class="btn-profil">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+
+            {% if valid %}
+                <div class="bg-danger text-white">
+                    <p>les mots de passe ne correspondent pas !</p>
+                </div>
+            {% endif %}
+            {% if noValid %}
+                <div class="bg-danger text-white">
+                    <p>Les champs doivent avoir au moins 4 caractères et sans espace !</p>
+                </div>
+            {% endif %}
+            {% if space %}
+                <div class="bg-warning text-white">
+                    <p>Les champs ne doivent pas contenir d'espaces</p>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="row section topspace">
+        <h2 class="section-title"><span>avatar</span></h2>
+        <form action="http://{{ server }}/Admin/profile" method="post" enctype="multipart/form-data">
+
+            <div class="form-group btn-profil">
                 <label for="avatar">Choisir un avatar</label>
                 <input type="file" class="form-control-file" id="avatar" name="avatar">
             </div>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-        </div>
 
-        <div class="form-group">
-            <img src="../images/avatar/{{ avatar }}" alt="" width="50px" height="50px">
-        </div>
-
-
-
-        {% if error %}
-            <div class="bg-warning text-white">
-                <p>Une erreur est survenue lors du transfert</p>
+            <div class="btn-profil">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
-        {% endif %}
-        {% if size %}
-            <div class="bg-danger text-white">
-                <p>Le fichier est trop volumineux, maximum 500Ko</p>
-            </div>
-        {% endif %}
-        {% if ext %}
-            <div class="bg-danger text-white">
-                <p>Le fichier n'est pa une image, extension accepté: .jpg, .jpeg, .gif, .png</p>
-            </div>
-        {% endif %}
-    </form>
 
+            <div class="avatarprofil">
+                <img src="http://{{ server }}/images/avatar/{{ avatar }}" alt="avatar" width="50px" height="50px">
+            </div>
+
+
+            {% if error %}
+                <div class="bg-warning text-white">
+                    <p>Une erreur est survenue lors du transfert</p>
+                </div>
+            {% endif %}
+            {% if size %}
+                <div class="bg-danger text-white">
+                    <p>Le fichier est trop volumineux, maximum 500Ko</p>
+                </div>
+            {% endif %}
+            {% if ext %}
+                <div class="bg-danger text-white">
+                    <p>Le fichier n'est pa une image, extension accepté: .jpg, .jpeg, .gif, .png</p>
+                </div>
+            {% endif %}
+        </form>
+    </div>
 
 {% endblock %}

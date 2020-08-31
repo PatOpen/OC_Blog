@@ -16,12 +16,12 @@ class ControllerAuth extends ControllerFactory {
 	public function login(): void {
 		$valid = true;
 
-		if (!empty($this->getPost())){
+		if ( ! empty( $this->getPostForm() ) ) {
 			$valid = $this->checkAuth();
 		}
 
-		if ($valid){
-			$this->render('login.twig', ['server' => $this->getServer()]);
+		if ( $valid ) {
+			$this->render( 'login.twig', [ 'server' => $this->getServer() ] );
 		}
 	}
 
@@ -32,7 +32,7 @@ class ControllerAuth extends ControllerFactory {
 	 */
 	public function logout(): void {
 		session_destroy();
-		$this->redirect($this->getServer());
+		$this->redirect( $this->getServer() );
 	}
 
 	/**
@@ -42,12 +42,12 @@ class ControllerAuth extends ControllerFactory {
 
 		$valid = true;
 
-		if (!empty($this->getPost())){
+		if ( ! empty( $this->getPostForm() ) ) {
 			$valid = $this->check();
 		}
 
-		if ($valid){
-			$this->render('register.twig', ['server' => $this->getServer()]);
+		if ( $valid ) {
+			$this->render( 'register.twig', [ 'server' => $this->getServer() ] );
 		}
 	}
 
@@ -56,11 +56,13 @@ class ControllerAuth extends ControllerFactory {
 	 *
 	 * @param array $params
 	 */
-	public function addUser(array $params): void {
+	public function addUser( array $params ): void {
 
-		(new AuthManager())->registerUser($params);
-		$this->render('login.twig', ['valid' => TRUE,
-		                                         'server' => $this->getServer()]);
+		( new AuthManager() )->registerUser( $params );
+		$this->render( 'login.twig', [
+			'valid'  => true,
+			'server' => $this->getServer()
+		] );
 
 	}
 
@@ -70,16 +72,20 @@ class ControllerAuth extends ControllerFactory {
 	 * @return bool|null
 	 */
 	public function checkAuth(): ?bool {
-		$params = $this->getPost();
-		$user = (new AuthManager())->checkLogin($params);
+		$params = $this->getPostForm();
+		$user   = ( new AuthManager() )->checkLogin( $params );
 
-		if ($user === null){
-			$this->render('login.twig', ['notValid' => TRUE,
-			                                         'server' => $this->getServer()]);
+		if ( $user === null ) {
+			$this->render( 'login.twig', [
+				'notValid' => true,
+				'server'   => $this->getServer()
+			] );
+
 			return false;
-		}else{
-			( new Session )->setKey('user', $user);
-			$this->redirect($this->getServer());
+		} else {
+			( new Session )->setKey( 'user', $user );
+			$this->redirect( $this->getServer() );
+
 			return null;
 		}
 	}
@@ -90,48 +96,63 @@ class ControllerAuth extends ControllerFactory {
 	 * @return bool|null
 	 */
 	public function check(): ?bool {
-		$params = $this->getPost();
+		$params      = $this->getPostForm();
 		$userManager = new AuthManager;
 
-		foreach ($params as $value){
+		foreach ( $params as $value ) {
 
-			if ($value != preg_replace('/\s+/', '', $value)){
-				$this->render('register.twig', ['space' => TRUE,
-				                                        'server' => $this->getServer(),
-				                                        'key' => $params]);
+			if ( $value != preg_replace( '/\s+/', '', $value ) ) {
+				$this->render( 'register.twig', [
+					'space'  => true,
+					'server' => $this->getServer(),
+					'key'    => $params
+				] );
+
 				return false;
 			}
 
-			if (strlen($value) < 3){
-				$this->render('register.twig', ['noValid' => TRUE,
-				                                        'server' => $this->getServer(),
-				                                        'key' => $params]);
+			if ( strlen( $value ) < 3 ) {
+				$this->render( 'register.twig', [
+					'noValid' => true,
+					'server'  => $this->getServer(),
+					'key'     => $params
+				] );
+
 				return false;
 			}
 		}
 
-		if($params['password'] != $params['confirme']){
-			$this->render('register.twig', ['valid' => TRUE,
-			                                        'server' => $this->getServer(),
-			                                        'key' => $params]);
+		if ( $params['password'] != $params['confirme'] ) {
+			$this->render( 'register.twig', [
+				'valid'  => true,
+				'server' => $this->getServer(),
+				'key'    => $params
+			] );
+
 			return false;
 		}
 
-		if ($userManager->checkUser($params['pseudo'])){
-			$this->render('register.twig', ['noPseudo' => TRUE,
-			                                        'server' => $this->getServer(),
-			                                        'key' => $params]);
+		if ( $userManager->checkUser( $params['pseudo'] ) ) {
+			$this->render( 'register.twig', [
+				'noPseudo' => true,
+				'server'   => $this->getServer(),
+				'key'      => $params
+			] );
+
 			return false;
 		}
 
-		if ($userManager->checkEmail($params['identifiant'])){
-			$this->render('register.twig', ['noEmail' => TRUE,
-			                                        'server' => $this->getServer(),
-			                                        'key' => $params]);
+		if ( $userManager->checkEmail( $params['identifiant'] ) ) {
+			$this->render( 'register.twig', [
+				'noEmail' => true,
+				'server'  => $this->getServer(),
+				'key'     => $params
+			] );
+
 			return false;
 		}
 
-		$this->addUser($params);
+		$this->addUser( $params );
 	}
 }
 

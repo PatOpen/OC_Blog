@@ -12,15 +12,15 @@ class AuthManager extends Manager {
 	 *
 	 * @param array $params
 	 */
-	public function registerUser(array $params): void {
-		$pass = password_hash($params['password'], PASSWORD_DEFAULT);
-		$sql = "INSERT INTO users (pseudo, email, password, create_at) VALUES (:pseudo, :email, :password, now())";
-		$req = $this->getBdd()->prepare($sql);
-		$req->execute([
+	public function registerUser( array $params ): void {
+		$pass = password_hash( $params['password'], PASSWORD_DEFAULT );
+		$sql  = "INSERT INTO users (pseudo, email, password, create_at) VALUES (:pseudo, :email, :password, now())";
+		$req  = $this->getBdd()->prepare( $sql );
+		$req->execute( [
 			':pseudo'   => $params['pseudo'],
 			':email'    => $params['identifiant'],
 			':password' => $pass
-		]);
+		] );
 
 		$req->closeCursor();
 	}
@@ -32,18 +32,18 @@ class AuthManager extends Manager {
 	 *
 	 * @return bool
 	 */
-	public function checkUser(string $user): bool {
+	public function checkUser( string $user ): bool {
 		$pseudo = $user;
-		$sql = "SELECT * FROM users WHERE pseudo = ?";
-		$req = $this->getBdd()->prepare($sql);
-		$req->execute([$pseudo]);
+		$sql    = "SELECT * FROM users WHERE pseudo = ?";
+		$req    = $this->getBdd()->prepare( $sql );
+		$req->execute( [ $pseudo ] );
 		$test = $req->fetch();
 
 		$req->closeCursor();
 
-		if ($test){
+		if ( $test ) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -55,18 +55,18 @@ class AuthManager extends Manager {
 	 *
 	 * @return bool
 	 */
-	public function checkEmail(string $mail): bool {
+	public function checkEmail( string $mail ): bool {
 		$email = $mail;
-		$sql = "SELECT * FROM users WHERE email = ?";
-		$req = $this->getBdd()->prepare($sql);
-		$req->execute([$email]);
+		$sql   = "SELECT * FROM users WHERE email = ?";
+		$req   = $this->getBdd()->prepare( $sql );
+		$req->execute( [ $email ] );
 		$test = $req->fetch();
 
 		$req->closeCursor();
 
-		if ($test){
+		if ( $test ) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -78,21 +78,21 @@ class AuthManager extends Manager {
 	 *
 	 * @return array|null
 	 */
-	public function checkLogin(array $params): ?array {
+	public function checkLogin( array $params ): ?array {
 		$email = $params['identifiant'];
 
 		$sql = "SELECT * FROM users WHERE email = ?";
-		$req = $this->getBdd()->prepare($sql);
-		$req->execute([$email]);
-		$user = $req->fetch(PDO::FETCH_ASSOC);
+		$req = $this->getBdd()->prepare( $sql );
+		$req->execute( [ $email ] );
+		$user = $req->fetch( PDO::FETCH_ASSOC );
 
 		$req->closeCursor();
 
-		if ($user && password_verify($params['password'], $user['password'])){
-				return $user;
-			}else{
-				return null;
-			}
+		if ( $user && password_verify( $params['password'], $user['password'] ) ) {
+			return $user;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -103,19 +103,21 @@ class AuthManager extends Manager {
 	 *
 	 * @return bool
 	 */
-	public function updateUserMail(string $params, array $userKey): bool {
+	public function updateUserMail( string $params, array $userKey ): bool {
 
-		$user = new Auth($userKey);
-		$sql ="UPDATE users SET email = :email WHERE id = :id";
-		$req = $this->getBdd()->prepare($sql);
-		$user = $req->execute([':id'=> $user->getId(),
-		                       ':email'=> $params]);
+		$user = new Auth( $userKey );
+		$sql  = "UPDATE users SET email = :email WHERE id = :id";
+		$req  = $this->getBdd()->prepare( $sql );
+		$user = $req->execute( [
+			':id'    => $user->getId(),
+			':email' => $params
+		] );
 
 		$req->closeCursor();
 
-		if ($user){
+		if ( $user ) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -126,14 +128,16 @@ class AuthManager extends Manager {
 	 * @param string $pass
 	 * @param array $userKey
 	 */
-	public function updateUserPass(string $pass, array $userKey): void {
-		$pass = password_hash($pass, PASSWORD_DEFAULT);
+	public function updateUserPass( string $pass, array $userKey ): void {
+		$pass = password_hash( $pass, PASSWORD_DEFAULT );
 
-		$user = new Auth($userKey);
-		$sql ="UPDATE users SET password = :password WHERE id = :id";
-		$req = $this->getBdd()->prepare($sql);
-		$req->execute([':id'=> $user->getId(),
-		               ':password'=> $pass]);
+		$user = new Auth( $userKey );
+		$sql  = "UPDATE users SET password = :password WHERE id = :id";
+		$req  = $this->getBdd()->prepare( $sql );
+		$req->execute( [
+			':id'       => $user->getId(),
+			':password' => $pass
+		] );
 
 		$req->closeCursor();
 	}
@@ -146,21 +150,48 @@ class AuthManager extends Manager {
 	 *
 	 * @return bool
 	 */
-	public function updateAvatar(string $params, array $userId): bool {
+	public function updateAvatar( string $params, array $userId ): bool {
 
-		$user = new Auth($userId);
-		$sql ="UPDATE users SET avatar = :avatar WHERE id = :id";
-		$req = $this->getBdd()->prepare($sql);
-		$user = $req->execute([':id'=> $user->getId(),
-		                       ':avatar'=> $params]);
+		$user = new Auth( $userId );
+		$sql  = "UPDATE users SET avatar = :avatar WHERE id = :id";
+		$req  = $this->getBdd()->prepare( $sql );
+		$user = $req->execute( [
+			':id'     => $user->getId(),
+			':avatar' => $params
+		] );
 
 		$req->closeCursor();
 
-		if ($user){
+		if ( $user ) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Vérifie si l'utilisateur est administrateur
+	 *
+	 * @param int $userId
+	 *
+	 * @return bool
+	 */
+	public function checkUserAdmin(int $userId): bool{
+		$sql = "SELECT user_id, role 
+				FROM admin 
+				WHERE user_id = ? AND role = 3";
+		$req    = $this->getBdd()->prepare( $sql );
+		$req->execute( [ $userId ] );
+		$test = $req->fetch();
+
+		$req->closeCursor();
+
+		if ( $test ) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 }
 

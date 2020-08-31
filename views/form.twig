@@ -2,7 +2,8 @@
 
     <div class="form-group {{ options.class }}">
         <label for="{{ name }}">{{ label }}</label>
-        <input type="{{ type }}" class="form-control" id="{{ name }}" name="{{ name }}" placeholder="{{ text }}" value="{{ value }}" required>
+        <input type="{{ type }}" class="form-control" id="{{ name }}" name="{{ name }}" placeholder="{{ text }}"
+               value="{{ value }}" required>
     </div>
 
 {% endmacro %}
@@ -11,7 +12,8 @@
 
     <div class="form-group {{ options.class }}">
         <label for="{{ name }}">{{ label }}</label>
-        <textarea name="{{ name }}" id="{{ name }}" cols="30" rows="10" class="form-control" placeholder="{{ text }}" required>{{ value }}</textarea>
+        <textarea name="{{ name }}" id="{{ name }}" cols="30" rows="6" class="form-control" placeholder="{{ text }}"
+                  required>{{ value }}</textarea>
     </div>
 
 {% endmacro %}

@@ -1,0 +1,114 @@
+{% extends 'layout.twig' %}
+
+{% import 'form.twig' as form %}
+
+{% block title %}admin{% endblock %}
+
+{% block content %}
+
+    {% if confirm %}
+        <div class="row section">
+            <p class="bg-success text-center text-uppercase"><strong>Vos informations ont bien été mis à jour !</strong></p>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="row section">
+            <p class="bg-danger text-center text-uppercase"><strong>Une erreur c'est produite lors de l'enregistrement de l'image !</strong></p>
+        </div>
+    {% endif %}
+
+    {% if size %}
+        <div class="row section">
+            <p class="bg-danger text-center text-uppercase"><strong>Le fichier est doit être inférieur à 5Mo !</strong></p>
+        </div>
+    {% endif %}
+
+    {% if ext %}
+        <div class="row section">
+            <p class="bg-danger text-center text-uppercase"><strong>L'extension du fichier n'est pas bonne !</strong></p>
+        </div>
+    {% endif %}
+
+    {% if create %}
+
+        <h2 class="section-title"><span>Créer un article</span></h2>
+
+        <div class="row section">
+
+            <form action="http://{{ server }}/Post/createPost" method="post" enctype="multipart/form-data">
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    {{ form.input('titre', 'Titre de l\'article', 'text', 'Titre de l\'article', title) }}
+
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    {{ form.input('chapo', 'Chapô de l\'article', 'text', 'Chapô de l\'article', chapo) }}
+
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    {{ form.textarea('description', 'Votre commentaire', 'Description de l\'article', description ) }}
+
+                </div>
+
+                <div class="form-group btn-profil">
+                    <label for="image">Choisir une image</label>
+                    <input type="file" class="form-control-file" id="image" name="image">
+                </div>
+
+                <div class="form-group btn-profil">
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                </div>
+            </form>
+        </div>
+
+    {% else %}
+
+        <h2 class="section-title"><span>Modifier un article</span></h2>
+
+        <div class="row section">
+
+            <form action="http://{{ server }}/Post/updatePost/{{ id }}" method="post" enctype="multipart/form-data">
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    {{ form.input('titre', 'Titre de l\'article', 'text', 'Titre de l\'article', title) }}
+
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    {{ form.input('chapo', 'Chapô de l\'article', 'text', 'Chapô de l\'article', chapo) }}
+
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    {{ form.textarea('description', 'Votre commentaire', 'Ecrivez votre message', description ) }}
+
+                </div>
+
+                <div class="form-group btn-profil">
+                    <label for="image">Choisir une image</label>
+                    <input type="file" class="form-control-file" id="image" name="image">
+                </div>
+
+                <div class="avatarprofil text-center">
+                    <img src="http://{{ server }}/images/{{ image }}" alt="avatar" width="300px" height="250px">
+                </div>
+
+                <div class="form-group btn-profil">
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                </div>
+            </form>
+
+        </div>
+
+    {% endif %}
+
+{% endblock %}

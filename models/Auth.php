@@ -13,24 +13,20 @@ class Auth {
 	private $_avatar;
 	private bool $_admin;
 
-	public function __construct(array $data)
-	{
-		if(!empty($data))
-		{
-			$this -> hydrate($data);
+	public function __construct( array $data ) {
+		if ( ! empty( $data ) ) {
+			$this->hydrate( $data );
 		}
 
 	}
 
-	public function hydrate($data){
+	public function hydrate( $data ) {
 
-		foreach ($data as $key => $value)
-		{
-			$method = 'set'.ucfirst($key);
+		foreach ( $data as $key => $value ) {
+			$method = 'set' . ucfirst( $key );
 
-			if (method_exists($this, $method))
-			{
-				$this->$method($value);
+			if ( method_exists( $this, $method ) ) {
+				$this->$method( $value );
 			}
 		}
 	}
@@ -80,32 +76,32 @@ class Auth {
 	/**
 	 * @param int $id
 	 */
-	public function setId(int $id ): void {
+	public function setId( int $id ): void {
 
-			if($id > 0){
-				$this->_id = $id;
-			}
+		if ( $id > 0 ) {
+			$this->_id = $id;
+		}
 	}
 
 	/**
 	 * @param string $pseudo
 	 */
-	public function setPseudo(string $pseudo ) {
+	public function setPseudo( string $pseudo ) {
 
-			$this->_pseudo = $pseudo;
+		$this->_pseudo = $pseudo;
 	}
 
 	/**
 	 * @param string $email
 	 */
-	public function setEmail(string $email ) {
+	public function setEmail( string $email ) {
 		$this->_email = $email;
 	}
 
 	/**
 	 * @param string $password
 	 */
-	public function setPassword(string $password ) {
+	public function setPassword( string $password ) {
 		$this->_password = $password;
 	}
 
@@ -131,7 +127,7 @@ class Auth {
 	/**
 	 * @param bool $admin
 	 */
-	public function setAdmin(bool $admin ): void {
+	public function setAdmin( bool $admin ): void {
 		$this->_admin = $admin;
 	}
 }

@@ -2,6 +2,7 @@
 
 use OC_Blog\Controllers\Router;
 use OC_Blog\Tools\Session;
+use Twig\Extra\String\StringExtension;
 use Whoops\Handler\PrettyPageHandler;
 
 //Chargement de l'autoload de composer
@@ -16,6 +17,7 @@ $whoops->register();
 //Twig
 $loader = new Twig\Loader\FilesystemLoader('../views');
 $twig = new Twig\Environment($loader);
+$twig->addExtension(new StringExtension());
 
 //Sessions
 Session::getSession();

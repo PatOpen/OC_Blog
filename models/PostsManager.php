@@ -24,7 +24,7 @@ class PostsManager extends Manager {
 					   FROM post
 					   ORDER BY id DESC";
 
-		$req = $this->getBdd()->prepare($sql);
+		$req = $this->getBdd()->prepare( $sql );
 		$req->execute();
 		$req->setFetchMode( PDO::FETCH_ASSOC );
 		$listPosts = $req->fetchAll();
@@ -41,7 +41,7 @@ class PostsManager extends Manager {
 	 *
 	 * @return array
 	 */
-	public function getPost(int $id): array {
+	public function getPost( int $id ): array {
 		$sql = "SELECT p.id,
 					   title,
 					   chapo,
@@ -56,13 +56,73 @@ class PostsManager extends Manager {
 					   ON p.user_id = u.id
 					   WHERE p.id = :id";
 
-		$req = $this->getBdd()->prepare($sql);
-		$req->execute([':id' => $id]);
-		$req->setFetchMode( PDO::FETCH_ASSOC);
+		$req = $this->getBdd()->prepare( $sql );
+		$req->execute( [ ':id' => $id ] );
+		$req->setFetchMode( PDO::FETCH_ASSOC );
 		$post = $req->fetchAll();
 
 		$req->closeCursor();
 
 		return $post;
+	}
+
+	/**
+	 * Enregistre un nouvel article en BDD.
+	 *
+	 * @param array $form
+	 * @param int $userId
+	 * @param string $file
+	 *
+	 * @return bool
+	 */
+	public function addPost(array $form, int $userId, string $file): bool{
+		$sql = "INSERT INTO post ( title, chapo, description, create_at, modified_at, user_id, image)
+				VALUES ( :title, :chapo, :description, now(), null, :user_id, :image)";
+
+		$req = $this->getBdd()->prepare( $sql );
+		$result = $req->execute( [
+								':title' => $form['titre'],
+								':chapo' => $form['chapo'],
+								'description' => $form['description'],
+								':user_id' => $userId,
+								':image' => $file
+								] );
+		$req->closeCursor();
+
+		if ( $result ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function updatePost(int $postId, array $form){
+		$sql = "UPDATE post 
+				SET title = :title, chapo = :chapo, description = :description, modified_at = NOW(), image = :image 
+				WHERE id = :id";
+		$req = $this->getBdd()->prepare( $sql );
+		$post = $req->execute( [
+			':id'      => $postId,
+			':title'      => $form['titre'],
+			':chapo'      => $form['chapo'],
+			':description' => $form['description'],
+			':image' => $form['image']
+		] );
+
+		$req->closeCursor();
+
+		if ( $post ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**Supprime un article de la BDD.
+	 *
+	 * @param int $postId
+	 */
+	public function deletePost(int $postId){
+		$this->getBdd()->exec( 'DELETE FROM post WHERE id = ' . $postId );
 	}
 }

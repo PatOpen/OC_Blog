@@ -13,21 +13,25 @@ class ControllerHome extends ControllerFactory {
 	 * Affiche la page d'accueil.
 	 */
 	public function home(): void {
-		$posts = new PostsManager();
+		$posts    = new PostsManager();
 		$allPosts = $posts->listPosts();
-		$key = (new Session)->getKey('user');
+		$key      = ( new Session )->getKey( 'user' );
 
 
-		if(!empty($key)){
-			$this->render( 'home.twig', ['allPosts' => $allPosts,
-			                                         'logged'=> TRUE,
-			                                         'user'=> $key['pseudo'],
-			                                         'admin' => $key['admin'],
-			                                         'server' => $this->getServer()]);
-		}else{
-			$this->render( 'home.twig', ['allPosts' => $allPosts,
-			                                         'logged' => FALSE,
-													 'server'=> $this->getServer()]);
+		if ( ! empty( $key ) ) {
+			$this->render( 'home.twig', [
+				'allPosts' => $allPosts,
+				'logged'   => true,
+				'user'     => $key['pseudo'],
+				'admin'    => $key['admin'],
+				'server'   => $this->getServer()
+			] );
+		} else {
+			$this->render( 'home.twig', [
+				'allPosts' => $allPosts,
+				'logged'   => false,
+				'server'   => $this->getServer()
+			] );
 		}
 
 	}

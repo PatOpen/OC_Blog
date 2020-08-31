@@ -4,14 +4,13 @@
 namespace OC_Blog\Tools;
 
 
-
 class Session {
 
 	private static Session $session;
 
 	public function __construct() {
 
-		if(session_status() == PHP_SESSION_NONE){
+		if ( session_status() == PHP_SESSION_NONE ) {
 			session_start();
 		}
 	}
@@ -21,9 +20,9 @@ class Session {
 	 *
 	 * @return Session
 	 */
-	public static function getSession(): Session{
+	public static function getSession(): Session {
 
-		if (!isset(self::$session)){
+		if ( ! isset( self::$session ) ) {
 			self::$session = new Session();
 		}
 
@@ -36,8 +35,8 @@ class Session {
 	 * @param string $key
 	 * @param array $value
 	 */
-	public function setKey(string $key, array $value): void {
-		$_SESSION[$key] = $value;
+	public function setKey( string $key, array $value ): void {
+		$_SESSION[ $key ] = $value;
 	}
 
 	/**
@@ -47,12 +46,11 @@ class Session {
 	 *
 	 * @return mixed|null
 	 */
-	public function getKey(string $key) {
+	public function getKey( string $key ) {
 
-		if (isset($_SESSION[$key])){
-			return $_SESSION[$key];
-		}
-		else{
+		if ( isset( $_SESSION[ $key ] ) ) {
+			return $_SESSION[ $key ];
+		} else {
 			return null;
 		}
 	}
@@ -64,7 +62,7 @@ class Session {
 	 * @param string $valueKey
 	 * @param string $value
 	 */
-	public function setValueKey(string $key, string $valueKey, string $value): void {
-		$_SESSION[$key][$valueKey] = $value;
+	public function setValueKey( string $key, string $valueKey, string $value ): void {
+		$_SESSION[ $key ][ $valueKey ] = $value;
 	}
 }

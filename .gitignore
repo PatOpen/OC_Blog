@@ -2,6 +2,6 @@
 
 /vendor/
 
-/public/images/
+/public/images/avatar/
 
 /config/DBConstant.php
