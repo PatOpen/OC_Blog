@@ -15,26 +15,26 @@ class ControllerComment extends ControllerFactory {
 	 * Si l'utilisateur n'est pas connecté, renvoi sur la page de connexion.
 	 */
 	public function addCommentPost(): void {
-		$key = (new Session)->getKey('user');
+		$key = ( new Session )->getKey( 'user' );
 
 
-		if (!isset($key)){
-			$path = $this->getServer()."/Auth/login";
-			$this->redirect($path);
-		}else{
+		if ( ! isset( $key ) ) {
+			$path = $this->getServer() . "/Auth/login";
+			$this->redirect( $path );
+		} else {
 
-			$userId = $key['id'];
-			$comment = htmlentities(trim($this->getPost()['message']));
-			$postId = (new Session)->getKey('post');
+			$userId  = $key['id'];
+			$comment = $this->getPostForm()['message'];
+			$postId  = ( new Session )->getKey( 'post' );
 
-			$good = (new CommentsManager())->addComment($userId, $comment, $postId['id']);
+			$good = ( new CommentsManager() )->addComment( $userId, $comment, $postId['id'] );
 
-			if ($good){
-				$path = $this->getServer()."/Post/viewPost/".$postId['id'];
-				$this->redirect($path);
-			}else{
+			if ( $good ) {
+				$path = $this->getServer() . "/Post/viewPost/" . $postId['id'];
+				$this->redirect( $path );
+			} else {
 				$errorMsg = 'Une erreur c\'est produite veuillez recommencer !';
-				$this->render( '404.twig', ['error'=> $errorMsg] );
+				$this->render( '404.twig', [ 'error' => $errorMsg ] );
 			}
 		}
 	}
@@ -46,22 +46,24 @@ class ControllerComment extends ControllerFactory {
 	 */
 	public function updateComment(): void {
 
-		$keyPost = (new Session)->getKey('post');
-		$keyUser = (new Session)->getKey('user');
-		$post = $this->getPost();
+		$keyPost = ( new Session )->getKey( 'post' );
+		$keyUser = ( new Session )->getKey( 'user' );
+		$post    = $this->getPostForm();
 
-		if (isset($post['message'])){
-			$this->checkComment($post['message'], $this->getSlug(), $keyPost['id']);
+		if ( isset( $post['message'] ) ) {
+			$this->checkComment( $post['message'], $this->getSlug(), $keyPost['id'] );
 		}
 
-		$content = (new CommentsManager())->oneComment((int) $this->getSlug());
+		$content = ( new CommentsManager() )->oneComment( (int) $this->getSlug() );
 
-		$this->render( 'comment.twig', ['logged'=> TRUE,
-		                                                'server' => $this->getServer(),
-		                                                'id' => $content['id'],
-		                                                'admin' => $keyUser['admin'],
-		                                                'user' => $keyUser['pseudo'],
-		                                                'content'=> html_entity_decode($content['content'])]);
+		$this->render( 'comment.twig', [
+			'logged'  => true,
+			'server'  => $this->getServer(),
+			'id'      => $content['id'],
+			'admin'   => $keyUser['admin'],
+			'user'    => $keyUser['pseudo'],
+			'content' => $content['content']
+		] );
 
 	}
 
@@ -72,20 +74,22 @@ class ControllerComment extends ControllerFactory {
 	 * @param int $commentId
 	 * @param int $postId
 	 */
-	public function checkComment(string $comment, int $commentId, int $postId): void {
+	public function checkComment( string $comment, int $commentId, int $postId ): void {
 
-		$content = htmlentities(trim($comment), ENT_QUOTES);
-		$update = (new CommentsManager())->updateComment($content, $commentId);
+		$content = trim( $comment );
+		$update  = ( new CommentsManager() )->updateComment( $content, $commentId );
 
-		if ($update){
-			$path = $this->getServer().'/Post/viewPost/'.$postId;
-			$this->redirect($path);
-		}else{
-			$this->render( 'comment.twig', ['logged'=> TRUE,
-			                                                'error' => TRUE,
-			                                                'server' => $this->getServer(),
-			                                                'id' => $commentId,
-			                                                'content'=> $content]);
+		if ( $update ) {
+			$path = $this->getServer() . '/Post/viewPost/' . $postId;
+			$this->redirect( $path );
+		} else {
+			$this->render( 'comment.twig', [
+				'logged'  => true,
+				'error'   => true,
+				'server'  => $this->getServer(),
+				'id'      => $commentId,
+				'content' => $content
+			] );
 		}
 	}
 
@@ -96,10 +100,10 @@ class ControllerComment extends ControllerFactory {
 	 */
 	public function deleteComment(): void {
 
-		$key = (new Session)->getKey('post');
-		(new CommentsManager())->deleteComment($this->getSlug());
-		$path = $this->getServer().'/Post/viewPost/'. $key['id'];
-		$this->redirect($path);
+		$key = ( new Session )->getKey( 'post' );
+		( new CommentsManager() )->deleteComment( $this->getSlug() );
+		$path = $this->getServer() . '/Post/viewPost/' . $key['id'];
+		$this->redirect( $path );
 	}
 }
 

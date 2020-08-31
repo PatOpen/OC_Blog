@@ -14,9 +14,9 @@ abstract class Manager {
 	 * Connexion à la base de donnée.
 	 */
 	private function setBdd() {
-			self::$_bdd = new PDO( 'pgsql:dbname='.DBConstant::DBNAME.';host='.DBConstant::DBHOST, DBConstant::USERNAME, DBConstant::PASSWORD );
-			self::$_bdd->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-			self::$_bdd->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ );
+		self::$_bdd = new PDO( 'pgsql:dbname=' . DBConstant::DBNAME . ';host=' . DBConstant::DBHOST, DBConstant::USERNAME, DBConstant::PASSWORD );
+		self::$_bdd->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		self::$_bdd->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ );
 	}
 
 	/**
@@ -25,7 +25,7 @@ abstract class Manager {
 	 * @return object
 	 */
 	protected function getBdd(): object {
-		if ( empty(self::$_bdd) ) {
+		if ( empty( self::$_bdd ) ) {
 			self::setBdd();
 		}
 

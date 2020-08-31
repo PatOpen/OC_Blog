@@ -44,14 +44,13 @@ class ControllerFactory {
 	 * @param int $slug
 	 * @param array $post
 	 */
-	public function __construct(object $twig,int $slug = 0, array $post = [], ConstantGlobal $constant_global){
+	public function __construct( object $twig, int $slug = 0, array $post = [], ConstantGlobal $constant_global ) {
 
 		$this->twig = $twig;
 		$this->slug = $slug;
 		$this->post = $post;
-		//$this->server = ( new ConstantGlobal(ServerRequest::fromGlobals()));
 		$this->server = $constant_global;
-}
+	}
 
 	/**
 	 * Renvoi un objet Twig.
@@ -96,7 +95,7 @@ class ControllerFactory {
 	 *
 	 * @return array
 	 */
-	public function getPost(): array {
+	public function getPostForm(): array {
 		return $this->post;
 	}
 
@@ -106,8 +105,8 @@ class ControllerFactory {
 	 * @param string $twigPath
 	 * @param array $data
 	 */
-	public function render(string $twigPath, array $data): void {
-		echo $this->twig->render($twigPath, $data);
+	public function render( string $twigPath, array $data ): void {
+		echo $this->twig->render( $twigPath, $data );
 	}
 
 	/**
@@ -115,10 +114,16 @@ class ControllerFactory {
 	 *
 	 * @param string $path
 	 */
-	public function redirect(string $path): void{
-		header('HTTP/1.1 Moved Permanently', false, 302);
-		header('Status: 302 Moved Permanently', false, 302);
-		header('location: http://'.$path);
+	public function redirect( string $path ): void {
+		header( 'HTTP/1.1 Moved Permanently', false, 302 );
+		header( 'Status: 302 Moved Permanently', false, 302 );
+		header( 'location: http://' . $path );
+	}
+
+	public function deleteImage(string $path): void{
+		if (file_exists($path)){
+			unlink($path);
+		}
 	}
 }
 

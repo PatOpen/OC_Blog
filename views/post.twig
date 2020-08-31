@@ -7,76 +7,113 @@
 
     {% for thePosts in thePost %}
 
-    <h1>{{ thePosts.title }}</h1>
+        <div class="row topspace">
+            <div class="col-sm-8 col-sm-offset-2">
 
-        <span>Article écrit le {{ thePosts.post_create_date }}</span>
-
-        <p>{{ thePosts.description }}</p>
-
-        <p>écrit par {{ thePosts.pseudo }}</p>
-
-        <h2 class="page-header">Commentaires</h2>
-
-        <section class="comment-list">
-
-            {% for allComment in allComments %}
-            <article class="row">
-                <div class="col-md-2 col-sm-2 hidden-xs">
-                    <figure class="thumbnail">
-                        <img class=" rounded mx-auto d-block" src="http://{{ server }}/images/avatar/{{ allComment.avatar }}" width="50px" height="50px" alt="{{ allComment.pseudo }}"/>
-                        <figcaption class="text-center">{{ allComment.pseudo }}</figcaption>
-                    </figure>
-                </div>
-                <div class="col-md-10 col-sm-10">
-                    <div class="panel panel-default arrow left">
-
-                        {% if allComment.user_id == modifComment%}
-                            <div class="btn-group align-top float-right">
-                                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-bars"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item text-center" href="http://{{ server }}/Comment/updateComment/{{ allComment.id }}">Modifier</a>
-                                    <a class="dropdown-item text-center" href="http://{{ server }}/Comment/deleteComment/{{ allComment.id }}" onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?')">Supprimer</a>
-                                </div>
-                            </div>
-                        {% endif %}
-                        <div class="panel-body">
-                            <header class="text-left">
-                                <div class="comment-user"><i class="fa fa-user"></i> {{ allComment.pseudo }}</div>
-                                <time class="comment-date" datetime="{{ allComment.comment_create_date }}"><i class="fa fa-clock-o"></i> {{ allComment.comment_create_date }} </time>
-                                {% if allComment.comment_modif_date %}
-                                <time class="comment-date" datetime="{{ allComment.comment_modif_date }}"> <em>  modifié le :</em> {{ allComment.comment_modif_date }}</time>
-                                {% endif %}
-                            </header>
-                            <div class="comment-post">
-                                <p>{{ allComment.content }} </p>
-                            </div>
+                <article class="post">
+                    <header class="entry-header">
+                        <div class="entry-meta">
+                            <span class="posted-on">Posté le <time class="entry-date published"
+                                                                   date="{{ thePosts.post_create_date }}">{{ thePosts.post_create_date }}</time></span>
                         </div>
+                        <div class="entry-meta">
+                            <span class="posted-on">Article écrit par {{ thePosts.pseudo }} </span>
+                        </div>
+
+                        <h1 class="entry-title">{{ thePosts.title }}</h1>
+                    </header>
+                    <div class="entry-content">
+                        <div class="row text-center post-img">
+                            <img alt="" src="http://{{ server }}/images/{{ thePosts.image }}">
+                        </div>
+                        <p>{{ thePosts.description }}</p>
+
                     </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div id="comments">
+
+                    <h3 class="comments-title text-center">Commentaires</h3>
+
+                    <section class="comment-list">
+
+                        {% for allComment in allComments %}
+                            <article class="row">
+                                <div class="col-md-2 col-sm-2 hidden-xs">
+                                    <figure class="thumbnail">
+                                        <img class="avatar"
+                                             src="http://{{ server }}/images/avatar/{{ allComment.avatar }}"
+                                             alt="{{ allComment.pseudo }}"/>
+                                    </figure>
+                                </div>
+                                <div class="col-md-10 col-sm-10">
+                                    <div class="panel panel-default arrow left">
+                                        <div class="panel-body">
+                                            <header class="text-left">
+                                                <div class="comment-user"><i
+                                                            class="fa fa-user"></i> {{ allComment.pseudo }}</div>
+                                                <time class="comment-date"
+                                                      datetime="{{ allComment.comment_create_date }}"><i
+                                                            class="fa fa-clock-o"></i> {{ allComment.comment_create_date }}
+                                                </time>
+                                                {% if allComment.comment_modif_date %}
+                                                    <time class="comment-date"
+                                                          datetime="{{ allComment.comment_modif_date }}"><em> modifié le
+                                                            :</em> {{ allComment.comment_modif_date }}</time>
+                                                {% endif %}
+                                            </header>
+                                            <div class="comment-post">
+                                                <p>{{ allComment.content }} </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    {% if allComment.user_id == modifComment %}
+                                        <div class="button-comment col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                                            <a class="btn btn-action btn-small col-md-6 col-xs-6 col-sm-6 col-lg-6"
+                                                    href="http://{{ server }}/Comment/updateComment/{{ allComment.id }}">Modifier</a>
+
+                                            <a class="btn btn-action btn-small col-md-6 col-xs-6 col-sm-6 col-lg-6"
+                                                    href="http://{{ server }}/Comment/deleteComment/{{ allComment.id }}"
+                                                    onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?')">Supprimer</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+
+                            </article>
+
+                        {% endfor %}
+
+                    </section>
+
+                    <div class="clearfix"></div>
+
+                    <div id="respond">
+                        <h3 class="reply-title text-center">Ajouter un commentaire</h3>
+                        <form action="http://{{ server }}/Comment/addCommentPost" method="post" id="commentform">
+                            <div class="row">
+
+                                {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message') }}
+
+                            </div>
+
+                            <div class="row">
+                                <button type="submit" class="btn btn-action">Envoyer</button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
-
-
-            </article>
-
-            {% endfor %}
-
-        </section>
+            </div>
+        </div>
 
     {% endfor %}
 
-
-    <h2>Ajouter un commentaire</h2>
-
-    <form action="http://{{ server }}/Comment/addCommentPost" method="post">
-        <div class="row">
-
-            {{ form.textarea('message', 'Votre commentaire', 'Ecrivez votre message') }}
-
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Envoyer</button>
-        </div>
-    </form>
+    <div class="clearfix"></div>
 
 {% endblock %}

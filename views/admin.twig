@@ -1,55 +1,95 @@
 {% extends 'layout.twig' %}
 
+{% import 'form.twig' as form %}
+
 {% block title %}admin{% endblock %}
 
 {% block content %}
-
-    {% for allComment in allComments %}
-
-        <h1>{{ allComment.title }}</h1>
-
-        <h2 class="page-header">Commentaires</h2>
+    <div class="row topspace"></div>
+    <h2 class="section-title"><span>Commentaires à valider</span></h2>
 
         <section class="comment-list">
+            {% for allComment in allComments %}
 
-                <article class="row">
-                    <div class="col-md-2 col-sm-2 hidden-xs">
-                        <figure class="thumbnail">
-                            <img class=" rounded mx-auto d-block" src="../images/avatar/{{ allComment.avatar }}" width="50px" height="50px" alt="{{ allComment.pseudo }}"/>
-                            <figcaption class="text-center">{{ allComment.pseudo }}</figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-md-10 col-sm-10">
-                        <div class="panel panel-default arrow left">
-                                <div class="btn-group align-top float-right">
-                                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-bars"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item text-center" href="http://{{ server }}/Comment/updateComment/{{ allComment.commentid }}">Modifier</a>
-                                        <a class="dropdown-item text-center" href="http://{{ server }}/Admin/validate/{{ allComment.commentid }}" onclick="return confirm('Voulez-vous vraiment valider ce commentaire ?')">Valider</a>
-                                        <a class="dropdown-item text-center" href="http://{{ server }}/Comment/deleteComment/{{ allComment.commentid }}" onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?')">Supprimer</a>
+                <h2 class="text-center">{{ allComment.title }}</h2>
+                    <article class="row">
+                        <div class="col-md-2 col-sm-2 hidden-xs" id="comments">
+                            <figure class="thumbnail">
+                                <img class="avatar-admin"
+                                     src="http://{{ server }}/images/avatar/{{ allComment.avatar }}"
+                                     alt="{{ allComment.pseudo }}"/>
+                            </figure>
+                        </div>
+                        <div class="col-md-10 col-sm-10">
+                            <div class="panel panel-default arrow left">
+                                <div class="panel-body">
+                                    <header class="text-left">
+                                        <div class="comment-user"><i class="fa fa-user"></i> {{ allComment.pseudo }}</div>
+                                        <time class="comment-date" datetime="{{ allComment.comment_create_date }}"><i
+                                                    class="fa fa-clock-o"></i> {{ allComment.comment_create_date }} </time>
+                                        {% if allComment.comment_modif_date %}
+                                            <time class="comment-date" datetime="{{ allComment.comment_modif_date }}"><em>
+                                                    modifié le :</em> {{ allComment.comment_modif_date }}</time>
+                                        {% endif %}
+                                    </header>
+                                    <div class="comment-post">
+                                        <p>{{ allComment.content }} </p>
                                     </div>
                                 </div>
-                            <div class="panel-body">
-                                <header class="text-left">
-                                    <div class="comment-user"><i class="fa fa-user"></i> {{ allComment.pseudo }}</div>
-                                    <time class="comment-date" datetime="{{ allComment.comment_create_date }}"><i class="fa fa-clock-o"></i> {{ allComment.comment_create_date }} </time>
-                                    {% if allComment.comment_modif_date %}
-                                        <time class="comment-date" datetime="{{ allComment.comment_modif_date }}"> <em>  modifié le :</em> {{ allComment.comment_modif_date }}</time>
-                                    {% endif %}
-                                </header>
-                                <div class="comment-post">
-                                    <p>{{ allComment.content }} </p>
-                                </div>
+                            </div>
+                            <div class="button-comment col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                                <a class="btn btn-action btn-small col-md-4 col-xs-4 col-sm-4 col-lg-4"
+                                        href="http://{{ server }}/Comment/updateComment/{{ allComment.commentid }}">Modifier</a>
+
+                                <a class="btn btn-action  btn-small col-md-4 col-xs-4 col-sm-4 col-lg-4"
+                                        href="http://{{ server }}/Admin/validate/{{ allComment.commentid }}"
+                                        onclick="return confirm('Voulez-vous vraiment valider ce commentaire ?')">Valider</a>
+
+                                <a class="btn btn-action btn-small col-md-4 col-xs-4 col-sm-4 col-lg-4"
+                                        href="http://{{ server }}/Comment/deleteComment/{{ allComment.commentid }}"
+                                        onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?')">Supprimer</a>
                             </div>
                         </div>
-                    </div>
-                </article>
+                    </article>
+            {% endfor %}
 
+            <div class="clearfix"></div>
         </section>
 
-    {% endfor %}
 
 
+    <h2 class="section-title"><span>ARTICLES</span></h2>
+    <a class="btn btn-action col-xs-12"
+       href="http://{{ server }}/Post/viewCreatePost">Créer un article</a>
+
+    <div class="row section recentworks topspace">
+
+        <h2 class="section-title"><span>Liste des Articles</span></h2>
+
+        <div class="thumbnails recentworks row">
+
+            {% for allPost in allPosts %}
+
+                <div class="post-thumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <a class="thumbnail" href="http://{{ server }}/Post/viewPost/{{ allPost.id }}">
+						<span class="img">
+							<img src="http://{{ server }}/images/{{ allPost.image }}" alt="" width="340px" height="250px">
+							<span class="cover"><span class="more">Voir details &rarr;</span></span>
+						</span>
+                        <span class="title">{{ allPost.title }}</span>
+                    </a>
+                    <h4>{{ allPost.chapo | u.truncate(40, '...') }}</h4>
+                    <span class="details">
+                        <a class="btn btn-action col-xs-12" href="http://{{ server }}/Post/viewUpdatePost/{{ allPost.id }}">MODIFIER</a>
+                    </span>
+                    <span class="details">
+                        <a class="btn btn-action col-xs-12" href="http://{{ server }}/Post/deletePost/{{ allPost.id }}">SUPPRIMER</a>
+                    </span>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
 {% endblock %}

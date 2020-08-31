@@ -17,41 +17,38 @@ class Router {
 	 *
 	 * @param object $twig
 	 */
-	public function run(object $twig): void {
+	public function run( object $twig ): void {
 
-		$constant = new ConstantGlobal(ServerRequest::fromGlobals());
-		$url = $constant->getServerUri();
-		$uri = $this->cleanUri($url);
+		$constant = new ConstantGlobal( ServerRequest::fromGlobals() );
+		$url      = $constant->getServerUri();
+		$uri      = $this->cleanUri( $url );
 
 		try {
-			$url = explode( '/', filter_var( $uri, FILTER_SANITIZE_URL ) );
-			$slug = $this->slug($url);
+			$url  = explode( '/', filter_var( $uri, FILTER_SANITIZE_URL ) );
+			$slug = $this->slug( $url );
 
-			if ( isset($url)) {
+			if ( isset( $url ) ) {
 
 				$controller      = ucfirst( strtolower( $url[1] ) );
 				$controllerClass = "OC_Blog\\Controllers\\Controller" . $controller;
-				$method = $this->getMethod($url, $controller);
+				$method          = $this->getMethod( $url, $controller );
 
-				if (class_exists( $controllerClass)  && !empty($constant->getPost())){
+				if ( class_exists( $controllerClass ) && ! empty( $constant->getPost() ) ) {
 					$params = $constant->getPost();
-					(new $controllerClass( $twig, $slug, $params, $constant))->$method();
-				}
-				elseif ( class_exists( $controllerClass)  && isset($method)) {
-					(new $controllerClass($twig, $slug, [], $constant))->$method();
-				}
-
-				else {
-					(new ControllerHome($twig, $slug, [],$constant))->home();
+					( new $controllerClass( $twig, $slug, $params, $constant ) )->$method();
+				} elseif ( class_exists( $controllerClass ) && isset( $method ) ) {
+					( new $controllerClass( $twig, $slug, [], $constant ) )->$method();
+				} else {
+					( new ControllerHome( $twig, $slug, [], $constant ) )->home();
 				}
 
 			}
 
 
 		} catch ( Exception $e ) {
-			$error = new ControllerFactory($twig, $slug = 0, [], $constant);
+			$error    = new ControllerFactory( $twig, $slug = 0, [], $constant );
 			$errorMsg = $e->getMessage();
-			$error->render( '404.twig', ['error'=> $errorMsg] );
+			$error->render( '404.twig', [ 'error' => $errorMsg ] );
 		}
 	}
 
@@ -62,9 +59,10 @@ class Router {
 	 *
 	 * @return string
 	 */
-	public function cleanUri($url): string {
-		$uri = new Uri($url);
-		return UriNormalizer::normalize($uri,UriNormalizer::REMOVE_DUPLICATE_SLASHES);
+	public function cleanUri( $url ): string {
+		$uri = new Uri( $url );
+
+		return UriNormalizer::normalize( $uri, UriNormalizer::REMOVE_DUPLICATE_SLASHES );
 	}
 
 	/**
@@ -75,16 +73,16 @@ class Router {
 	 *
 	 * @return string|null
 	 */
-	public function getMethod(array $method, string $controller): ?string {
-		if (empty($controller)){
+	public function getMethod( array $method, string $controller ): ?string {
+		if ( empty( $controller ) ) {
 			$controller = 'Home';
-			$method = "home";
+			$method     = "home";
 		}
 		$controllerClass = "OC_Blog\\Controllers\\Controller" . $controller;
 
-		if (method_exists("$controllerClass", $method[2]) ) {
+		if ( method_exists( "$controllerClass", $method[2] ) ) {
 			return $method[2];
-		}else{
+		} else {
 			return null;
 		}
 	}
@@ -96,10 +94,10 @@ class Router {
 	 *
 	 * @return int
 	 */
-	public function slug(array $url): int {
-		if (isset($url[3])){
+	public function slug( array $url ): int {
+		if ( isset( $url[3] ) ) {
 			return $url[3];
-		}else{
+		} else {
 			return 0;
 		}
 	}
