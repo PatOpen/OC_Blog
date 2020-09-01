@@ -1,4 +1,4 @@
-# Projet n°5 : Blog
+# Projet 5 : Blog
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/dc7178f37e2d4d72a10fefdb5a9f9b46)](https://www.codacy.com/manual/PatOpen/OC_Blog?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PatOpen/OC_Blog&amp;utm_campaign=Badge_Grade)
 
@@ -17,7 +17,8 @@ It has been encoded according to the `Model` `View` `Controller` (**MVC**) patte
 -   [Installation procedure](#Installation-procedure)
 -   [Language](#Language)
 -   [Copyright](#Copyright)
--   [Open Source](#Open-Source)
+-   [Issues](#Issues)
+-   [Pull Requests](#Pull-Requests)
 
 ---
 
@@ -46,3 +47,25 @@ This project (***blog***) is written with `PHP`, `HTML`, `CSS`, `Twig`, `SQL`
 Code published under the MIT license
 
 ![GitHub license](https://img.shields.io/github/license/PatOpen/OC_Blog)
+
+---
+
+
+## Issues
+
+For Issues are here
+
+![GitHub Open Issues](https://img.shields.io/github/issues-raw/PatOpen/OC_Blog)
+![GitHub Close Issues](https://img.shields.io/github/issues-closed-raw/PatOpen/OC_Blog?color=green)
+
+---
+
+## Pull Requests
+
+For Pull Requests are here
+
+![GitHub Open Pull Requests](https://img.shields.io/github/issues-pr-raw/PatOpen/OC_Blog)
+![GitHub Close Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/PatOpen/OC_Blog?color=green)
+
+---
+
