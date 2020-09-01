@@ -1,7 +1,8 @@
 # Projet 5 : Blog
 
+![GitHub Version](https://img.shields.io/github/v/tag/PatOpen/OC_Blog?label=version)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/dc7178f37e2d4d72a10fefdb5a9f9b46)](https://www.codacy.com/manual/PatOpen/OC_Blog?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PatOpen/OC_Blog&amp;utm_campaign=Badge_Grade)
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/bf9f44c4ce39753bc8b6/maintainability)](https://codeclimate.com/github/PatOpen/OC_Blog/maintainability)
 ---
 
 ## Overview
