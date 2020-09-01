@@ -1,6 +1,9 @@
 {
     "name": "patopen/oc_blog",
-    "description": "Openclassrooms projet 5 creer un blog",
+    "version": "1.0",
+    "type": "project",
+    "description": "Openclassrooms Projet 5 créer un Blog",
+    "license": "MIT",
     "authors": [
         {
             "name": "Pat",
