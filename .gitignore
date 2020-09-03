@@ -2,7 +2,6 @@
 
 /vendor/
 
-/public/images/avatar/
-
 /config/DBConstant.php
+
 /data/
