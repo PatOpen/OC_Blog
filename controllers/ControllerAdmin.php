@@ -57,7 +57,7 @@ class ControllerAdmin extends ControllerFactory {
 
 		if ( $admin ) {
 			$allComments = $adminManager->commentsPost();
-			$allPosts = (new PostsManager)->listPosts();
+			$allPosts    = ( new PostsManager )->listPosts();
 			$this->render( 'admin.twig', [
 				'logged'      => true,
 				'user'        => $key['pseudo'],

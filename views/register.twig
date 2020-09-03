@@ -5,6 +5,33 @@
 
 {% block content %}
 
+    {% if noPseudo %}
+        <div class="section">
+            <p class="bg-warning text-white text-center">Ce pseudo existe déja !</p>
+        </div>
+    {% endif %}
+    {% if noEmail %}
+        <div class="section">
+            <p class="bg-warning text-white text-center">Cet Email existe déja !</p>
+        </div>
+    {% endif %}
+    {% if valid %}
+        <div class="section">
+            <p class="bg-danger text-white text-center">les mots de passe ne correspondent pas !</p>
+        </div>
+    {% endif %}
+    {% if noValid %}
+        <div class="section">
+            <p class="bg-danger text-white text-center">Les champs doivent avoir au moins 4 caractères et sans espace
+                !</p>
+        </div>
+    {% endif %}
+    {% if space %}
+        <div class="section">
+            <p class="bg-warning text-white text-center">Les champs ne doivent pas contenir d'espaces</p>
+        </div>
+    {% endif %}
+
     <h1>S'enregistrer</h1>
 
     <form action="http://{{ server }}/Auth/register" method="post">
@@ -14,18 +41,6 @@
             {{ form.input('identifiant', 'Email', 'email', 'Votre Email', key.identifiant) }}
 
         </div>
-
-        {% if noPseudo %}
-            <div class="bg-warning text-white">
-                <p>Ce pseudo existe déja !</p>
-            </div>
-        {% endif %}
-        {% if noEmail %}
-            <div class="bg-warning text-white">
-                <p>Cet Email existe déja !</p>
-            </div>
-        {% endif %}
-
         <div class="row">
 
             {{ form.input('password', 'Mot de passe', 'password', 'Votre mot de passe') }}
@@ -40,26 +55,6 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Envoyer</button>
         </div>
-
-
-        {% if valid %}
-            <div class="bg-danger text-white">
-                <p>les mots de passe ne correspondent pas !</p>
-            </div>
-        {% endif %}
-        {% if noValid %}
-            <div class="bg-danger text-white">
-                <p>Les champs doivent avoir au moins 4 caractères et sans espace !</p>
-            </div>
-        {% endif %}
-        {% if space %}
-            <div class="bg-warning text-white">
-                <p>Les champs ne doivent pas contenir d'espaces</p>
-            </div>
-        {% endif %}
-
-
     </form>
-
 
 {% endblock %}

@@ -48,40 +48,40 @@ class ControllerPost extends ControllerFactory {
 	 * Renvoi sur la page de création de d'article.
 	 */
 	public function viewCreatePost(): void {
-		$key = (new Session)->getKey('user');
+		$key = ( new Session )->getKey( 'user' );
 
 		$this->render( 'newPost.twig', [
-			'logged'       => true,
-			'user'         => $key['pseudo'],
-			'server'       => $this->getServer(),
-			'admin'        => $key['admin'],
-			'create'       => true
+			'logged' => true,
+			'user'   => $key['pseudo'],
+			'server' => $this->getServer(),
+			'admin'  => $key['admin'],
+			'create' => true
 		] );
 	}
 
 	/**
 	 * Récupère un post dans la BDD pour le modifier.
 	 */
-	public function viewUpdatePost(): void{
-		$key = new Session();
-		$keyUser = $key->getKey('user');
-		$postId = $this->getSlug();
-		$post = (new PostsManager)->getPost($postId);
+	public function viewUpdatePost(): void {
+		$key     = new Session();
+		$keyUser = $key->getKey( 'user' );
+		$postId  = $this->getSlug();
+		$post    = ( new PostsManager )->getPost( $postId );
 
-		$key->setValueKey('post', 'image', $post[0]['image']);
-		$key->setValueKey('post', 'id', $postId);
+		$key->setValueKey( 'post', 'image', $post[0]['image'] );
+		$key->setValueKey( 'post', 'id', $postId );
 
 		$this->render( 'newPost.twig', [
-			'logged'       => true,
-			'user'         => $keyUser['pseudo'],
-			'server'       => $this->getServer(),
-			'admin'        => $keyUser['admin'],
-			'id'           => $post[0]['id'],
-			'title'        => $post[0]['title'],
-			'chapo'        => $post[0]['chapo'],
-			'description'  => $post[0]['description'],
-			'image'        => $post[0]['image'],
-			'create'       => false
+			'logged'      => true,
+			'user'        => $keyUser['pseudo'],
+			'server'      => $this->getServer(),
+			'admin'       => $keyUser['admin'],
+			'id'          => $post[0]['id'],
+			'title'       => $post[0]['title'],
+			'chapo'       => $post[0]['chapo'],
+			'description' => $post[0]['description'],
+			'image'       => $post[0]['image'],
+			'create'      => false
 		] );
 	}
 
@@ -89,73 +89,73 @@ class ControllerPost extends ControllerFactory {
 	 * Récupère les données envoyées et enregistre l'article en BDD.
 	 */
 	public function createPost(): void {
-		$session = new Session();
+		$session  = new Session();
 		$postForm = $this->getPostForm();
-		$confim = true;
-		$error = false;
-		$size = false;
-		$ext = false;
+		$confim   = true;
+		$error    = false;
+		$size     = false;
+		$ext      = false;
 
-		$user = $session->getKey('user');
+		$user = $session->getKey( 'user' );
 
-		if (isset($postForm)){
-			foreach ($postForm as $key => $value){
-				$key = trim($value);
+		if ( isset( $postForm ) ) {
+			foreach ( $postForm as $key => $value ) {
+				$key = trim( $value );
 			}
 			$file = $this->checkImage();
 
-			if ($file === 'error'){
+			if ( $file === 'error' ) {
 				$confim = false;
-				$error = true;
+				$error  = true;
 			}
 
-			if ($file === 'size'){
+			if ( $file === 'size' ) {
 				$confim = false;
-				$size = true;
+				$size   = true;
 			}
 
-			if ($file === 'ext'){
+			if ( $file === 'ext' ) {
 				$confim = false;
-				$ext = true;
+				$ext    = true;
 			}
 
-			if ($confim === false){
+			if ( $confim === false ) {
 				$this->render( 'newPost.twig', [
-					'logged'       => true,
-					'confirm'      => $confim,
-					'error'        => $error,
-					'size'         => $size,
-					'ext'          => $ext,
-					'title'        => $postForm['titre'],
-					'chapo'        => $postForm['chapo'],
-					'description'  => $postForm['description'],
-					'user'         => $user['pseudo'],
-					'server'       => $this->getServer(),
-					'admin'        => $user['admin'],
-					'create'       => true
+					'logged'      => true,
+					'confirm'     => $confim,
+					'error'       => $error,
+					'size'        => $size,
+					'ext'         => $ext,
+					'title'       => $postForm['titre'],
+					'chapo'       => $postForm['chapo'],
+					'description' => $postForm['description'],
+					'user'        => $user['pseudo'],
+					'server'      => $this->getServer(),
+					'admin'       => $user['admin'],
+					'create'      => true
 				] );
 			}
 
-			if ($confim === true){
-				$post = (new PostsManager())->addPost($postForm, $user['id'], $file);
+			if ( $confim === true ) {
+				$post = ( new PostsManager() )->addPost( $postForm, $user['id'], $file );
 
-				if ($post){
+				if ( $post ) {
 					$this->render( 'newPost.twig', [
-						'logged'       => true,
-						'confirm'      => $confim,
-						'error'        => $error,
-						'size'         => $size,
-						'ext'          => $ext,
-						'user'         => $user['pseudo'],
-						'server'       => $this->getServer(),
-						'admin'        => $user['admin'],
-						'create'       => true
+						'logged'  => true,
+						'confirm' => $confim,
+						'error'   => $error,
+						'size'    => $size,
+						'ext'     => $ext,
+						'user'    => $user['pseudo'],
+						'server'  => $this->getServer(),
+						'admin'   => $user['admin'],
+						'create'  => true
 					] );
 				}
 
-				if ($post === false){
-					$error = ['error' => 'Malheurusement les informations n\'ont pas été pris en compte veuillez nous excusez'];
-					$this->render('500.twig', $error);
+				if ( $post === false ) {
+					$error = [ 'error' => 'Malheurusement les informations n\'ont pas été pris en compte veuillez nous excusez' ];
+					$this->render( '500.twig', $error );
 				}
 			}
 		}
@@ -164,146 +164,137 @@ class ControllerPost extends ControllerFactory {
 	/**
 	 * Récupère le post demandé pour le modifier.
 	 */
-	public function updatePost(): void{
+	public function updatePost(): void {
 
-		$postForm = $this->getPostForm();
-		$postId = $this->getSlug();
+		$postForm      = $this->getPostForm();
+		$postId        = $this->getSlug();
 		$normalizeFile = $this->getUpFile();
-		$fileName  = $normalizeFile['image']->getClientFilename();
+		$fileName      = $normalizeFile['image']->getClientFilename();
 
 		$session = new Session();
-		$keyPost = $session->getKey('post');
-		$user = $session->getKey('user');
-		$confim = true;
-		$error = false;
-		$size = false;
-		$ext = false;
-		foreach ($postForm as $key => $value){
-			$key = trim($value);
+		$keyPost = $session->getKey( 'post' );
+		$user    = $session->getKey( 'user' );
+		$confim  = true;
+		$error   = false;
+		$size    = false;
+		$ext     = false;
+
+		foreach ( $postForm as $key => $value ) {
+			$key = trim( $value );
 		}
 
-		if (empty($fileName)){
+		if ( empty( $fileName ) ) {
 			$postForm['image'] = $keyPost['image'];
+			$postUpdate        = ( new PostsManager() )->updatePost( $postId, $postForm );
 
-
-
-			$postUpdate = (new PostsManager())->updatePost($postId, $postForm);
-
-			if ($postUpdate){
+			if ( $postUpdate ) {
 				$this->render( 'newPost.twig', [
-					'logged'       => true,
-					'confirm'      => $confim,
-					'error'        => $error,
-					'size'         => $size,
-					'ext'          => $ext,
-					'id'           => $keyPost['id'],
-					'title'        => $postForm['titre'],
-					'chapo'        => $postForm['chapo'],
-					'description'  => $postForm['description'],
-					'image'        => $postForm['image'],
-					'user'         => $user['pseudo'],
-					'server'       => $this->getServer(),
-					'admin'        => $user['admin'],
-					'create'       => false
+					'logged'      => true,
+					'confirm'     => $confim,
+					'error'       => $error,
+					'size'        => $size,
+					'ext'         => $ext,
+					'id'          => $keyPost['id'],
+					'title'       => $postForm['titre'],
+					'chapo'       => $postForm['chapo'],
+					'description' => $postForm['description'],
+					'image'       => $postForm['image'],
+					'user'        => $user['pseudo'],
+					'server'      => $this->getServer(),
+					'admin'       => $user['admin'],
+					'create'      => false
 				] );
 			}
 
-			if ($postUpdate === false){
-				$error = ['error' => 'Malheurusement les informations n\'ont pas été pris en compte veuillez nous excusez'];
-				$this->render('500.twig', $error);
+			if ( $postUpdate === false ) {
+				$error = [ 'error' => 'Malheurusement les informations n\'ont pas été pris en compte veuillez nous excusez' ];
+				$this->render( '500.twig', $error );
 			}
 		}
 
-		if (!empty($fileName)){
-
+		if ( ! empty( $fileName ) ) {
 			$file = $this->checkImage();
 
-			if ($file === 'error'){
+			if ( $file === 'error' ) {
 				$confim = false;
-				$error = true;
+				$error  = true;
 			}
 
-			if ($file === 'size'){
+			if ( $file === 'size' ) {
 				$confim = false;
-				$size = true;
+				$size   = true;
 			}
 
-			if ($file === 'ext'){
+			if ( $file === 'ext' ) {
 				$confim = false;
-				$ext = true;
+				$ext    = true;
 			}
 
-			if ($confim === false){
+			if ( $confim === false ) {
 				$this->render( 'newPost.twig', [
-					'logged'       => true,
-					'confirm'      => $confim,
-					'error'        => $error,
-					'size'         => $size,
-					'ext'          => $ext,
-					'id'           => $keyPost['id'],
-					'title'        => $postForm['titre'],
-					'chapo'        => $postForm['chapo'],
-					'description'  => $postForm['description'],
-					'image'        => $postForm['image'],
-					'user'         => $user['pseudo'],
-					'server'       => $this->getServer(),
-					'admin'        => $user['admin'],
-					'create'       => false
+					'logged'      => true,
+					'confirm'     => $confim,
+					'error'       => $error,
+					'size'        => $size,
+					'ext'         => $ext,
+					'id'          => $keyPost['id'],
+					'title'       => $postForm['titre'],
+					'chapo'       => $postForm['chapo'],
+					'description' => $postForm['description'],
+					'image'       => $postForm['image'],
+					'user'        => $user['pseudo'],
+					'server'      => $this->getServer(),
+					'admin'       => $user['admin'],
+					'create'      => false
 				] );
 			}
 
-			if ($confim === true){
+			if ( $confim === true ) {
 				$postForm['image'] = $file;
+				$postUpdate        = ( new PostsManager() )->updatePost( $postId, $postForm );
 
-				$postUpdate = (new PostsManager())->updatePost($postId, $postForm);
-
-				if ($postUpdate){
+				if ( $postUpdate ) {
 					$this->render( 'newPost.twig', [
-						'logged'       => true,
-						'confirm'      => $confim,
-						'error'        => $error,
-						'size'         => $size,
-						'ext'          => $ext,
-						'title'        => $postForm['titre'],
-						'id'           => $keyPost['id'],
-						'chapo'        => $postForm['chapo'],
-						'description'  => $postForm['description'],
-						'image'        => $postForm['image'],
-						'user'         => $user['pseudo'],
-						'server'       => $this->getServer(),
-						'admin'        => $user['admin'],
-						'create'       => false
+						'logged'      => true,
+						'confirm'     => $confim,
+						'error'       => $error,
+						'size'        => $size,
+						'ext'         => $ext,
+						'title'       => $postForm['titre'],
+						'id'          => $keyPost['id'],
+						'chapo'       => $postForm['chapo'],
+						'description' => $postForm['description'],
+						'image'       => $postForm['image'],
+						'user'        => $user['pseudo'],
+						'server'      => $this->getServer(),
+						'admin'       => $user['admin'],
+						'create'      => false
 					] );
 				}
 
-				if ($postUpdate === false){
-					$error = ['error' => 'Malheurusement les informations n\'ont pas été pris en compte veuillez nous excusez'];
-					$this->render('500.twig', $error);
+				if ( $postUpdate === false ) {
+					$error = [ 'error' => 'Malheurusement les informations n\'ont pas été pris en compte veuillez nous excusez' ];
+					$this->render( '500.twig', $error );
 				}
 			}
 		}
-
-
 	}
 
 	/**
 	 * Supprime un post de la BDD.
 	 */
-	public function deletePost(){
-		$postId = $this->getSlug();
-		$session = new Session();
-		$user = $session->getKey('user');
-		$postImage = $session->getKey('post');
+	public function deletePost() {
+		$postId    = $this->getSlug();
+		$session   = new Session();
+		$user      = $session->getKey( 'user' );
+		$postImage = $session->getKey( 'post' );
+		if ( isset( $user['id'] ) ) {
+			$admin = ( new AuthManager )->checkUserAdmin( $user['id'] );
 
-
-
-		if (isset($user['id'])){
-			$admin = (new AuthManager)->checkUserAdmin($user['id']);
-
-			if ($admin){
-				(new PostsManager)->deletePost($postId);
-				$this->deleteImage('../public/images/'.$postImage['image']);
-				$this->redirect($this->getServer().'/Admin/admin');
+			if ( $admin ) {
+				( new PostsManager )->deletePost( $postId );
+				$this->deleteImage( '../public/images/' . $postImage['image'] );
+				$this->redirect( $this->getServer() . '/Admin/admin' );
 			}
 		}
 	}
@@ -316,7 +307,6 @@ class ControllerPost extends ControllerFactory {
 	 * @return string
 	 */
 	public function checkImage(): string {
-
 		$normalizeFile = $this->getUpFile();
 
 		$maxSize   = 5000000;
@@ -345,13 +335,14 @@ class ControllerPost extends ControllerFactory {
 		$moveFile = $normalizeFile['image']->isMoved();
 
 		if ( $moveFile ) {
-			$key = new Session();
-			$keyImage = $key->getKey('post');
-			if (isset($keyImage['image'])){
-				$oldFile  = "../public/images/" . $keyImage['image'];
-				$this->deleteImage($oldFile);
+			$key      = new Session();
+			$keyImage = $key->getKey( 'post' );
+			if ( isset( $keyImage['image'] ) ) {
+				$oldFile = "../public/images/" . $keyImage['image'];
+				$this->deleteImage( $oldFile );
 			}
-			$key->setValueKey('post', 'image', $newNameFile);
+			$key->setValueKey( 'post', 'image', $newNameFile );
+
 			return $newNameFile;
 		}
 	}

@@ -75,18 +75,18 @@ class PostsManager extends Manager {
 	 *
 	 * @return bool
 	 */
-	public function addPost(array $form, int $userId, string $file): bool{
+	public function addPost( array $form, int $userId, string $file ): bool {
 		$sql = "INSERT INTO post ( title, chapo, description, create_at, modified_at, user_id, image)
 				VALUES ( :title, :chapo, :description, now(), null, :user_id, :image)";
 
-		$req = $this->getBdd()->prepare( $sql );
+		$req    = $this->getBdd()->prepare( $sql );
 		$result = $req->execute( [
-								':title' => $form['titre'],
-								':chapo' => $form['chapo'],
-								'description' => $form['description'],
-								':user_id' => $userId,
-								':image' => $file
-								] );
+			':title'      => $form['titre'],
+			':chapo'      => $form['chapo'],
+			'description' => $form['description'],
+			':user_id'    => $userId,
+			':image'      => $file
+		] );
 		$req->closeCursor();
 
 		if ( $result ) {
@@ -96,17 +96,17 @@ class PostsManager extends Manager {
 		}
 	}
 
-	public function updatePost(int $postId, array $form){
-		$sql = "UPDATE post 
+	public function updatePost( int $postId, array $form ) {
+		$sql  = "UPDATE post 
 				SET title = :title, chapo = :chapo, description = :description, modified_at = NOW(), image = :image 
 				WHERE id = :id";
-		$req = $this->getBdd()->prepare( $sql );
+		$req  = $this->getBdd()->prepare( $sql );
 		$post = $req->execute( [
-			':id'      => $postId,
-			':title'      => $form['titre'],
-			':chapo'      => $form['chapo'],
+			':id'          => $postId,
+			':title'       => $form['titre'],
+			':chapo'       => $form['chapo'],
 			':description' => $form['description'],
-			':image' => $form['image']
+			':image'       => $form['image']
 		] );
 
 		$req->closeCursor();
@@ -122,7 +122,7 @@ class PostsManager extends Manager {
 	 *
 	 * @param int $postId
 	 */
-	public function deletePost(int $postId){
+	public function deletePost( int $postId ) {
 		$this->getBdd()->exec( 'DELETE FROM post WHERE id = ' . $postId );
 	}
 }

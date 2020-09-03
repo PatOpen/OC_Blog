@@ -4,7 +4,7 @@
 namespace OC_Blog\Config;
 
 
-class DbConstant {
+/*class DbConstant {
 
 	//Constantes pour la connection PDO
 
@@ -13,4 +13,4 @@ class DbConstant {
 	const USERNAME = 'username';
 	const PASSWORD = 'password';
 
-}
+}*/

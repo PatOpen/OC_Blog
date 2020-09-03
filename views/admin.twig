@@ -38,14 +38,14 @@
                                 </div>
                             </div>
                             <div class="button-comment col-md-12 col-xs-12 col-sm-12 col-lg-12">
-                                <a class="btn btn-action btn-small col-md-4 col-xs-4 col-sm-4 col-lg-4"
+                                <a class="btn btn-admin btn-small col-md-4 col-xs-4 col-sm-4 col-lg-4"
                                         href="http://{{ server }}/Comment/updateComment/{{ allComment.commentid }}">Modifier</a>
 
-                                <a class="btn btn-action  btn-small col-md-4 col-xs-4 col-sm-4 col-lg-4"
+                                <a class="btn btn-admin  btn-small col-md-4 col-xs-4 col-sm-4 col-lg-4"
                                         href="http://{{ server }}/Admin/validate/{{ allComment.commentid }}"
                                         onclick="return confirm('Voulez-vous vraiment valider ce commentaire ?')">Valider</a>
 
-                                <a class="btn btn-action btn-small col-md-4 col-xs-4 col-sm-4 col-lg-4"
+                                <a class="btn btn-admin btn-small col-md-4 col-xs-4 col-sm-4 col-lg-4"
                                         href="http://{{ server }}/Comment/deleteComment/{{ allComment.commentid }}"
                                         onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?')">Supprimer</a>
                             </div>
@@ -59,8 +59,10 @@
 
 
     <h2 class="section-title"><span>ARTICLES</span></h2>
-    <a class="btn btn-action col-xs-12"
+    <div class="row text-center">
+    <a class="btn btn-action mt-4"
        href="http://{{ server }}/Post/viewCreatePost">Créer un article</a>
+    </div>
 
     <div class="row section recentworks topspace">
 
@@ -80,10 +82,10 @@
                     </a>
                     <h4>{{ allPost.chapo | u.truncate(40, '...') }}</h4>
                     <span class="details">
-                        <a class="btn btn-action col-xs-12" href="http://{{ server }}/Post/viewUpdatePost/{{ allPost.id }}">MODIFIER</a>
+                        <a class="btn btn-admin col-xs-12" href="http://{{ server }}/Post/viewUpdatePost/{{ allPost.id }}">MODIFIER</a>
                     </span>
                     <span class="details">
-                        <a class="btn btn-action col-xs-12" href="http://{{ server }}/Post/deletePost/{{ allPost.id }}">SUPPRIMER</a>
+                        <a class="btn btn-admin col-xs-12" href="http://{{ server }}/Post/deletePost/{{ allPost.id }}">SUPPRIMER</a>
                     </span>
                 </div>
 

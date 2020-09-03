@@ -176,11 +176,11 @@ class AuthManager extends Manager {
 	 *
 	 * @return bool
 	 */
-	public function checkUserAdmin(int $userId): bool{
+	public function checkUserAdmin( int $userId ): bool {
 		$sql = "SELECT user_id, role 
 				FROM admin 
 				WHERE user_id = ? AND role = 3";
-		$req    = $this->getBdd()->prepare( $sql );
+		$req = $this->getBdd()->prepare( $sql );
 		$req->execute( [ $userId ] );
 		$test = $req->fetch();
 

@@ -29,6 +29,7 @@ It has been encoded according to the `Model` `View` `Controller` (**MVC**) patte
 -   Import the file *db.sql* into the database with *PostgreSQL*.
 -   Put the project content of the site in a folder on your computer.
 -   Point the *public* folder as root folder to your server.
+-   Install *composer* and do `php composer.phar install`.
 -   Create a user account and login to leave comments.
 -   For test the *Administration* login to *admin* and password *admin*.
 
@@ -36,7 +37,7 @@ It has been encoded according to the `Model` `View` `Controller` (**MVC**) patte
 
 ## Language
 
-This project (***blog***) is written with `PHP`, `HTML`, `CSS`, `Twig`, `SQL`
+This project (*blog*) is written with `PHP`, `HTML`, `CSS`, `Twig`, `SQL`
 
 ![GitHub language count](https://img.shields.io/github/languages/count/PatOpen/OC_Blog)
 ![GitHub Top language](https://img.shields.io/github/languages/top/PatOpen/OC_Blog?color=red&label=PHP)
@@ -54,7 +55,7 @@ Code published under the MIT license
 
 ## Issues
 
-For Issues are here
+For Issues
 
 ![GitHub Open Issues](https://img.shields.io/github/issues-raw/PatOpen/OC_Blog)
 ![GitHub Close Issues](https://img.shields.io/github/issues-closed-raw/PatOpen/OC_Blog?color=green)
@@ -63,10 +64,8 @@ For Issues are here
 
 ## Pull Requests
 
-For Pull Requests are here
+For Pull Requests
 
 ![GitHub Open Pull Requests](https://img.shields.io/github/issues-pr-raw/PatOpen/OC_Blog)
 ![GitHub Close Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/PatOpen/OC_Blog?color=green)
-
----
 

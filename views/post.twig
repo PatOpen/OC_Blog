@@ -13,8 +13,16 @@
                 <article class="post">
                     <header class="entry-header">
                         <div class="entry-meta">
-                            <span class="posted-on">Posté le <time class="entry-date published"
-                                                                   date="{{ thePosts.post_create_date }}">{{ thePosts.post_create_date }}</time></span>
+                            <span class="posted-on">Posté le
+                                <time class="entry-date published" date="{{ thePosts.post_create_date }}">
+                                    {{ thePosts.post_create_date }}
+                                </time>
+                            </span>
+                            <span class="posted-on">modifié le
+                                <time class="entry-date published" date="{{ thePosts.post_modif_date }}">
+                                    {{ thePosts.post_modif_date }}
+                                </time>
+                            </span>
                         </div>
                         <div class="entry-meta">
                             <span class="posted-on">Article écrit par {{ thePosts.pseudo }} </span>

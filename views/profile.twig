@@ -6,11 +6,48 @@
 {% block content %}
 
     {% if confirm %}
-        <div class="bg-success text-white">
-            <p>Vos informations ont bien été mis à jour !</p>
+        <div class="section">
+            <p class="bg-success text-white text-center">Vos informations ont bien été mis à jour !</p>
         </div>
     {% endif %}
-    <h1 class="text-center">PROFILE</h1>
+    {% if noEmail %}
+        <div class="bg-warning text-white text-center">
+            <p>Cet Email existe déja !</p>
+        </div>
+    {% endif %}
+    {% if valid %}
+        <div class="section">
+            <p class="bg-danger text-white text-center">les mots de passe ne correspondent pas !</p>
+        </div>
+    {% endif %}
+    {% if noValid %}
+        <div class="section">
+            <p class="bg-danger text-white text-center">Les champs doivent avoir au moins 4 caractères et sans espace
+                !</p>
+        </div>
+    {% endif %}
+    {% if space %}
+        <div class="section">
+            <p class="bg-warning text-white text-center">Les champs ne doivent pas contenir d'espaces</p>
+        </div>
+    {% endif %}
+    {% if error %}
+        <div class="section">
+            <p class="bg-warning text-white text-center">Une erreur est survenue lors du transfert</p>
+        </div>
+    {% endif %}
+    {% if size %}
+        <div class="section">
+            <p class="bg-danger text-white text-center">Le fichier est trop volumineux, maximum 500Ko</p>
+        </div>
+    {% endif %}
+    {% if ext %}
+        <div class="section">
+            <p class="bg-danger text-white text-center">Le fichier n'est pa une image, extension accepté: .jpg, .jpeg,
+                .gif, .png</p>
+        </div>
+    {% endif %}
+    <h1 class="text-center">PROFIL</h1>
     <div class="row section topspace">
 
         <h2 class="section-title"><span>Email</span></h2>
@@ -21,12 +58,6 @@
                 {{ form.input('identifiant', 'Changer d\'Email', 'email', 'Nouveau Email', value) }}
 
             </div>
-            {% if noEmail %}
-                <div class="bg-warning text-white">
-                    <p>Cet Email existe déja !</p>
-                </div>
-            {% endif %}
-
             <div class="btn-profil">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
@@ -49,22 +80,6 @@
             <div class="btn-profil">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
-
-            {% if valid %}
-                <div class="bg-danger text-white">
-                    <p>les mots de passe ne correspondent pas !</p>
-                </div>
-            {% endif %}
-            {% if noValid %}
-                <div class="bg-danger text-white">
-                    <p>Les champs doivent avoir au moins 4 caractères et sans espace !</p>
-                </div>
-            {% endif %}
-            {% if space %}
-                <div class="bg-warning text-white">
-                    <p>Les champs ne doivent pas contenir d'espaces</p>
-                </div>
-            {% endif %}
         </form>
     </div>
 
@@ -77,30 +92,13 @@
                 <input type="file" class="form-control-file" id="avatar" name="avatar">
             </div>
 
-            <div class="btn-profil">
+            <div class="form-group btn-profil">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
 
-            <div class="avatarprofil">
+            <div class="form-group avatarprofil">
                 <img src="http://{{ server }}/images/avatar/{{ avatar }}" alt="avatar" width="50px" height="50px">
             </div>
-
-
-            {% if error %}
-                <div class="bg-warning text-white">
-                    <p>Une erreur est survenue lors du transfert</p>
-                </div>
-            {% endif %}
-            {% if size %}
-                <div class="bg-danger text-white">
-                    <p>Le fichier est trop volumineux, maximum 500Ko</p>
-                </div>
-            {% endif %}
-            {% if ext %}
-                <div class="bg-danger text-white">
-                    <p>Le fichier n'est pa une image, extension accepté: .jpg, .jpeg, .gif, .png</p>
-                </div>
-            {% endif %}
         </form>
     </div>
 
