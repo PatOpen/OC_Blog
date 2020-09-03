@@ -153,6 +153,7 @@ class ControllerAuth extends ControllerFactory {
 		}
 
 		$this->addUser( $params );
+		return true;
 	}
 }
 

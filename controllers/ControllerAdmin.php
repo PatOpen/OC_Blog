@@ -290,12 +290,11 @@ class ControllerAdmin extends ControllerFactory {
 			$userManager = new AuthManager();
 			$upload      = $userManager->updateAvatar( $newNameFile, $key );
 
-			if ( file_exists( $oldFile ) ) {
-				unlink( $oldFile );
+			if (!empty($key['avatar'])){
+				$this->deleteImage($oldFile);
 			}
 
 			if ( $upload ) {
-
 				( new Session )->setValueKey( 'user', 'avatar', $newNameFile );
 				$key['avatar'] = $newNameFile;
 				$this->render( 'profile.twig', [
