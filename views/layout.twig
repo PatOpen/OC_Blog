@@ -8,7 +8,8 @@
     <link rel="shortcut icon" href="http://{{ server }}/images/Logo.png">
 
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/v4-shims.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Alice|Open+Sans:400,300,700">
     <link rel="stylesheet" href="http://{{ server }}/css/styles.css">
 
@@ -22,7 +23,8 @@
             <img class="img-circle" src="http://{{ server }}/images/Logo.png" alt="">
             <span class="title">Pat Open</span>
             <span class="tagline">Une personne mystérieuse<br>
-				<a href="mailto:patopenclassrom@gmail.com">patopenclassrom@gmail.com</a></span>
+				<a href="mailto:patopenclassrom@gmail.com">patopenclassrom@gmail.com</a>
+            </span>
         </h1>
     </div>
 
@@ -40,12 +42,13 @@
 
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="http://{{ server }}">Accueil</a></li>
-                    <li><a href="#">About</a></li>
+                    <li><a href="http://{{ server }}#about">à propos</a></li>
+                    <li><a href="http://{{ server }}#articles">Articles</a></li>
                     {% if logged %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bonjour {{ user }} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="http://{{ server }}/Admin/profile" class="dropdown-item">Mon profile</a>
+                                <li><a href="http://{{ server }}/Admin/profile" class="dropdown-item">Mon profil</a>
                                 </li>
                                 {% if admin %}
                                     <li><a href="http://{{ server }}/Admin/admin"
@@ -94,10 +97,10 @@
                 <h3 class="widget-title">Follow me</h3>
                 <div class="widget-body">
                     <p class="follow-me-icons">
-                        <a href=""><i class="fa fa-twitter fa-2"></i></a>
-                        <a href=""><i class="fa fa-dribbble fa-2"></i></a>
-                        <a href=""><i class="fa fa-github fa-2"></i></a>
-                        <a href=""><i class="fa fa-facebook fa-2"></i></a>
+                        <a href="https://twitter.com/PatOpen33" target="_blank"><i class="fa fa-twitter fa-2"></i></a>
+                        <a href="https://www.linkedin.com/in/patrick-o-031515157/" target="_blank"><i class="fa fa-linkedin fa-2"></i></a>
+                        <a href="https://github.com/PatOpen" target="_blank"><i class="fa fa-github fa-2"></i></a>
+                        <a href="https://openclassrooms.workplace.com/" target="_blank"><i class="fa fa-facebook fa-2"></i></a>
                     </p>
                 </div>
             </div>

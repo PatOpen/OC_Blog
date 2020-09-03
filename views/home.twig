@@ -6,9 +6,11 @@
 
 
     <div class="row section topspace">
-        <div class="col-md-12">
-            <p class="lead text-center text-muted">Bienvenue sur mon blog, ici on parle surtout développement web mais pas seulement, dans la mesure
-                où vous aimez la programmation en <strong>PHP</strong> et avec le framework <strong>Symfony</strong>, <strong>javascript</strong> et avec le framework <strong>Angular</strong>,
+        <div class="col-md-10 col-md-offset-1">
+            <p class="lead text-center">Bienvenue sur mon blog, ici on parle surtout développement web mais pas
+                seulement, dans la mesure
+                où vous aimez la programmation en <strong>PHP</strong> et avec le framework <strong>Symfony</strong>,
+                <strong>javascript</strong> et avec le framework <strong>Angular</strong>,
                 <strong>HTML</strong>
                 ou <strong>CSS</strong> vous êtes au bon endroit.
             </p>
@@ -16,21 +18,27 @@
     </div>
 
     <div class="row section featured topspace">
-        <h2 class="section-title"><span></span></h2>
+        <h2 class="section-title" id="about"><span>à propos</span></h2>
         <div class="row">
-            <div class="col-sm-6 col-md-3">
-                <h3 class="text-center">Custom website design</h3>
-                <p>I don't think they tried to market it to the billionaire, spelunking, base-jumping crowd. i did the
-                    same thing to gandhi, he didn't eat for three weeks. i once heard a wise man say there are no
-                    perfect men.</p>
-                <p class="text-center"><a href="" class="btn btn-action">Read more</a></p>
+            <div class="">
+                <p class="lead text-center">Bonjour je m'appelle Patrick, j'ai 42 ans et j'habite en Gironde.<br>
+                    Je me reconverti dans le développement d'application <strong>PHP / Symfony</strong> pour lequel je me passionne
+                    depuis plusieurs années.
+                </p>
+                <p class="lead text-center">Ce blog a été développé en respectant la structure <strong>MVC</strong> (Model View Controller), la
+                    Programmation Orientée Objet (POO) et utilise le moteur de templating <strong>Twig</strong> intégré grâce à <strong>Composer</strong>.<br>
+                    <strong>PostgreSQL</strong> est utilisé comme systême de gestion de base de données.
+                </p>
             </div>
+        </div>
+        <div class="row text-center mt-4">
+            <a class="btn btn-action" href="http://{{ server }}/files/cv.pdf" download><i class="fa fa-download"></i> Télécharger mon CV</a>
         </div>
     </div>
 
     <div class="row section recentworks topspace">
 
-        <h2 class="section-title"><span>ARTICLES</span></h2>
+        <h2 class="section-title" id="articles"><span>ARTICLES</span></h2>
 
         <div class="thumbnails recentworks row">
 
@@ -39,7 +47,7 @@
                 <div class="post-thumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <a class="thumbnail" href="http://{{ server }}/Post/viewPost/{{ allPost.id }}">
 						<span class="img">
-							<img src="images/{{ allPost.image }}" alt="" width="340px" height="250px">
+							<img src="http://{{ server }}/images/{{ allPost.image }}" alt="" width="340px" height="250px">
 							<span class="cover"><span class="more">Voir details &rarr;</span></span>
 						</span>
                         <span class="title">{{ allPost.title }}</span>
@@ -57,7 +65,7 @@
     </div>
 
     <div class="row section clients topspace">
-        <h2 class="section-title"><span>Clients</span></h2>
+        <h2 class="section-title"><span><></span></h2>
         <div class="col-lg-12">
         </div>
     </div>

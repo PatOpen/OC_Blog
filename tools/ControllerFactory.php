@@ -4,9 +4,6 @@
 namespace OC_Blog\Tools;
 
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\ServerRequest;
-
 /**
  * Class ControllerFactory
  *
@@ -43,22 +40,14 @@ class ControllerFactory {
 	 * @param object $twig
 	 * @param int $slug
 	 * @param array $post
+	 * @param ConstantGlobal $constant_global
 	 */
 	public function __construct( object $twig, int $slug = 0, array $post = [], ConstantGlobal $constant_global ) {
 
-		$this->twig = $twig;
-		$this->slug = $slug;
-		$this->post = $post;
+		$this->twig   = $twig;
+		$this->slug   = $slug;
+		$this->post   = $post;
 		$this->server = $constant_global;
-	}
-
-	/**
-	 * Renvoi un objet Twig.
-	 *
-	 * @return object
-	 */
-	public function getTwig(): object {
-		return $this->twig;
 	}
 
 	/**
@@ -120,9 +109,9 @@ class ControllerFactory {
 		header( 'location: http://' . $path );
 	}
 
-	public function deleteImage(string $path): void{
-		if (file_exists($path)){
-			unlink($path);
+	public function deleteImage( string $path ): void {
+		if ( file_exists( $path ) ) {
+			unlink( $path );
 		}
 	}
 }

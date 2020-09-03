@@ -4,7 +4,6 @@ html {
 
 body {
     font-size: 15px;
-    font-size: 0.9375rem;
     font-family: "Open sans", Helvetica, Arial, sans-serif;
     color: #666666;
     padding: 0;
@@ -12,6 +11,8 @@ body {
 
 .topspace {
     margin-top: 40px;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 /*********************************************************************
@@ -140,7 +141,6 @@ body {
 *****************************************************************************************/
 .nav-side {
     font-size: 24px;
-    font-size: 1.5rem;
     font-weight: 300;
     margin-top: -0.37em;
 }
@@ -203,27 +203,22 @@ h6,
 
 h1 {
     font-size: 40px;
-    font-size: 2.5rem;
 }
 
 h2 {
     font-size: 36px;
-    font-size: 2.25rem;
 }
 
 h3 {
     font-size: 30px;
-    font-size: 1.875rem;
 }
 
 h4 {
     font-size: 24px;
-    font-size: 1.5rem;
 }
 
 h5 {
     font-size: 20px;
-    font-size: 1.25rem;
 }
 
 a {
@@ -237,7 +232,6 @@ a:hover {
 .lead {
     font-weight: 300;
     font-size: 21px;
-    font-size: 1.3125rem;
 }
 
 .text-msg {
@@ -283,7 +277,6 @@ a:hover {
 #head .title {
     font-family: Alice, Georgia, serif;
     font-size: 49px;
-    font-size: 3.0625rem;
     color: #ffffff;
 }
 
@@ -295,7 +288,6 @@ a:hover {
 #head .tagline {
     display: block;
     font-size: 14px;
-    font-size: 0.875rem;
     line-height: 1.2em;
     color: #b5b5b5;
     margin: 5px 0 0;
@@ -315,12 +307,10 @@ a:hover {
 
 .home #head .title {
     font-size: 49px;
-    font-size: 3.0625rem;
 }
 
 .home #head .tagline {
     font-size: 16px;
-    font-size: 1rem;
     margin: 15px 0 0;
 }
 
@@ -337,7 +327,6 @@ img {
 
 .btn {
     font-size: 12px;
-    font-size: 0.75rem;
     text-decoration: none;
     text-transform: uppercase;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -386,9 +375,9 @@ img {
 
 .btn-action {
     font-weight: bold;
-    background: transparent !important;
-    color: #025f53;
-    border: 1px solid #ffffff;
+    background-color: #025f53;
+    color: #ffffff;
+    border: 1px solid #025f53;
     text-shadow: none;
 }
 
@@ -396,6 +385,23 @@ img {
 .btn-action:focus,
 .btn-action:active,
 .btn-action.active {
+    background: transparent !important;
+    color: #00b49c;
+    border-color: #00b49c;
+}
+
+.btn-admin {
+    font-weight: bold;
+    background: transparent !important;
+    color: #025f53;
+    border: 1px solid #ffffff;
+    text-shadow: none;
+}
+
+.btn-admin:hover,
+.btn-admin:focus,
+.btn-admin:active,
+.btn-admin.active {
     color: #00b49c;
     border-color: #00b49c;
 }
@@ -438,14 +444,12 @@ img {
 /* Section - Featured */
 .featured {
     font-size: 13px;
-    font-size: 0.8125rem;
 }
 
 .featured h3 {
     font-weight: bold;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 24px;
-    font-size: 1.5rem;
     text-transform: uppercase;
     line-height: 1.4em;
     vertical-align: middle;
@@ -474,7 +478,6 @@ img {
     display: block;
     text-align: center;
     font-size: 12px;
-    font-size: 0.75rem;
 }
 
 .thumbnail {
@@ -541,7 +544,6 @@ img {
     border-radius: 1px 0 0 1px;
     background-clip: padding-box;
     font-size: 12px;
-    font-size: 0.75rem;
     text-transform: uppercase;
     text-shadow: 0 1px 0 #00584d;
     background: #00b79f;
@@ -604,7 +606,6 @@ img {
     font-weight: 300;
     text-transform: uppercase;
     font-size: 36px;
-    font-size: 2.25rem;
     letter-spacing: 1px;
 }
 
@@ -648,7 +649,6 @@ img {
     text-align: center;
     font-family: Georgia, serif;
     font-size: 18px;
-    font-size: 1.125rem;
     font-style: italic;
     font-weight: normal;
     color: #a5a5a5;
@@ -666,7 +666,6 @@ img {
 .entry-content h2 {
     line-height: 1.2;
     font-size: 30px;
-    font-size: 1.875rem;
     padding-top: 20px;
     margin-bottom: 20px;
 }
@@ -742,7 +741,6 @@ footer.entry-meta {
     padding: 2px 0;
     color: #888888;
     font-size: 12px;
-    font-size: 0.75rem;
 }
 
 footer.entry-meta a {
@@ -776,7 +774,6 @@ footer.entry-meta .meta-in {
 **********************************************************************/
 #comments {
     font-size: 13px;
-    font-size: 0.8125rem;
 }
 
 #comments .comments-title {
@@ -925,7 +922,6 @@ footer.entry-meta .meta-in {
 
 #footer h3.widget-title {
     font-size: 15px;
-    font-size: 0.9375rem;
     text-transform: uppercase;
     color: #ccc;
     margin: 0 0 20px;
