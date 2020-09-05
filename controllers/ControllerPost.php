@@ -179,8 +179,8 @@ class ControllerPost extends ControllerFactory {
 		$size    = false;
 		$ext     = false;
 
-		foreach ( $postForm as $key => $value ) {
-			$key = trim( $value );
+		foreach ( $postForm as $value ) {
+			trim( $value );
 		}
 
 		if ( empty( $fileName ) ) {
