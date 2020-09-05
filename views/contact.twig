@@ -1,0 +1,36 @@
+{% import 'form.twig' as form %}
+
+{% block content %}
+
+    <div class="row section">
+        <form action="http://{{ server }}/Home/home" method="post">
+
+            <div class="form-group">
+
+                {{ form.input('nom', 'Nom', 'text', 'Votre nom') }}
+
+            </div>
+
+            <div class="form-group">
+
+                {{ form.input('prenom', 'Prénom', 'text', 'Votre prénom') }}
+
+            </div>
+
+            <div class="form-group">
+
+                {{ form.input('email', 'Email', 'email', 'Votre mail') }}
+
+            </div>
+
+            <div class="form-group">
+
+                {{ form.textarea('message', 'Votre message', 'Ecrivez votre message') }}
+
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

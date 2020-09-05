@@ -5,6 +5,22 @@
 {% block content %}
 
 
+    {% if confirm %}
+        <div class="row section">
+            <p class="bg-success text-center text-uppercase"><strong>Votre message a bien été envoyé !</strong>
+            </p>
+        </div>
+    {% endif %}
+
+    {% if error %}
+
+        <div class="section">
+            <p class="bg-danger text-white text-center">Une erreur est survenue lors de l'envoi !</p>
+        </div>
+
+    {% endif %}
+
+
     <div class="row section topspace">
         <div class="col-md-10 col-md-offset-1">
             <p class="lead text-center">Bienvenue sur mon blog, ici on parle surtout développement web mais pas
@@ -22,17 +38,21 @@
         <div class="row">
             <div class="">
                 <p class="lead text-center">Bonjour je m'appelle Patrick, j'ai 42 ans et j'habite en Gironde.<br>
-                    Je me reconverti dans le développement d'application <strong>PHP / Symfony</strong> pour lequel je me passionne
+                    Je me reconverti dans le développement d'application <strong>PHP / Symfony</strong> pour lequel je
+                    me passionne
                     depuis plusieurs années.
                 </p>
-                <p class="lead text-center">Ce blog a été développé en respectant la structure <strong>MVC</strong> (Model View Controller), la
-                    Programmation Orientée Objet (POO) et utilise le moteur de templating <strong>Twig</strong> intégré grâce à <strong>Composer</strong>.<br>
+                <p class="lead text-center">Ce blog a été développé en respectant la structure <strong>MVC</strong>
+                    (Model View Controller), la
+                    Programmation Orientée Objet (POO) et utilise le moteur de templating <strong>Twig</strong> intégré
+                    grâce à <strong>Composer</strong>.<br>
                     <strong>PostgreSQL</strong> est utilisé comme systême de gestion de base de données.
                 </p>
             </div>
         </div>
         <div class="row text-center mt-4">
-            <a class="btn btn-action" href="http://{{ server }}/files/cv.pdf" download><i class="fa fa-download"></i> Télécharger mon CV</a>
+            <a class="btn btn-action" href="http://{{ server }}/files/cv.pdf" download><i class="fa fa-download"></i>
+                Télécharger mon CV</a>
         </div>
     </div>
 
@@ -47,7 +67,8 @@
                 <div class="post-thumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <a class="thumbnail" href="http://{{ server }}/Post/viewPost/{{ allPost.id }}">
 						<span class="img">
-							<img src="http://{{ server }}/images/{{ allPost.image }}" alt="" width="340px" height="250px">
+							<img src="http://{{ server }}/images/{{ allPost.image }}" alt="" width="340px"
+                                 height="250px">
 							<span class="cover"><span class="more">Voir details &rarr;</span></span>
 						</span>
                         <span class="title">{{ allPost.title }}</span>
@@ -64,10 +85,9 @@
 
     </div>
 
-    <div class="row section clients topspace">
-        <h2 class="section-title"><span><></span></h2>
-        <div class="col-lg-12">
-        </div>
+    <div class="row section recentworks topspace" id="contact">
+        <h2 class="section-title"><span>CONTACT</span></h2>
+        {{ include('contact.twig') }}
     </div>
 
 {% endblock %}
