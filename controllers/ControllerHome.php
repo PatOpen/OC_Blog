@@ -2,7 +2,6 @@
 
 namespace OC_Blog\Controllers;
 
-use OC_Blog\Models\PostsManager;
 use OC_Blog\Tools\ControllerFactory;
 use OC_Blog\Tools\Session;
 
@@ -13,8 +12,6 @@ class ControllerHome extends ControllerFactory {
 	 * Affiche la page d'accueil.
 	 */
 	public function home(): void {
-		$posts    = new PostsManager();
-		$allPosts = $posts->listPosts();
 		$contact  = $this->getPostForm();
 		$confirm  = false;
 		$key      = ( new Session )->getKey( 'user' );
@@ -26,7 +23,6 @@ class ControllerHome extends ControllerFactory {
 
 		if ( ! empty( $key ) ) {
 			$this->render( 'home.twig', [
-				'allPosts' => $allPosts,
 				'logged'   => true,
 				'confirm'  => $confirm,
 				'user'     => $key['pseudo'],
@@ -35,7 +31,6 @@ class ControllerHome extends ControllerFactory {
 			] );
 		} else {
 			$this->render( 'home.twig', [
-				'allPosts' => $allPosts,
 				'logged'   => false,
 				'confirm'  => $confirm,
 				'server'   => $this->getServer()

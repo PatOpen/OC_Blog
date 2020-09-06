@@ -1,0 +1,40 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+
+    <div class="row topspace">
+
+        <h2 class="section-title" id="articles"><span>ARTICLES</span></h2>
+
+        <div class="col-sm-8 col-sm-offset-2">
+
+            {% for allPost in allPosts %}
+
+                <article class="post">
+                    <header class="entry-header">
+                        <div class="entry-meta">
+                            <span class="posted-on">
+                                <time class="entry-date published" date="{{ allPost.post_create_date }}"> Créer le {{ allPost.post_create_date }}</time>
+                            </span>
+                        </div>
+                        <h1 class="entry-title">
+                            <a href="{{ server }}/Post/viewPost/{{ allPost.id }}" rel="bookmark">{{ allPost.title }}</a>
+                        </h1>
+                    </header>
+                    <div class="entry-content">
+                        <p class="text-center"><img alt="" src="http://{{ server }}/images/{{ allPost.image }}"></p>
+                        <p>{{ allPost.chapo | u.truncate(200, '...') }}
+                            <a href="http://{{ server }}/Post/viewPost/{{ allPost.id }}" class="more-link">Continuer à lire&#8230;</a>
+                        </p>
+                    </div>
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+{% endblock %}
