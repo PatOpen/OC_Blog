@@ -31,7 +31,7 @@ It has been encoded according to the `Model` `View` `Controller` (**MVC**) patte
 -   Point the *public* folder as root folder to your server.
 -   Install *composer* and do `php composer.phar install`.
 -   Create a user account and login to leave comments.
--   For test the *Administration* login to *admin* and password *admin*.
+-   For test the *Administration* login to *admin@admin.fr* and password *admin*.
 
 ---
 
