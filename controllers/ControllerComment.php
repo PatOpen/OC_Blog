@@ -98,6 +98,12 @@ class ControllerComment extends ControllerFactory {
 		}
 	}
 
+	/**
+	 * Vérification des informations $_POST et enregistrement du commentaire.
+	 *
+	 * @param string $comment
+	 * @param int $commentId
+	 */
 	public function checkCommentAdmin( string $comment, int $commentId): void {
 
 		$content = trim( $comment );

@@ -10,6 +10,28 @@ use OC_Blog\Tools\Session;
 
 class ControllerPost extends ControllerFactory {
 
+	public function blog() {
+		$posts    = new PostsManager();
+		$allPosts = $posts->listPosts();
+		$key      = ( new Session )->getKey( 'user' );
+
+		if ( ! empty( $key ) ) {
+			$this->render( 'blog.twig', [
+				'allPosts' => $allPosts,
+				'logged'   => true,
+				'user'     => $key['pseudo'],
+				'admin'    => $key['admin'],
+				'server'   => $this->getServer()
+			] );
+		} else {
+			$this->render( 'blog.twig', [
+				'allPosts' => $allPosts,
+				'logged'   => false,
+				'server'   => $this->getServer()
+			] );
+		}
+	}
+
 	/**
 	 * Récupère les commentaires d'un post avant d'affiche la page du post et ses commantaires.
 	 */
