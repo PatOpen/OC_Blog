@@ -198,6 +198,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 COPY public.admin (id, user_id, create_at, role) FROM stdin;
 1	2	2020-08-21 11:12:10	3
+2	7	2020-08-30 10:54:32	3
 \.
 
 
