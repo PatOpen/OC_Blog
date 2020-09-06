@@ -50,8 +50,13 @@ class ControllerComment extends ControllerFactory {
 		$keyUser = ( new Session )->getKey( 'user' );
 		$post    = $this->getPostForm();
 
-		if ( isset( $post['message'] ) ) {
+
+		if ( isset( $post['message']) && !empty($keyPost['id']) ) {
 			$this->checkComment( $post['message'], $this->getSlug(), $keyPost['id'] );
+		}
+
+		if ( isset( $post['message']) && empty($keyPost['id']) ) {
+			$this->checkCommentAdmin( $post['message'], $this->getSlug());
 		}
 
 		$content = ( new CommentsManager() )->oneComment( (int) $this->getSlug() );
@@ -81,6 +86,25 @@ class ControllerComment extends ControllerFactory {
 
 		if ( $update ) {
 			$path = $this->getServer() . '/Post/viewPost/' . $postId;
+			$this->redirect( $path );
+		} else {
+			$this->render( 'comment.twig', [
+				'logged'  => true,
+				'error'   => true,
+				'server'  => $this->getServer(),
+				'id'      => $commentId,
+				'content' => $content
+			] );
+		}
+	}
+
+	public function checkCommentAdmin( string $comment, int $commentId): void {
+
+		$content = trim( $comment );
+		$update  = ( new CommentsManager() )->updateComment( $content, $commentId );
+
+		if ( $update ) {
+			$path = $this->getServer() . '/Admin/admin';
 			$this->redirect( $path );
 		} else {
 			$this->render( 'comment.twig', [
