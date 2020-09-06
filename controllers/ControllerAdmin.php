@@ -51,7 +51,7 @@ class ControllerAdmin extends ControllerFactory {
 	public function admin() {
 
 		$key          = ( new Session )->getKey( 'user' );
-		$adminManager = ( new AdminManager() );
+		$adminManager = new AdminManager();
 		$admin        = $adminManager->checkAdmin( (int) $key['id'] );
 
 
